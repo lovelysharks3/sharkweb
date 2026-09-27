@@ -388,7 +388,7 @@ const 音乐= new Audio('./music/!toy.mp3')
     音乐.volume = 0.1
 let 循环播放 = true
 let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
-    {标题:`<span id='复制提示'>📌请假提示(点击文字自动复制)</span>`,
+    {标题:`<span id='复制提示'>📌请假提示(点击内容以复制文字)</span>`,
     内容:`<div onclick='复制文字()' id='复制按钮'><span>\
 请假需提前联系老师短信或电话，请假格式如下，回来记得销假
 我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:\
@@ -400,7 +400,7 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
 <a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
 <a href="https://m.fjpit.com/#/">智慧教务</a>
     </div>`,
-    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="1200" frameborder='0' style="zoom: 1;border-radius: 6px"></iframe></div>`,
+    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="1200" frameborder='0' style="zoom: 1.5;border-radius: 6px"></iframe></div>`,
     作者:'shark',
     类型:'文本'},
 ]
@@ -408,7 +408,7 @@ let 音乐列表
 let 播放中 = false
 let 音乐索引 = 0
 let 用户名
-const 设置列表 = [['蓝色背景',蓝色背景],['背景音乐',音乐开关]]
+const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.2.1',音乐开关]]
 设置列表.forEach(function([选项文本,选项功能]){ //设置功能
     const 设置选项 = document.createElement('div')
     设置选项.className = '设置选项 横排';
