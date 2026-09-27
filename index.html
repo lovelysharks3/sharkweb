@@ -1,689 +1,693 @@
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html>
 
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport"
-    content="width=device-width, initial-scale=0.4">
-<title>鲨鱼福信</title>
-<link rel="icon" href="./shark.png">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=0.4">
+    <title>鲨鱼福信</title>
+    <link rel="icon" href="./shark.png">
 
-<!-- pwa -->
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#ffffff">
-<link rel="apple-touch-icon" href="./shark512.png">
+    <!-- pwa -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" href="./shark512.png">
 
-<style>
-/* 通用 */
-*{
-    box-sizing:border-box;
-    padding: 0;
-    margin: 0;
-    user-select: none;
-}
-/* h1, h2, h3, h4, h5, h6, span, p {
-    user-select: text !important;
-} */
-
-::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.1);
-}
-::-webkit-scrollbar-thumb {
-    border-radius: 100px;
-    background: rgba(44,63,85,0.25);
-    /* border-left: 1px solid transparent;
-    border-right: 1px solid transparent; */
-    background-clip: padding-box;
-}
-
-html{
-    scrollbar-gutter: stable;
-    background:#f5f5f5;
-    touch-action: manipulation;
-    overscroll-behavior-y: none;
-}
-body{
-    margin:0;
-    min-height:100vh;
-    font-family: Arial;
-    background:transparent;
-    box-sizing:border-box;
-    touch-action: manipulation;
-    overscroll-behavior-y: none;
-}
-
-.填充{
-    /* margin-right:auto */
-    flex: 1;
-}
-#用户{
-    position:absolute;
-    top:8px;
-    right: 0;
-    z-index:1;
-    height:60px;
-    min-width:60px;
-    background:white;
-    border-radius:100px;
-    box-shadow:0 0 10px rgba(0,0,0,0.15);
-    border:1px solid lightgrey;
-    padding:0px 16px;
-    margin:0;
-    border:0;
-    font-size:24px;
-    transition: 0.5s;
-}
-button{
-    transition: 0.1s;
-    cursor:pointer;
-    /* user-select: none; */
-}
-button:hover{
-    filter: brightness(1.05);
-    transform: scale(1.01);
-}
-button:active{
-    filter: brightness(0.9);
-    transform: scale(0.99);
-}
-.方按钮{
-    font-size: 20px;
-    border-radius:6px;
-    border: 0;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
-    border:1px solid lightgrey;
-}
-.竖排{
-    display:flex;
-    flex-direction:column;
-}
-.横排{
-    display:flex;
-    flex-direction:row;
-}
-/* 投稿 */
-#动态编辑{
-    display: none;
-    margin-top:68px;
-    margin-bottom:8px;
-    position: relative;
-}
-#标题编辑{
-    border-bottom: 1px solid lightgrey;
-    min-height: 48px;
-    font-size: 32px;
-    margin-bottom: 8px;
-}
-#内容编辑{
-    font-size: 20px;
-    color: grey;
-    margin-bottom: 30px;
-    min-height: 200px;
-}
-.文本编辑{
-    outline: none;
-    overflow-wrap: break-word;
-}
-#发布按钮{
-    position: absolute;
-    width: 80px;
-    height: 40px;
-    bottom: 10px;
-    right: 20px;
-    background: #34D0F4;
-}
-/* 其他 */
-#顶栏{
-    position:absolute;
-    top:8px;
-    z-index:1;
-    height:60px;
-    background:white;
-    border-radius:100px;
-    box-shadow:0 0 10px rgba(0,0,0,0.15);
-    border-bottom:1px solid lightgrey;
-    padding:8px;
-    justify-content:flex-start;
-    align-items:center;
-}
-#顶栏 button{
-    font-size:20px;
-    min-width:100px;
-    height: 100%;
-    margin:4px;
-    background: lightgrey;
-    border: 0;
-    border-radius:100px;
-    box-shadow:0 0 5px rgba(0,0,0,0.1);
-}
-.文章 :is(h1,h2,h3,h4,h5,h6){
-    margin-bottom:4px;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
-.文章 :is(h3,h4,h5,h6){
-    color:grey
-}
-.文章{
-    position: relative;
-    margin:8px 0;
-    width:min(calc(600px + 20vw),100vw);
-    transition: 0.5s;
-}
-.文章 .删除按钮{
-    position: absolute;
-    right:5px;
-    top: 20px;
-    height: 40px;
-    width: 40px;
-    opacity: 0;
-    transition: 0.2s;
-}
-.文章:hover .删除按钮{
-    opacity: 0.8;
-}
-#主页 .文章{
-    transform: translate(-100vw)
-}
-#主页{
-    padding:68px 4px 8px 4px;
-    min-height: 100vh;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-}
-.卡片{
-    min-height:200px;
-    background:white;
-    padding:20px;
-    border-radius:16px;
-    box-shadow:0 0 20px rgba(0,0,0,0.1);
-}
-#设置卡片{
-    display: flex;
-    position: fixed;
-    min-width: 400px;
-    background: white;
-    transition: 0.2s;
-    transform: scale(0.8);
-    opacity: 0.95;
-}
-.设置选项{
-    font-size:20px;
-    justify-content: space-between;
-    align-items:center;
-    width: 100%;
-    height: 64px;
-}
-.设置选项:not(:last-child){
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-.设置开关{
-    background: lightgrey;
-    width: 64px;
-    height: 32px;
-    border-radius:100px;
-    padding: 4px;
-    box-shadow:0 0 10px rgba(0,0,0,0.2);
-    justify-content: flex-start;
-}
-.设置开关.开关开启{
-    justify-content: flex-end;
-    background: #34D0F4;
-}
-.开关圆点{
-   border-radius:100px;
-   background: white;
-   height: 100%;
-   width: 24px;
-   transition: 0.1s;
-}
-#模糊{
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.1);
-    backdrop-filter: blur(3px);
-    z-index: 2;
-    transition: 0.2s;
-    pointer-events:none;
-    opacity: 0;
-}
-.居中{
-    justify-content:center;
-    align-items:center;
-}
-#登录卡片{
-    position:fixed;
-    width:400px;
-    opacity: 0;
-    transition: 0.2s;
-    transform: scale(0.8);
-    z-index: 1;
-    pointer-events:none;
-}
-#登录卡片 input{
-    font-size:20px;
-    margin:5px;
-    padding:10px;
-    width:250px;
-}
-#登录卡片 button{
-    font-size:20px;
-    padding:10px 30px;
-    margin:10px;
-}
-.渐显:not(.卡片){
-    opacity: 1!important;
-    pointer-events:auto!important;
-}
-.渐显.卡片{
-    transform:scale(1) translate(0)!important;
-    opacity: 1!important;
-    pointer-events:auto!important;
-}
-.渐显.卡片.删除{
-    transform: translate(100vw)!important;
-}
-#音乐卡片{
-    justify-content: flex-start;
-    align-items:center;
-}
-#音乐卡片 h1{
-    font-size: 40px;
-    height: 60px;
-    line-height: 60px;
-    margin-bottom:25px;
-}
-.进度条{
-    height: 12px;
-    width: 100%;
-    border-radius: 100px;
-    background: lightgrey;
-    overflow:hidden;
-    cursor: pointer;
-    margin-bottom: 5px;
-}
-.进度{
-    height: 100%;
-    width: 10%;
-    background: #34D0F4;
-    /* transition: 1s; */
-}
-.时间条{
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-#主页 .文章 button{
-    width: 50px;
-    height: 50px;
-    background: none;
-    border: 0;
-    font-size: 30px;
-    margin: 0 10px 0 10px;
-}
-.音乐按钮栏{
-    display: grid;
-    grid-template-columns:1fr auto 1fr;
-    width: 100%;
-}
-.音乐按钮栏 > .grid左{
-    justify-self: start;
-}
-.音乐按钮栏 > .grid中{
-    justify-self: center;
-}
-.音乐按钮栏 > .grid右{
-    justify-self: end;
-}
-.音量区域{
-    position: relative;
-}
-.音量条{
-    width: 100px;
-}
-.音量条区域{
-    position: absolute;
-    width: 120px;
-    height: 40px;
-    border-radius: 100px;
-    right: 90%;
-    background: rgba(220,220,220,0.9);
-    opacity: 0;
-    pointer-events:none;
-}
-.音量区域:hover .音量条区域{
-    opacity: 1;
-    pointer-events:auto;
-}
-img{
-    width: 100%;
-    height: 100%;
-}
-</style>
-
-</head>
-
-<body class='竖排 居中'>
-<div id='顶栏' class="横排"><button id="设置按钮">设置</button><button>作者→</button><button>萌鲨无敌</button></div>
-<div id="模糊" class="居中 竖排">
-    <div id='设置卡片' class="卡片 居中 竖排"></div>
-</div>
-<div id="登录卡片" class='卡片 居中 竖排'>
-    <h2 style='padding-top:10px'>鲨鱼网站测试</h2>
-    <input id="用户名" placeholder="用户名" maxlength="20">
-    <input id="密码" type="password" placeholder="密码">
-    <button id='登录按钮' class="方按钮">登录</button>
-</div>
-<div id="动态编辑" class='卡片 竖排 文章'><div id="标题编辑" class="文本编辑" contenteditable="true">标题</div><div id="内容编辑" class="文本编辑" contenteditable="true">请输入文本</div><button id="发布按钮" class="方按钮">发布</button></div>
-<div id='主页' class='竖排' style='display:none'></div>
-</div>
-
-<script>
-const 音乐= new Audio('./music/!toy.mp3')
-    音乐.loop = false
-    音乐.volume = 0.1
-let 循环播放 = true
-let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
-    {标题:`<span id='复制提示'>📌请假提示(点击内容以复制文字)</span>`,
-    内容:`<div onclick='复制文字()' id='复制按钮'><span>\
-请假需提前联系老师短信或电话，请假格式如下，回来记得销假
-我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:\
-</span></div>`,
-    作者:'shark',
-    类型:'文本'},
-    {标题:`<div class='横排' style='justify-content: space-between'>
-<a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
-<a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
-<a href="https://m.fjpit.com/#/">智慧教务</a>
-    </div>`,
-    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="1200" frameborder='0' style="zoom: 1.5;border-radius: 6px"></iframe></div>`,
-    作者:'shark',
-    类型:'文本'},
-]
-let 音乐列表
-let 播放中 = false
-let 音乐索引 = 0
-let 用户名
-const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.2.1',音乐开关]]
-设置列表.forEach(function([选项文本,选项功能]){ //设置功能
-    const 设置选项 = document.createElement('div')
-    设置选项.className = '设置选项 横排';
-    设置选项.textContent = 选项文本;
-    const 设置开关 = document.createElement('div');
-    设置开关.className = '设置开关 横排';
-    const 开关圆点 = document.createElement('div');
-    开关圆点.className = '开关圆点';
-    document.querySelector('#设置卡片').appendChild(设置选项);
-    设置选项.appendChild(设置开关);
-    设置开关.appendChild(开关圆点);
-    设置开关.onclick = 选项功能;
-})
-document.querySelector("#模糊").addEventListener("click",function(e){
-     if (e.target === e.currentTarget){
-    document.querySelector('#模糊').classList.remove('渐显');
-    document.querySelector('#设置卡片').classList.remove('渐显');
-    e.stopPropagation;
-    }});
-document.querySelector("#登录按钮").onclick = function(){//登录>主页
-登录切换()
-    };//登录>主页
-document.querySelector('#设置按钮').onclick = function(){
-    document.querySelector('#模糊').classList.add('渐显')
-    document.querySelector('#设置卡片').classList.add('渐显')
-};
-document.querySelector('#发布按钮').onclick = function(){
-    发布动态(document.querySelector('#标题编辑').innerText,document.querySelector('#内容编辑').innerText,用户名);
-    切换主页()
-    清除文章()
-};
-document.addEventListener('click', function(e) {
-    const 文章i = e.target.closest('.删除按钮').closest('.文章');
-    if (文章i) {
-        文章i.classList.add('删除');
-        删除文章(文章i.dataset.id)
-        setTimeout(function(){文章i.remove()},500)
+    <style>
+    /* 通用 */
+    *{
+        box-sizing:border-box;
+        padding: 0;
+        margin: 0;
+        user-select: none;
     }
-});
-function 蓝色背景(){
-    if(this.classList.contains('开关开启')){
-        this.classList.remove('开关开启');
-        document.documentElement.style.background = '#f5f5f5';
-        }
-    else
-        {this.classList.add('开关开启');
-        document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
-}}
-function 音乐开关(){
-    if(this.classList.contains('开关开启')){
-        this.classList.remove('开关开启');
-        音乐.pause();
-        }
-    else
-        {this.classList.add('开关开启');
-        音乐.play();
-}}
-function 加载音乐卡片(n){
-    function 下一首(){
-        if(音乐索引===音乐列表.length-1){音乐索引=0}
-        else{音乐索引++};
-        音乐.src = './music/' + 音乐列表[音乐索引];
-        document.querySelector('.进度').style.width = 0
+    /* h1, h2, h3, h4, h5, h6, span, p {
+        user-select: text !important;
+    } */
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.1);
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 100px;
+        background: rgba(44,63,85,0.25);
+        /* border-left: 1px solid transparent;
+        border-right: 1px solid transparent; */
+        background-clip: padding-box;
+    }
+
+    html{
+        scrollbar-gutter: stable;
+        background:#f5f5f5;
+        touch-action: manipulation;
+        overscroll-behavior-y: none;
+    }
+    body{
+        margin:0;
+        min-height:100vh;
+        font-family: Arial;
+        background:transparent;
+        box-sizing:border-box;
+        touch-action: manipulation;
+        overscroll-behavior-y: none;
+    }
+
+    .填充{
+        /* margin-right:auto */
+        flex: 1;
+    }
+    #用户{
+        position:absolute;
+        top:8px;
+        right: 0;
+        z-index:1;
+        height:60px;
+        min-width:60px;
+        background:white;
+        border-radius:100px;
+        box-shadow:0 0 10px rgba(0,0,0,0.15);
+        border:1px solid lightgrey;
+        padding:0px 16px;
+        margin:0;
+        border:0;
+        font-size:24px;
+        transition: 0.5s;
+    }
+    button{
+        transition: 0.1s;
+        cursor:pointer;
+        /* user-select: none; */
+    }
+    button:hover{
+        filter: brightness(1.05);
+        transform: scale(1.01);
+    }
+    button:active{
+        filter: brightness(0.9);
+        transform: scale(0.99);
+    }
+    .方按钮{
+        font-size: 20px;
+        border-radius:6px;
+        border: 0;
+        box-shadow:0 0 10px rgba(0,0,0,0.1);
+        border:1px solid lightgrey;
+    }
+    .竖排{
+        display:flex;
+        flex-direction:column;
+    }
+    .横排{
+        display:flex;
+        flex-direction:row;
+    }
+    /* 投稿 */
+    #动态编辑{
+        display: none;
+        margin-top:68px;
+        margin-bottom:8px;
+        position: relative;
+    }
+    #标题编辑{
+        border-bottom: 1px solid lightgrey;
+        min-height: 48px;
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+    #内容编辑{
+        font-size: 20px;
+        color: grey;
+        margin-bottom: 30px;
+        min-height: 200px;
+    }
+    .文本编辑{
+        outline: none;
+        overflow-wrap: break-word;
+    }
+    #发布按钮{
+        position: absolute;
+        width: 80px;
+        height: 40px;
+        bottom: 10px;
+        right: 20px;
+        background: #34D0F4;
+    }
+    /* 其他 */
+    #顶栏{
+        position:absolute;
+        top:8px;
+        z-index:1;
+        height:60px;
+        background:white;
+        border-radius:100px;
+        box-shadow:0 0 10px rgba(0,0,0,0.15);
+        border-bottom:1px solid lightgrey;
+        padding:8px;
+        justify-content:flex-start;
+        align-items:center;
+    }
+    #顶栏 button{
+        font-size:20px;
+        min-width:100px;
+        height: 100%;
+        margin:4px;
+        background: lightgrey;
+        border: 0;
+        border-radius:100px;
+        box-shadow:0 0 5px rgba(0,0,0,0.1);
+    }
+    .文章 :is(h1,h2,h3,h4,h5,h6){
+        margin-bottom:4px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+    .文章 :is(h3,h4,h5,h6){
+        color:grey
+    }
+    .文章{
+        position: relative;
+        margin:8px 0;
+        width:min(calc(600px + 20vw),100vw);
+        transition: 0.5s;
+    }
+    .文章 .删除按钮{
+        position: absolute;
+        right:5px;
+        top: 20px;
+        height: 40px;
+        width: 40px;
+        opacity: 0;
+        transition: 0.2s;
+    }
+    .文章:hover .删除按钮{
+        opacity: 0.8;
+    }
+    #主页 .文章{
+        transform: translate(-100vw)
+    }
+    #主页{
+        padding:68px 4px 8px 4px;
+        min-height: 100vh;
+        justify-content: flex-start;
+        align-items: center;
+        position: relative;
+    }
+    .卡片{
+        min-height:200px;
+        background:white;
+        padding:20px;
+        border-radius:16px;
+        box-shadow:0 0 20px rgba(0,0,0,0.1);
+    }
+    #设置卡片{
+        display: flex;
+        position: fixed;
+        min-width: 400px;
+        background: white;
+        transition: 0.2s;
+        transform: scale(0.8);
+        opacity: 0.95;
+    }
+    .设置选项{
+        font-size:20px;
+        justify-content: space-between;
+        align-items:center;
+        width: 100%;
+        height: 64px;
+    }
+    .设置选项:not(:last-child){
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    .设置开关{
+        background: lightgrey;
+        width: 64px;
+        height: 32px;
+        border-radius:100px;
+        padding: 4px;
+        box-shadow:0 0 10px rgba(0,0,0,0.2);
+        justify-content: flex-start;
+    }
+    .设置开关.开关开启{
+        justify-content: flex-end;
+        background: #34D0F4;
+    }
+    .开关圆点{
+    border-radius:100px;
+    background: white;
+    height: 100%;
+    width: 24px;
+    transition: 0.1s;
+    }
+    #模糊{
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.1);
+        backdrop-filter: blur(3px);
+        z-index: 2;
+        transition: 0.2s;
+        pointer-events:none;
+        opacity: 0;
+    }
+    .居中{
+        justify-content:center;
+        align-items:center;
+    }
+    #登录卡片{
+        position:fixed;
+        width:400px;
+        opacity: 0;
+        transition: 0.2s;
+        transform: scale(0.8);
+        z-index: 1;
+        pointer-events:none;
+    }
+    #登录卡片 input{
+        font-size:20px;
+        margin:5px;
+        padding:10px;
+        width:250px;
+    }
+    #登录卡片 button{
+        font-size:20px;
+        padding:10px 30px;
+        margin:10px;
+    }
+    .渐显:not(.卡片){
+        opacity: 1!important;
+        pointer-events:auto!important;
+    }
+    .渐显.卡片{
+        transform:scale(1) translate(0)!important;
+        opacity: 1!important;
+        pointer-events:auto!important;
+    }
+    .渐显.卡片.删除{
+        transform: translate(100vw)!important;
+    }
+    #音乐卡片{
+        justify-content: flex-start;
+        align-items:center;
+    }
+    #音乐卡片 h1{
+        font-size: 40px;
+        height: 60px;
+        line-height: 60px;
+        margin-bottom:25px;
+    }
+    .进度条{
+        height: 12px;
+        width: 100%;
+        border-radius: 100px;
+        background: lightgrey;
+        overflow:hidden;
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
+    .进度{
+        height: 100%;
+        width: 10%;
+        background: #34D0F4;
+        /* transition: 1s; */
+    }
+    .时间条{
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    #主页 .文章 button{
+        width: 50px;
+        height: 50px;
+        background: none;
+        border: 0;
+        font-size: 30px;
+        margin: 0 10px 0 10px;
+    }
+    .音乐按钮栏{
+        display: grid;
+        grid-template-columns:1fr auto 1fr;
+        width: 100%;
+    }
+    .音乐按钮栏 > .grid左{
+        justify-self: start;
+    }
+    .音乐按钮栏 > .grid中{
+        justify-self: center;
+    }
+    .音乐按钮栏 > .grid右{
+        justify-self: end;
+    }
+    .音量区域{
+        position: relative;
+    }
+    .音量条{
+        width: 100px;
+    }
+    .音量条区域{
+        position: absolute;
+        width: 120px;
+        height: 40px;
+        border-radius: 100px;
+        right: 90%;
+        background: rgba(220,220,220,0.9);
+        opacity: 0;
+        pointer-events:none;
+    }
+    .音量区域:hover .音量条区域{
+        opacity: 1;
+        pointer-events:auto;
+    }
+    img{
+        width: 100%;
+        height: 100%;
+    }
+    </style>
+
+    </head>
+
+    <body class='竖排 居中'>
+    <div id='顶栏' class="横排"><button id="设置按钮">设置</button><button>作者→</button><button>萌鲨无敌</button></div>
+    <div id="模糊" class="居中 竖排">
+        <div id='设置卡片' class="卡片 居中 竖排"></div>
+    </div>
+    <div id="登录卡片" class='卡片 居中 竖排'>
+        <h2 style='padding-top:10px'>鲨鱼网站测试</h2>
+        <input id="用户名" placeholder="用户名" maxlength="20">
+        <input id="密码" type="password" placeholder="密码">
+        <button id='登录按钮' class="方按钮">登录</button>
+    </div>
+    <div id="动态编辑" class='卡片 竖排 文章'><div id="标题编辑" class="文本编辑" contenteditable="true">标题</div><div id="内容编辑" class="文本编辑" contenteditable="true">请输入文本</div><button id="发布按钮" class="方按钮">发布</button></div>
+    <div id='主页' class='竖排' style='display:none'></div>
+    </div>
+
+    <script>
+    const 音乐= new Audio('./music/!toy.mp3')
+        音乐.loop = false
+        音乐.volume = 0.1
+    let 循环播放 = true
+    let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
+        {标题:`<span id='复制提示'>📌请假提示(点击内容以复制文字)</span>`,
+        内容:`<div onclick='复制文字()' id='复制按钮'><span>\
+    请假需提前联系老师短信或电话，请假格式如下，回来记得销假
+    我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:\
+    </span></div>`,
+        作者:'shark',
+        类型:'文本'},
+        {标题:`<div class='横排' style='justify-content: space-between'>
+    <a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
+    <a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
+    <a href="https://m.fjpit.com/#/">智慧教务</a>
+        </div>`,
+        内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="900" frameborder='0' style="zoom: 1.5;border-radius: 6px"></iframe></div>`,
+        作者:'shark',
+        类型:'文本'},
+        {标题:`小公告栏(手动写的，可能更新不及时)`,
+        内容:`<img src="./公告/公告.png">`,
+        作者:'shark',
+        类型:'文本'},
+    ]
+    let 音乐列表
+    let 播放中 = false
+    let 音乐索引 = 0
+    let 用户名
+    const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.2.1',音乐开关]]
+    设置列表.forEach(function([选项文本,选项功能]){ //设置功能
+        const 设置选项 = document.createElement('div')
+        设置选项.className = '设置选项 横排';
+        设置选项.textContent = 选项文本;
+        const 设置开关 = document.createElement('div');
+        设置开关.className = '设置开关 横排';
+        const 开关圆点 = document.createElement('div');
+        开关圆点.className = '开关圆点';
+        document.querySelector('#设置卡片').appendChild(设置选项);
+        设置选项.appendChild(设置开关);
+        设置开关.appendChild(开关圆点);
+        设置开关.onclick = 选项功能;
+    })
+    document.querySelector("#模糊").addEventListener("click",function(e){
+        if (e.target === e.currentTarget){
+        document.querySelector('#模糊').classList.remove('渐显');
+        document.querySelector('#设置卡片').classList.remove('渐显');
+        e.stopPropagation;
+        }});
+    document.querySelector("#登录按钮").onclick = function(){//登录>主页
+    登录切换()
+        };//登录>主页
+    document.querySelector('#设置按钮').onclick = function(){
+        document.querySelector('#模糊').classList.add('渐显')
+        document.querySelector('#设置卡片').classList.add('渐显')
     };
-    document.querySelector('#主页').insertAdjacentHTML('afterbegin',
-    `<div id="音乐卡片" class="卡片 文章 竖排">
-        <h1>标题加载中</h1>
-        <div class="进度条"><div class="进度"></div></div>
-        <div class="横排 时间条"><h3 class="当前时间">0:00</h3><h3 class="总时间">0:00</h3></div>
-        <div class="音乐按钮栏 横排">
-            <div class='grid左'>
-                <button class="循环按钮"><img src='./svg/循环.svg'></button>
-            </div>
-            <div class='grid中'>
-                <button class="左箭头"><img src='./svg/左箭头.svg'></button>
-                <button class="播放按钮"><img src='./svg/播放按钮.svg'></button>
-                <button class="右箭头"><img src='./svg/右箭头.svg'></button>
-            </div>
-            <div class='grid右'>
-                <div class='音量区域 横排 居中'>
-                    <div class='音量条区域 横排 居中'><input class='音量条' type="range" min="0" max="100" value="20" step="10"></div>
-                    <button class="音量按钮"><img src='./svg/声音开.svg'></button>
+    document.querySelector('#发布按钮').onclick = function(){
+        发布动态(document.querySelector('#标题编辑').innerText,document.querySelector('#内容编辑').innerText,用户名);
+        切换主页()
+        清除文章()
+    };
+    document.addEventListener('click', function(e) {
+        const 文章i = e.target.closest('.删除按钮').closest('.文章');
+        if (文章i) {
+            文章i.classList.add('删除');
+            删除文章(文章i.dataset.id)
+            setTimeout(function(){文章i.remove()},500)
+        }
+    });
+    function 蓝色背景(){
+        if(this.classList.contains('开关开启')){
+            this.classList.remove('开关开启');
+            document.documentElement.style.background = '#f5f5f5';
+            }
+        else
+            {this.classList.add('开关开启');
+            document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
+    }}
+    function 音乐开关(){
+        if(this.classList.contains('开关开启')){
+            this.classList.remove('开关开启');
+            音乐.pause();
+            }
+        else
+            {this.classList.add('开关开启');
+            音乐.play();
+    }}
+    function 加载音乐卡片(n){
+        function 下一首(){
+            if(音乐索引===音乐列表.length-1){音乐索引=0}
+            else{音乐索引++};
+            音乐.src = './music/' + 音乐列表[音乐索引];
+            document.querySelector('.进度').style.width = 0
+        };
+        document.querySelector('#主页').insertAdjacentHTML('afterbegin',
+        `<div id="音乐卡片" class="卡片 文章 竖排">
+            <h1>标题加载中</h1>
+            <div class="进度条"><div class="进度"></div></div>
+            <div class="横排 时间条"><h3 class="当前时间">0:00</h3><h3 class="总时间">0:00</h3></div>
+            <div class="音乐按钮栏 横排">
+                <div class='grid左'>
+                    <button class="循环按钮"><img src='./svg/循环.svg'></button>
+                </div>
+                <div class='grid中'>
+                    <button class="左箭头"><img src='./svg/左箭头.svg'></button>
+                    <button class="播放按钮"><img src='./svg/播放按钮.svg'></button>
+                    <button class="右箭头"><img src='./svg/右箭头.svg'></button>
+                </div>
+                <div class='grid右'>
+                    <div class='音量区域 横排 居中'>
+                        <div class='音量条区域 横排 居中'><input class='音量条' type="range" min="0" max="100" value="20" step="10"></div>
+                        <button class="音量按钮"><img src='./svg/声音开.svg'></button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>`);
-    document.querySelector('.音量条').addEventListener('input',function(){
-        音乐.volume =this.value *0.005
-    });
-    document.querySelector('.播放按钮').onclick = function(){
-        if(播放中){this.querySelector('img').src='./svg/播放按钮.svg';音乐.pause()}
-        else{this.querySelector('img').src='./svg/暂停按钮.svg';音乐.play()};
-        播放中=!播放中
-    };
-    document.querySelector('.循环按钮').onclick = function(){
-        if(循环播放){this.querySelector('img').src='./svg/双箭头.svg'}
-        else{this.querySelector('img').src='./svg/循环.svg'};
-        循环播放=!循环播放
-    };
-    document.querySelector('.左箭头').onclick = function(){
-        if(音乐索引===0){音乐索引=音乐列表.length-1}
-        else{音乐索引--};
-        音乐.src = './music/' + 音乐列表[音乐索引];
-        document.querySelector('.进度').style.width = 0
-    };
-    document.querySelector('.右箭头').onclick = 下一首
-    let 长按 = false;
-    document.querySelector('.进度条').addEventListener('mousedown',function(e){
-        长按 = true;
-        音乐.currentTime = e.offsetX / this.offsetWidth * 音乐.duration;
-        e.preventDefault();
-        音乐.pause();
-    });
-    document.addEventListener('mousemove',function(e){
-        if(长按){
-        const rect = document.querySelector('.进度条').getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        x = Math.max(0, Math.min(x, rect.width));
-        音乐.currentTime = (x / rect.width) * 音乐.duration;
-        }
-    });
-    document.addEventListener('mouseup',function(){
-        if(播放中&&长按){音乐.play()};
-        长按 = false;
-    });
-    音乐.addEventListener('timeupdate',function(){
-        let 百分比 = this.currentTime / this.duration *100;
-        document.querySelector('.进度').style.width = 百分比 + '%';
-        document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
-    });
-    音乐.addEventListener('canplay',function(){
-        document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
-        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
-        if(播放中&&!长按){音乐.play()};
-    });
-    音乐.addEventListener('ended',function(){
-        if(循环播放){音乐.currentTime = 0}
-        else{下一首()}
-    });
-    document.querySelector('.进度').style.width = 0;
-    if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
-    if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
-    setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
-}
-function 刷新动态(标题,内容,作者,id,n){
-    const 文章i = document.createElement('div')
-    文章i.className = '卡片 文章'
-    const 标题i = document.createElement('h1')
-    标题i.innerHTML = 标题
-    const 内容i = document.createElement('h3')
-    内容i.innerHTML = 内容
-    document.querySelector('#主页').append(文章i)
-    文章i.dataset.id = id
-    if (作者!=='shark'){
-        文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
+        </div>`);
+        document.querySelector('.音量条').addEventListener('input',function(){
+            音乐.volume =this.value *0.005
+        });
+        document.querySelector('.播放按钮').onclick = function(){
+            if(播放中){this.querySelector('img').src='./svg/播放按钮.svg';音乐.pause()}
+            else{this.querySelector('img').src='./svg/暂停按钮.svg';音乐.play()};
+            播放中=!播放中
+        };
+        document.querySelector('.循环按钮').onclick = function(){
+            if(循环播放){this.querySelector('img').src='./svg/双箭头.svg'}
+            else{this.querySelector('img').src='./svg/循环.svg'};
+            循环播放=!循环播放
+        };
+        document.querySelector('.左箭头').onclick = function(){
+            if(音乐索引===0){音乐索引=音乐列表.length-1}
+            else{音乐索引--};
+            音乐.src = './music/' + 音乐列表[音乐索引];
+            document.querySelector('.进度').style.width = 0
+        };
+        document.querySelector('.右箭头').onclick = 下一首
+        let 长按 = false;
+        document.querySelector('.进度条').addEventListener('mousedown',function(e){
+            长按 = true;
+            音乐.currentTime = e.offsetX / this.offsetWidth * 音乐.duration;
+            e.preventDefault();
+            音乐.pause();
+        });
+        document.addEventListener('mousemove',function(e){
+            if(长按){
+            const rect = document.querySelector('.进度条').getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            x = Math.max(0, Math.min(x, rect.width));
+            音乐.currentTime = (x / rect.width) * 音乐.duration;
+            }
+        });
+        document.addEventListener('mouseup',function(){
+            if(播放中&&长按){音乐.play()};
+            长按 = false;
+        });
+        音乐.addEventListener('timeupdate',function(){
+            let 百分比 = this.currentTime / this.duration *100;
+            document.querySelector('.进度').style.width = 百分比 + '%';
+            document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
+        });
+        音乐.addEventListener('canplay',function(){
+            document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
+            document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
+            if(播放中&&!长按){音乐.play()};
+        });
+        音乐.addEventListener('ended',function(){
+            if(循环播放){音乐.currentTime = 0}
+            else{下一首()}
+        });
+        document.querySelector('.进度').style.width = 0;
+        if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
+        if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
+        setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
     }
-    文章i.append(标题i,内容i)
-    setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
-}
-function 发布动态(标题,内容,作者){
-    const 文章i = document.createElement('div')
-    文章i.className = '卡片 文章'
-    const 标题i = document.createElement('h1')
-    标题i.textContent = 标题
-    const 内容i = document.createElement('h3')
-    内容i.textContent = 内容
-    document.querySelector('#主页').prepend(文章i)
-    文章i.append(标题i,内容i)
-    存储文章(标题,内容,作者)
-    setTimeout(function(){文章i.classList.add('渐显')},10)
-}
-function 切换主页(){
-        document.querySelector('#主页').style.display='flex';
-        document.querySelector('#动态编辑').style.display='none';
-        document.querySelector('#发动态').style.display='block';
-        document.querySelector('#主页按钮').style.display='none';
-}
-function 清除文章(){
-    document.querySelector('#标题编辑').innerText = '标题';
-    document.querySelector('#内容编辑').innerText = '请输入文本';
-}
-function 存储文章(标题,内容,作者){
-    fetch("/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            标题: 标题,
-            内容: 内容,
-            作者: 作者
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data + 作者)
-    })
-}
-function 请求文章(){
-    fetch("/api/load")
-    .then(res => res.json())
-    .then(data => {
-        data.forEach(function(i,n){
-            刷新动态(i['标题'],i['内容'],i['作者'],i['id'],n+文章列表.length)
-        })
-    })
-}
-function 删除文章(id){
-    fetch("/api/delete/"+id,{
-        method:'DELETE'
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data)
-    })
-}
-function 请求音乐(){
-    fetch("./music/music.json")
-    .then(res => res.json())
-    .then(data=>{
-        音乐列表=data;
-        // 音乐索引=Math.floor(Math.random()*音乐列表.length);
-        // 音乐.src = '/music/' + 音乐列表[音乐索引];
-        document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration);
-        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
-    })
-}
-function 刷新(){
-    document.querySelector('#主页').replaceChildren(document.querySelector('#用户'))
-    文章列表.forEach(function(i,n){
-        if (i['类型']==='文本'){刷新动态(i['标题'],i['内容'],i['作者'],-1,n)}
-        else if (i['类型']==='音乐播放器'){加载音乐卡片(n)}
-    })
-    // 请求文章()
-    // 请求音乐()
-}
-function 音乐时间显示(秒i){
-    let 分 = Math.floor(秒i/60);
-    let 秒 = Math.floor(秒i%60);
-    if (秒<10){秒 = '0'+秒};
-    return (分+':'+秒)
-}
-function 登录切换(){
-    let 用户名 = document.querySelector("#用户名").value
-    if (用户名 !== 'baka' && document.querySelector("#密码").value === '')
-        {document.querySelector('#登录卡片').classList.remove('渐显');
-        setTimeout(function(){
-        document.querySelector("#主页").style.display='flex';
-        //造三按钮
-        document.querySelector('#主页').insertAdjacentHTML("afterbegin",`<button id="用户">${用户名}</button>`);
-            document.querySelector('#用户').onclick = function(){刷新()};
-            刷新();
-        // document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="发动态">投稿</button>`);
-        //     document.querySelector('#发动态').onclick = function(){
-        //     document.querySelector('#主页').style.display='none';
-        //     document.querySelector('#动态编辑').style.display='flex';
-        //     document.querySelector('#发动态').style.display='none';
-        //     document.querySelector('#主页按钮').style.display='block';}
-        },200)
-        document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="主页按钮" style="display:none">主页</button>`);
-            document.querySelector('#主页按钮').onclick = 切换主页
+    function 刷新动态(标题,内容,作者,id,n){
+        const 文章i = document.createElement('div')
+        文章i.className = '卡片 文章'
+        const 标题i = document.createElement('h1')
+        标题i.innerHTML = 标题
+        const 内容i = document.createElement('h3')
+        内容i.innerHTML = 内容
+        document.querySelector('#主页').append(文章i)
+        文章i.dataset.id = id
+        if (作者!=='shark'){
+            文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
         }
-    else {alert("错了，笨蛋")}
-}
-function 复制文字(){
-    document.querySelector('#复制按钮').style.pointerEvents = "none";
-    navigator.clipboard.writeText("我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:");
-    document.querySelector('#复制提示').innerHTML='📌请假提示(复制成功)';
-    setTimeout(function(){document.querySelector('#复制提示').innerHTML='📌请假提示(点击文字自动复制)';document.querySelector('#复制按钮').style.pointerEvents = "auto";},2500)
-}
-setTimeout(function(){
-    登录切换()
-},10)
-</script>
+        文章i.append(标题i,内容i)
+        setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
+    }
+    function 发布动态(标题,内容,作者){
+        const 文章i = document.createElement('div')
+        文章i.className = '卡片 文章'
+        const 标题i = document.createElement('h1')
+        标题i.textContent = 标题
+        const 内容i = document.createElement('h3')
+        内容i.textContent = 内容
+        document.querySelector('#主页').prepend(文章i)
+        文章i.append(标题i,内容i)
+        存储文章(标题,内容,作者)
+        setTimeout(function(){文章i.classList.add('渐显')},10)
+    }
+    function 切换主页(){
+            document.querySelector('#主页').style.display='flex';
+            document.querySelector('#动态编辑').style.display='none';
+            document.querySelector('#发动态').style.display='block';
+            document.querySelector('#主页按钮').style.display='none';
+    }
+    function 清除文章(){
+        document.querySelector('#标题编辑').innerText = '标题';
+        document.querySelector('#内容编辑').innerText = '请输入文本';
+    }
+    function 存储文章(标题,内容,作者){
+        fetch("/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                标题: 标题,
+                内容: 内容,
+                作者: 作者
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data + 作者)
+        })
+    }
+    function 请求文章(){
+        fetch("/api/load")
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(function(i,n){
+                刷新动态(i['标题'],i['内容'],i['作者'],i['id'],n+文章列表.length)
+            })
+        })
+    }
+    function 删除文章(id){
+        fetch("/api/delete/"+id,{
+            method:'DELETE'
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+        })
+    }
+    function 请求音乐(){
+        fetch("./music/music.json")
+        .then(res => res.json())
+        .then(data=>{
+            音乐列表=data;
+            // 音乐索引=Math.floor(Math.random()*音乐列表.length);
+            // 音乐.src = '/music/' + 音乐列表[音乐索引];
+            document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration);
+            document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
+        })
+    }
+    function 刷新(){
+        document.querySelector('#主页').replaceChildren(document.querySelector('#用户'))
+        文章列表.forEach(function(i,n){
+            if (i['类型']==='文本'){刷新动态(i['标题'],i['内容'],i['作者'],-1,n)}
+            else if (i['类型']==='音乐播放器'){加载音乐卡片(n)}
+        })
+        // 请求文章()
+        // 请求音乐()
+    }
+    function 音乐时间显示(秒i){
+        let 分 = Math.floor(秒i/60);
+        let 秒 = Math.floor(秒i%60);
+        if (秒<10){秒 = '0'+秒};
+        return (分+':'+秒)
+    }
+    function 登录切换(){
+        let 用户名 = document.querySelector("#用户名").value
+        if (用户名 !== 'baka' && document.querySelector("#密码").value === '')
+            {document.querySelector('#登录卡片').classList.remove('渐显');
+            setTimeout(function(){
+            document.querySelector("#主页").style.display='flex';
+            //造三按钮
+            document.querySelector('#主页').insertAdjacentHTML("afterbegin",`<button id="用户">${用户名}</button>`);
+                document.querySelector('#用户').onclick = function(){刷新()};
+                刷新();
+            // document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="发动态">投稿</button>`);
+            //     document.querySelector('#发动态').onclick = function(){
+            //     document.querySelector('#主页').style.display='none';
+            //     document.querySelector('#动态编辑').style.display='flex';
+            //     document.querySelector('#发动态').style.display='none';
+            //     document.querySelector('#主页按钮').style.display='block';}
+            },200)
+            document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="主页按钮" style="display:none">主页</button>`);
+                document.querySelector('#主页按钮').onclick = 切换主页
+            }
+        else {alert("错了，笨蛋")}
+    }
+    function 复制文字(){
+        document.querySelector('#复制按钮').style.pointerEvents = "none";
+        navigator.clipboard.writeText("我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:");
+        document.querySelector('#复制提示').innerHTML='📌请假提示(复制成功)';
+        setTimeout(function(){document.querySelector('#复制提示').innerHTML='📌请假提示(点击文字自动复制)';document.querySelector('#复制按钮').style.pointerEvents = "auto";},2500)
+    }
+    setTimeout(function(){
+        登录切换()
+    },10)
+    </script>
 
-</body>
-</html>
-<!--ui:https://heroicons.com/?utm_source=chatgpt.com-->
+    </body>
+    </html>
+    <!--ui:https://heroicons.com/?utm_source=chatgpt.com-->
