@@ -2,6 +2,7 @@
 <html>
 
 <head>
+<!-- #region 元信息 -->
 <meta charset="UTF-8" />
 <meta name="viewport"
     content="width=device-width, initial-scale=0.4">
@@ -12,9 +13,9 @@
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#ffffff">
 <link rel="apple-touch-icon" href="./shark512.png">
-
+<!-- #endregion -->
 <style>
-/* 通用 */
+/* #region 通用 */
 *{
     box-sizing:border-box;
     padding: 0;
@@ -24,12 +25,6 @@
 /* h1, h2, h3, h4, h5, h6, span, p {
     user-select: text !important;
 } */
-@media (width<600px){
-    html{
-        zoom:1.5
-    }
-}
-
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -109,7 +104,8 @@ button:active{
     display:flex;
     flex-direction:row;
 }
-/* 投稿 */
+/* #endregion */
+/* #region 投稿 */
 #动态编辑{
     display: none;
     margin-top:68px;
@@ -140,7 +136,8 @@ button:active{
     right: 20px;
     background: #34D0F4;
 }
-/* 其他 */
+/* #endregion */
+/* #region 其他 */
 #顶栏{
     position:absolute;
     top:8px;
@@ -368,10 +365,11 @@ img{
     width: 100%;
     height: 100%;
 }
+/* #endregion */
 </style>
 
 </head>
-
+<!-- #region 界面 -->
 <body class='竖排 居中'>
 <div id='顶栏' class="横排"><button id="设置按钮">设置</button><button>作者→</button><button>萌鲨无敌</button></div>
 <div id="模糊" class="居中 竖排">
@@ -386,12 +384,16 @@ img{
 <div id="动态编辑" class='卡片 竖排 文章'><div id="标题编辑" class="文本编辑" contenteditable="true">标题</div><div id="内容编辑" class="文本编辑" contenteditable="true">请输入文本</div><button id="发布按钮" class="方按钮">发布</button></div>
 <div id='主页' class='竖排' style='display:none'></div>
 </div>
-
+<!-- #endregion -->
 <script>
-const 音乐= new Audio('./music/!toy.mp3')
-    音乐.loop = false
-    音乐.volume = 0.1
+//#region 初始化
 let 循环播放 = true
+let 音乐列表
+let 播放中 = false
+let 音乐索引 = 0
+let 用户名
+const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.4',音乐开关]]
+//#endregion
 let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
     {标题:`<span id='复制提示'>📌请假提示(点击内容以复制文字)</span>`,
     内容:`<div onclick='复制文字()' id='复制按钮'><span>\
@@ -405,7 +407,7 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
 <a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
 <a href="https://m.fjpit.com/#/">智慧教务</a>
     </div>`,
-    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="900" frameborder='0' style="zoom: 1.5;border-radius: 6px"></iframe></div>`,
+    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="600" frameborder='0' style="zoom: 2.5;border-radius: 6px"></iframe></div>`,
     作者:'shark',
     类型:'文本'},
     {标题:`小公告栏(手动写的，可能更新不及时)`,
@@ -413,11 +415,6 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
     作者:'shark',
     类型:'文本'},
 ]
-let 音乐列表
-let 播放中 = false
-let 音乐索引 = 0
-let 用户名
-const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.4',音乐开关]]
 设置列表.forEach(function([选项文本,选项功能]){ //设置功能
     const 设置选项 = document.createElement('div')
     设置选项.className = '设置选项 横排';
