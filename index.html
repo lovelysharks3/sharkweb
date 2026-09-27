@@ -24,9 +24,9 @@
 /* h1, h2, h3, h4, h5, h6, span, p {
     user-select: text !important;
 } */
-@media (width<600){
+@media (width<600px){
     html{
-        zoom:1.2
+        zoom:1.5
     }
 }
 
@@ -417,7 +417,7 @@ let 音乐列表
 let 播放中 = false
 let 音乐索引 = 0
 let 用户名
-const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.3',音乐开关]]
+const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.4',音乐开关]]
 设置列表.forEach(function([选项文本,选项功能]){ //设置功能
     const 设置选项 = document.createElement('div')
     设置选项.className = '设置选项 横排';
