@@ -191,7 +191,7 @@ button:active{
     transform: translate(-100vw)
 }
 #主页{
-    padding:68px 4px 8px 4px;
+    padding:68px 4px 128px 4px;
     min-height: 100vh;
     justify-content: flex-start;
     align-items: center;
@@ -366,6 +366,21 @@ img{
     height: 100%;
 }
 /* #endregion */
+/* #region 表格 */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 1px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    
+}
+/* #endregion */
 </style>
 
 </head>
@@ -395,23 +410,43 @@ let 用户名
 const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.4',音乐开关]]
 //#endregion
 let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
-    {标题:`<span id='复制提示'>📌请假提示(点击内容以复制文字)</span>`,
-    内容:`<div onclick='复制文字()' id='复制按钮'><span>\
-        请假需提前联系老师短信或电话，请假格式如下，回来记得销假
-我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:\
-</span></div>`,
-    作者:'shark',
-    类型:'文本'},
     {标题:`<div class='横排' style='justify-content: space-between'>
 <a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
 <a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
 <a href="https://m.fjpit.com/#/">智慧教务</a>
     </div>`,
-    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="600" frameborder='0' style="zoom: 2.0;border-radius: 6px"></iframe></div>`,
+    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="600" frameborder='0' style="zoom: 1;border-radius: 6px"></iframe></div>`,
     作者:'shark',
     类型:'文本'},
-    {标题:`小公告栏(手动写的，可能更新不及时)`,
-    内容:`<img src="./公告/公告.png">`,
+
+    {标题:`<span class='居中 横排'>第四周晨跑表</span>`,
+    列:['周一','周二','周三','周四','周五'],
+    行:``,
+    内容:[
+        ["软件技术2522", "软件技术2511", "物联网2512", "", ""],
+        ["网络技术2522", "大数据2511", "软件技术2521", "", ""],
+        ["电子信息2512", "物联网2511", "电子信息2511", "", ""],
+        ["电子信息2521", "网络技术2521", "网络技术2511", "", ""],
+        ["物联网2331", "电子信息2621", "大数据2621", "", ""],
+        ["软件技术2621", "物联网2612", "电子信息2612", "", ""],
+        ["电子信息2333", "软件技术2622", "网络技术2621", "", ""],
+        ["电子信息2332", "软件技术2611", "电子信息2611", "", ""],
+        ["大数据2611", "电子信息2331", "物联网2611", "", ""],
+        ["网络技术2611", "", "物联网2332", "",""]
+    ],
+    作者:'shark',
+    类型:'表格'},
+
+    {标题:`小公告栏`,
+    内容:`测试中\n正在想办法把课程表也转为表格`,
+    作者:'shark',
+    类型:'文本'},
+
+    {标题:`<span id='复制提示' onclick='复制文字()' class='复制按钮'>请假提示(点击内容以复制)</span>`,
+    内容:`<div onclick='复制文字()' class='复制按钮'><span>\
+📌请假需提前联系老师短信或电话，请假格式如下，回来记得销假
+我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:\
+</span></div>`,
     作者:'shark',
     类型:'文本'},
 ]
@@ -472,7 +507,7 @@ function 音乐开关(){
         {this.classList.add('开关开启');
         音乐.play();
 }}
-function 加载音乐卡片(n){
+function 加载卡片_音乐(n){
     function 下一首(){
         if(音乐索引===音乐列表.length-1){音乐索引=0}
         else{音乐索引++};
@@ -559,16 +594,48 @@ function 加载音乐卡片(n){
     if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
     setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
 }
-function 刷新动态(标题,内容,作者,id,n){
+function 加载卡片_文本(i,id,n){
     const 文章i = document.createElement('div')
     文章i.className = '卡片 文章'
     const 标题i = document.createElement('h1')
-    标题i.innerHTML = 标题
+    标题i.innerHTML = i['标题']
     const 内容i = document.createElement('h3')
-    内容i.innerHTML = 内容
+    内容i.innerHTML = i['内容']
     document.querySelector('#主页').append(文章i)
     文章i.dataset.id = id
-    if (作者!=='shark'){
+    if (i['作者']!=='shark'){
+        文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
+    }
+    文章i.append(标题i,内容i)
+    setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
+}
+function 加载卡片_表格(i,id,n){
+    const 文章i = document.createElement('div')
+    文章i.className = '卡片 文章'
+    const 标题i = document.createElement('h1')
+    标题i.innerHTML = i['标题']
+    const 内容i = document.createElement('table')
+    let tr = document.createElement('tr')
+        i['列'].forEach(function(i){
+            let th = document.createElement('th')
+            th.innerText = i
+            tr.append(th)
+        })
+    内容i.append(tr)
+    
+    i['内容'].forEach(function(i){
+        let tr = document.createElement('tr')
+            i.forEach(function(i,n){
+                let th = document.createElement('th')
+                th.innerText = i
+                tr.append(th)
+            })
+        内容i.append(tr)
+    })
+
+    document.querySelector('#主页').append(文章i)
+    文章i.dataset.id = id
+    if (i['作者']!=='shark'){
         文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
     }
     文章i.append(标题i,内容i)
@@ -645,8 +712,9 @@ function 请求音乐(){
 function 刷新(){
     document.querySelector('#主页').replaceChildren(document.querySelector('#用户'))
     文章列表.forEach(function(i,n){
-        if (i['类型']==='文本'){刷新动态(i['标题'],i['内容'],i['作者'],-1,n)}
-        else if (i['类型']==='音乐播放器'){加载音乐卡片(n)}
+        if (i['类型']==='文本'){加载卡片_文本(i,-1,n)}
+        else if (i['类型']==='音乐播放器'){加载卡片_音乐(n)}
+        if (i['类型']==='表格'){加载卡片_表格(i,-1,n)}
     })
     // 请求文章()
     // 请求音乐()
@@ -680,10 +748,10 @@ function 登录切换(){
     else {alert("错了，笨蛋")}
 }
 function 复制文字(){
-    document.querySelector('#复制按钮').style.pointerEvents = "none";
+    document.querySelector('.复制按钮').style.pointerEvents = "none";
     navigator.clipboard.writeText("我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:");
-    document.querySelector('#复制提示').innerHTML='📌请假提示(复制成功)';
-    setTimeout(function(){document.querySelector('#复制提示').innerHTML='📌请假提示(点击文字自动复制)';document.querySelector('#复制按钮').style.pointerEvents = "auto";},2500)
+    document.querySelector('#复制提示').innerHTML='请假提示(复制成功)';
+    setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
 }
 setTimeout(function(){
     登录切换()
