@@ -371,14 +371,31 @@ table {
     border-collapse: collapse;
     width: 100%;
     table-layout: fixed;
+    background-color: #f5f5f5;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid gray!important;
 }
 
 th, td {
-    border: 1px solid black;
+    border: 1px solid lightgray;
     padding: 1px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
-    
+}
+table[data-表格='1'] th {
+    height:64px;
+}
+table[data-表格='1'] th:nth-child(1) {
+    background-color: lightgray;
+    border: 1px solid gray;
+}
+table tr:nth-child(1)> th {
+    background-color: lightgray;
+    border: 1px solid gray;
+}
+table[data-表格='3'] {
+    table-layout: auto;
 }
 /* #endregion */
 </style>
@@ -410,16 +427,29 @@ let 用户名
 const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.5',音乐开关]]
 //#endregion
 let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
-    {标题:`<div class='横排' style='justify-content: space-between'>
-<a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
-<a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
-<a href="https://m.fjpit.com/#/">智慧教务</a>
-    </div>`,
-    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="750" frameborder='0' style="zoom: 1.2;border-radius: 6px"></iframe></div>`,
-    作者:'shark',
-    类型:'文本'},
+//     {标题:`<div class='横排' style='justify-content: space-between'>
+// <a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
+// <a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
+// <a href="https://m.fjpit.com/#/">智慧教务</a>
+//     </div>`,
+//     内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="750" frameborder='0' style="zoom: 1.2;border-radius: 6px"></iframe></div>`,
+//     作者:'shark',
+//     类型:'文本'},
 
-    {标题:`<span class='居中 横排'>第四周晨跑表</span>`,
+    {id:1,
+    标题:`<div class='横排' style='justify-content: space-around'>
+        <a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
+        <span class='居中 横排'>课程表</span>\n
+        <a href="https://m.fjpit.com/#/">智慧教务</a>
+    </div>`,
+    列:['周一','周二','周三','周四','周五','周六','周日'],
+    行:['课表','第一节\n8:10-9:50','第二节\n10:10-11:50','午休','第三节\n2:30-4:10','第四节\n4:20-6:00','第五节\n6:15-8:10','第六节\n8:20-10:00'],
+    内容:``,
+    作者:'shark',
+    类型:'表格'},
+
+    {id:2,
+    标题:`<span class='居中 横排'>第四周晨跑表</span>`,
     列:['周一','周二','周三','周四','周五'],
     行:``,
     内容:[
@@ -434,6 +464,75 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
         ["大数据2611", "电子信息2331", "物联网2611", "", ""],
         ["网络技术2611", "", "物联网2332", "",""]
     ],
+    作者:'shark',
+    类型:'表格'},
+
+    {id:3,
+    标题:`<span class='居中 横排'>值日表</span>`,
+    列:["星期","组别","组长","组员"],
+    行:``,
+    内容:[
+    [
+        "周一",
+        "第 1 组",
+        "陈墨阳",
+        "李煜烨、方礼程、占鑫淼、杜仁博"
+    ],
+    [
+        "周二",
+        "第 2 组",
+        "徐培超",
+        "徐淑婷、王记、何岳恒、张佳惠"
+    ],
+    [
+        "周三",
+        "第 3 组",
+        "林嘉琪",
+        "刘文俊、方伟炫、郑佳宝、郑戴俞萱"
+    ],
+    [
+        "周四",
+        "第 4 组",
+        "张钰玲",
+        "鲁城君、杨子鉴、林欣怡、郑洁"
+    ],
+    [
+        "周五",
+        "第 5 组",
+        "柯诗琳",
+        "刘智宏、邱函楸、李运、吴敬榆"
+    ],
+    [
+        "周一",
+        "第 6 组",
+        "沈一铭",
+        "陈雅诗、万龙、陈伟斌、陈巧莹"
+    ],
+    [
+        "周二",
+        "第 7 组",
+        "黄菡羽",
+        "杨昊、朱晨琳、陈宇杰、叶广霖"
+    ],
+    [
+        "周三",
+        "第 8 组",
+        "叶雯鑫",
+        "詹灿彬、朱铭航、吴京思、蔡星怀"
+    ],
+    [
+        "周四",
+        "第 9 组",
+        "洪梓杭",
+        "李泓燊、潘欣怡、刘鸣、余晨"
+    ],
+    [
+        "周五",
+        "第 10 组",
+        "程安琪",
+        "赖欣怡、黄洋、胡应超、刘子轩"
+    ]
+],
     作者:'shark',
     类型:'表格'},
 
@@ -615,23 +714,26 @@ function 加载卡片_表格(i,id,n){
     const 标题i = document.createElement('h1')
     标题i.innerHTML = i['标题']
     const 内容i = document.createElement('table')
-    let tr = document.createElement('tr')
-        i['列'].forEach(function(i){
+    if(i['id']){内容i.dataset.表格=i['id']}
+
+    function 加载表头(行,行n){
+        let tr = document.createElement('tr')
+        if(i['行']){tr.innerHTML = `<th data-行='0'>${行}</th>`}
+        内容i.append(tr)
+    
+        i['列'].forEach(function(列,列n){
             let th = document.createElement('th')
-            th.innerText = i
+            if(行n==0){th.innerHTML = 列;th.dataset.列=0}
+            else if(i['内容']){th.innerHTML = 行[列n]}
+            else(th.innerHTML = ' ')
             tr.append(th)
         })
-    内容i.append(tr)
-    
-    i['内容'].forEach(function(i){
-        let tr = document.createElement('tr')
-            i.forEach(function(i,n){
-                let th = document.createElement('th')
-                th.innerText = i
-                tr.append(th)
-            })
-        内容i.append(tr)
-    })
+    }
+
+    if (i['行']){i['行'].forEach(加载表头)}
+    else{
+        if(i['内容']&&i['列']){i['内容'].unshift(i['列']);i['内容'].forEach(加载表头)}
+    }
 
     document.querySelector('#主页').append(文章i)
     文章i.dataset.id = id
@@ -640,6 +742,15 @@ function 加载卡片_表格(i,id,n){
     }
     文章i.append(标题i,内容i)
     setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
+    加载课表()
+}
+async function 加载课表() {
+    let res = await fetch('./akb.json')
+    let data = await res.json()
+    let 课表 = data.data.list
+    课表.forEach(function(课程){
+        document.querySelector('[data-表格="1"]').rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
+    })
 }
 function 发布动态(标题,内容,作者){
     const 文章i = document.createElement('div')
