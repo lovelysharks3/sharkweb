@@ -376,23 +376,25 @@ table {
     overflow: hidden;
     border: 1px solid gray!important;
 }
-
 th, td {
-    border: 1px solid lightgray;
+    border: 1px solid rgba(0,0,0,0.1);
     padding: 1px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
+table tr:nth-child(1)> th {
+    background-color: lightgray;
+}
+
 table[data-表格='1'] th {
-    height:64px;
+    height:90px;
 }
 table[data-表格='1'] th:nth-child(1) {
     background-color: lightgray;
-    border: 1px solid gray;
 }
-table tr:nth-child(1)> th {
-    background-color: lightgray;
-    border: 1px solid gray;
+table[data-表格='1'] tr:nth-child(4)> th:not(:first-child) {
+    height: 64px;
+    border: none;
 }
 table[data-表格='3'] {
     table-layout: auto;
@@ -403,7 +405,7 @@ table[data-表格='3'] {
 </head>
 <!-- #region 界面 -->
 <body class='竖排 居中'>
-<div id='顶栏' class="横排"><button id="设置按钮">设置</button><button>作者→</button><button>萌鲨无敌</button></div>
+<div id='顶栏' class="横排"><button id="设置按钮">设置</button><button onclick='实验按钮()'>作者→</button><button>萌鲨无敌</button></div>
 <div id="模糊" class="居中 竖排">
     <div id='设置卡片' class="卡片 居中 竖排"></div>
 </div>
@@ -424,7 +426,8 @@ let 音乐列表
 let 播放中 = false
 let 音乐索引 = 0
 let 用户名
-const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.6',音乐开关]]
+let 时间戳
+const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.8',音乐开关]]
 //#endregion
 let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
 //     {标题:`<div class='横排' style='justify-content: space-between'>
@@ -537,7 +540,7 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
     类型:'表格'},
 
     {标题:`备忘录`,
-    内容:`记得多喝热水\n上午 7:00晨跑  7:30英语单词  12:00午休\n下午 7:00晚自习  9:30晚点点名  10:30熄灯`,
+    内容:`右上角小圆点刷新(下一次上课时间不会自动刷新)\n记得多喝热水，走之前断电倒垃圾\n上午 7:00晨跑  7:30英语单词  12:00午休\n下午 7:00晚自习  9:30晚点点名  10:30熄灯）`,
     作者:'shark',
     类型:'文本'},
 
@@ -742,15 +745,35 @@ function 加载卡片_表格(i,id,n){
     }
     文章i.append(标题i,内容i)
     setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
-    加载课表()
+    if(i['id']==1){加载课表()}
 }
 async function 加载课表() {
     let res = await fetch('./公告/kb.json')
     let data = await res.json()
     let 课表 = data.data.list
+    let 开始差值 = Infinity
+    let 结束差值 = Infinity
+    let 表格 = document.querySelector('table[data-表格="1"]')
+
     课表.forEach(function(课程){
-        document.querySelector('[data-表格="1"]').rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
+        表格.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
+        let 开始时间差=(new Date(`${课程.date}T${课程.jckssj}`)).getTime()-时间戳
+        let 结束时间差=(new Date(`${课程.date}T${课程.jcjssj}`)).getTime()-时间戳
+        if(开始时间差>=0&&开始时间差<开始差值){开始差值 = 开始时间差}
+        if(结束时间差>=0&&结束时间差<结束差值){结束差值 = 结束时间差}
     })
+    function 差值计算(差值){
+        差值 = Math.floor(差值/1000/60)
+        if (差值===Infinity){差值='本周没有课程了'}
+        else if (差值>=100){差值=Math.floor(差值/60)+'小时'+差值%60+'分钟'}
+        else {差值=差值+'分钟'}
+        return 差值
+    }
+    表格.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){
+        i.remove()
+    })
+    表格.rows[3].cells[1].colSpan = 7
+    表格.rows[3].cells[1].innerHTML= `下一次上课:${差值计算(开始差值)}\n下一次下课:${差值计算(结束差值)}`
 }
 function 发布动态(标题,内容,作者){
     const 文章i = document.createElement('div')
@@ -827,6 +850,7 @@ function 刷新(){
         else if (i['类型']==='音乐播放器'){加载卡片_音乐(n)}
         if (i['类型']==='表格'){加载卡片_表格(i,-1,n)}
     })
+    时间戳= (new Date()).getTime()
     // 请求文章()
     // 请求音乐()
 }
@@ -863,6 +887,11 @@ function 复制文字(){
     navigator.clipboard.writeText("我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:");
     document.querySelector('#复制提示').innerHTML='请假提示(复制成功)';
     setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
+}
+function 实验按钮(){
+document.querySelector('table[data-表格="1"]')
+    .querySelectorAll('th:not([data-列]):not([data-行])')
+    .forEach(i => i.innerText = '')
 }
 setTimeout(function(){
     登录切换()
