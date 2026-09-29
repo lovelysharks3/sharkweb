@@ -745,7 +745,7 @@ function 加载卡片_表格(i,id,n){
     加载课表()
 }
 async function 加载课表() {
-    let res = await fetch('./akb.json')
+    let res = await fetch('./公告/kb.json')
     let data = await res.json()
     let 课表 = data.data.list
     课表.forEach(function(课程){
