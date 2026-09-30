@@ -781,7 +781,7 @@ async function 加载课表() {
     if(课程开始){课程开始=`距离下课:${差值计算(结束差值)}`}
     else{课程开始=`距离上课:${差值计算(开始差值)}`}
     表格.rows[3].cells[1].colSpan = 7
-    表格.rows[3].cells[1].innerText = `${课程开始}   -   当前课程:${当前课程['course']}   -   上课地点:${当前课程['spaceName']}`
+    表格.rows[3].cells[1].innerText = `${课程开始}   --   上课地点:${当前课程['spaceName']}`
 }
 function 发布动态(标题,内容,作者){
     const 文章i = document.createElement('div')
