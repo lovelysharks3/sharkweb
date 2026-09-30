@@ -403,17 +403,35 @@ table tr > *:last-child {
 }
 
 table[data-表格='1'] th {
-    height:90px;
+    height:80px;
 }
 table[data-表格='1'] th:nth-child(1) {
     background-color: lightgray;
 }
 table[data-表格='1'] tr:nth-child(4)> th {
-    height: auto;
+    height: 48px;
     /* font-size: 15px; */
 }
 table[data-表格='3'] {
     table-layout: auto;
+}
+.课程进度条{
+    position: absolute;
+    width: 0;
+    height: 100%;
+    background:rgba(200,245,200,0.5);
+    z-index: 1;
+    box-shadow:0 0 0 1px rgba(200,245,200,0.5)
+}
+.定位容器{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.定位容器 span{
+    position: relative;
+    z-index: 1;
+    height: 100%;
 }
 /* #endregion */
 </style>
@@ -443,6 +461,8 @@ let 播放中 = false
 let 音乐索引 = 0
 let 用户名
 let 时间戳
+let 课表;let 表格1
+const 开学时间 = new Date('2026-9-7')
 const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.8',音乐开关]]
 //#endregion
 let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
@@ -761,21 +781,35 @@ function 加载卡片_表格(i,id,n){
     }
     文章i.append(标题i,内容i)
     setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
-    if(i['id']==1){加载课表()}
+    if(i['id']==1){请求课表()}
 }
-async function 加载课表() {
-    let res = await fetch('./公告/kb.json')
+async function 请求课表(){
+    时间戳= (new Date()).getTime()
+    // let 周数 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
+    let 周数 = 0
+    let res = await fetch(`./公告/课表(${周数}).json`)
     let data = await res.json()
-    let 课表 = data.data.list
+    课表 = data.data.list
+    表格1 = document.querySelector('table[data-表格="1"]')
+    表格1.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){
+        i.remove()
+    })
+    表格1.rows[3].cells[1].colSpan = 7
+    表格1.rows[0].cells[0].innerText=`第${周数}周`
+    课表.forEach(function(课程){
+        表格1.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
+    })
+    加载课表()
+}
+function 加载课表() {
+    时间戳= (new Date()).getTime()
     let 开始差值 = Infinity
     let 结束差值 = Infinity
     let 当前课程
-    let 课程开始 = false
-    let 表格 = document.querySelector('table[data-表格="1"]')
-    时间戳= (new Date()).getTime()
+    let 课程开始
+    let 课程进度 = 0
 
     课表.forEach(function(课程){
-        表格.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
         let 开始时间差=(new Date(`${课程.date}T${课程.jckssj}`)).getTime()-时间戳
         let 结束时间差=(new Date(`${课程.date}T${课程.jcjssj}`)).getTime()-时间戳
         if(开始时间差<=0&&结束时间差>=0){课程开始=true}
@@ -785,17 +819,17 @@ async function 加载课表() {
     function 差值计算(差值){
         差值 = Math.ceil(差值/1000/60)
         if (差值===Infinity){差值='本周没有课程了'}
+        else if (差值>60*24){差值=Math.floor(差值/60/24)+'天' +Math.ceil(差值/60)%24+'时'}
         else if (差值>60){差值=Math.floor(差值/60)+'时'+差值%60+'分'}
         else {差值=差值+'分'}
         return 差值
     }
-    表格.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){
-        i.remove()
-    })
-    if(课程开始){课程开始=`距离下课:${差值计算(结束差值)}`}
+    if(课程开始){课程开始=`距离下课:${差值计算(结束差值)}`;课程进度=100-结束差值/1000/60}
     else{课程开始=`距离上课:${差值计算(开始差值)}`}
-    表格.rows[3].cells[1].colSpan = 7
-    表格.rows[3].cells[1].innerText = `${课程开始}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`
+    console.log(课程开始)
+    if(当前课程){表格1.rows[3].cells[1].innerHTML = `<div class='定位容器'><div class='课程进度条'></div><span class='居中 竖排'>${课程开始}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}</span></div>`}
+    else{表格1.rows[3].cells[1].innerHTML = `<div class='定位容器'><div class='课程进度条'></div><span class='居中 竖排'>本周没有课程了\n休息一下吧~</span></div>`}
+    document.querySelector('.课程进度条').style.width=课程进度 + '%'
 }
 function 发布动态(标题,内容,作者){
     const 文章i = document.createElement('div')
