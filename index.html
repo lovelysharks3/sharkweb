@@ -369,18 +369,20 @@ img{
 /* #region 表格 */
 table {
     border-collapse: collapse;
-    width: 100%;
+    width: calc(100% + 40px);
     table-layout: fixed;
     background-color: #f5f5f5;
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
     border: 1px solid gray!important;
+    margin: 0px -20px -20px -20px;
 }
 th, td {
     border: 1px solid rgba(0,0,0,0.1);
     padding: 1px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+    font-size: 15px;
 }
 table tr:nth-child(1)> th {
     background-color: lightgray;
@@ -539,7 +541,7 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
     类型:'表格'},
 
     {标题:`备忘录`,
-    内容:`右上角小圆点刷新(下一次上课时间不会自动刷新)\n记得多喝热水，走之前断电倒垃圾\n上午 7:00晨跑  7:30英语单词  12:00午休\n下午 7:00晚自习  9:30晚点点名  10:30熄灯）`,
+    内容:`右上角小圆点刷新\n记得多喝热水，别忘了断电倒垃圾\n上午 7:00晨跑  7:30英语单词  12:00午休\n下午 7:00晚自习  9:30晚点点名  10:30熄灯`,
     作者:'shark',
     类型:'文本'},
 
@@ -752,27 +754,33 @@ async function 加载课表() {
     let 课表 = data.data.list
     let 开始差值 = Infinity
     let 结束差值 = Infinity
+    let 当前课程
+    let 课程开始 = false
     let 表格 = document.querySelector('table[data-表格="1"]')
+    时间戳= (new Date()).getTime()
 
     课表.forEach(function(课程){
         表格.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
         let 开始时间差=(new Date(`${课程.date}T${课程.jckssj}`)).getTime()-时间戳
         let 结束时间差=(new Date(`${课程.date}T${课程.jcjssj}`)).getTime()-时间戳
-        if(开始时间差>=0&&开始时间差<开始差值){开始差值 = 开始时间差}
+        if(开始时间差<=0&&结束时间差>=0){课程开始=true}
+        if(开始时间差>=0&&开始时间差<开始差值){开始差值 = 开始时间差;当前课程=课程}
         if(结束时间差>=0&&结束时间差<结束差值){结束差值 = 结束时间差}
     })
     function 差值计算(差值){
-        差值 = Math.floor(差值/1000/60)
+        差值 = Math.ceil(差值/1000/60)
         if (差值===Infinity){差值='本周没有课程了'}
-        else if (差值>=100){差值=Math.floor(差值/60)+'小时'+差值%60+'分钟'}
+        else if (差值>=100){差值=Math.ceil(差值/60)+'小时'+差值%60+'分钟'}
         else {差值=差值+'分钟'}
         return 差值
     }
     表格.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){
         i.remove()
     })
+    if(课程开始){课程开始=`距离下课:${差值计算(结束差值)}`}
+    else{课程开始=`距离上课:${差值计算(开始差值)}`}
     表格.rows[3].cells[1].colSpan = 7
-    表格.rows[3].cells[1].innerHTML= `下一次上课:${差值计算(开始差值)}\n下一次下课:${差值计算(结束差值)}`
+    表格.rows[3].cells[1].innerHTML= `${课程开始}  -  当前课程:${当前课程['course']}  -  上课地点:${当前课程['spaceName']}`
 }
 function 发布动态(标题,内容,作者){
     const 文章i = document.createElement('div')
@@ -849,7 +857,6 @@ function 刷新(){
         else if (i['类型']==='音乐播放器'){加载卡片_音乐(n)}
         if (i['类型']==='表格'){加载卡片_表格(i,-1,n)}
     })
-    时间戳= (new Date()).getTime()
     // 请求文章()
     // 请求音乐()
 }
@@ -895,6 +902,14 @@ document.querySelector('table[data-表格="1"]')
 setTimeout(function(){
     登录切换()
 },10)
+
+function 计数器_秒(){
+    setTimeout(() => {
+        加载课表()
+        计数器_秒()
+    },1000);
+}
+计数器_秒()
 </script>
 
 </body>
