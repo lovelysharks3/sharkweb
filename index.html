@@ -765,14 +765,14 @@ async function 加载课表() {
         let 开始时间差=(new Date(`${课程.date}T${课程.jckssj}`)).getTime()-时间戳
         let 结束时间差=(new Date(`${课程.date}T${课程.jcjssj}`)).getTime()-时间戳
         if(开始时间差<=0&&结束时间差>=0){课程开始=true}
-        if(开始时间差>=0&&开始时间差<开始差值){开始差值 = 开始时间差;当前课程=课程}
-        if(结束时间差>=0&&结束时间差<结束差值){结束差值 = 结束时间差}
+        if(开始时间差>=0&&开始时间差<开始差值){开始差值 = 开始时间差}
+        if(结束时间差>=0&&结束时间差<结束差值){结束差值 = 结束时间差;当前课程=课程}
     })
     function 差值计算(差值){
         差值 = Math.ceil(差值/1000/60)
         if (差值===Infinity){差值='本周没有课程了'}
-        else if (差值>=100){差值=Math.ceil(差值/60)+'小时'+差值%60+'分钟'}
-        else {差值=差值+'分钟'}
+        else if (差值>60){差值=Math.floor(差值/60)+'时'+差值%60+'分'}
+        else {差值=差值+'分'}
         return 差值
     }
     表格.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){
