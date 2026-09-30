@@ -1,0 +1,549 @@
+{
+    "code": 1,
+    "msg": "操作成功",
+    "time": 1790769911,
+    "data": {
+        "list": [
+            {
+                "id": 1521694,
+                "teachingTaskId": 140617,
+                "mergeTaskId": "",
+                "skfsmc": "讲授",
+                "fdjs": "",
+                "course": "大学英语（1）",
+                "courseCode": "10030000090",
+                "date": "2026-12-31",
+                "teacherName": "郑晶晶",
+                "spaceName": "503(龙腰校区教学楼)",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "10:10:00",
+                "jcjssj": "11:50:00",
+                "studentCount": 50,
+                "DayIndex": 4,
+                "sections": "3-4",
+                "sectionsShow": "3-4",
+                "section": "上午",
+                "startNode": "3",
+                "endNode": "4",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1521206,
+                "teachingTaskId": 140634,
+                "mergeTaskId": "",
+                "skfsmc": "一体化",
+                "fdjs": "",
+                "course": "数据库应用技术",
+                "courseCode": "10020012800",
+                "date": "2026-12-29",
+                "teacherName": "谢呈茜",
+                "spaceName": "JDL智能服务机器人实训中心(综合楼103)(龙腰校区综合楼北楼)",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "08:10:00",
+                "jcjssj": "09:50:00",
+                "studentCount": 0,
+                "DayIndex": 2,
+                "sections": "1-2",
+                "sectionsShow": "1-2",
+                "section": "上午",
+                "startNode": "1",
+                "endNode": "2",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1521746,
+                "teachingTaskId": 140623,
+                "mergeTaskId": 9736,
+                "skfsmc": "讲授",
+                "fdjs": "",
+                "course": "军事理论",
+                "courseCode": "10010009470",
+                "date": "2026-12-28",
+                "teacherName": "王佳卉",
+                "spaceName": "合班2(龙腰校区综合楼南楼)",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "08:10:00",
+                "jcjssj": "09:50:00",
+                "studentCount": 0,
+                "DayIndex": 1,
+                "sections": "1-2",
+                "sectionsShow": "1-2",
+                "section": "上午",
+                "startNode": "1",
+                "endNode": "2",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1583445,
+                "teachingTaskId": 140617,
+                "mergeTaskId": "",
+                "skfsmc": "网络教学",
+                "fdjs": "",
+                "course": "大学英语（1）",
+                "courseCode": "10030000090",
+                "date": "2027-01-03",
+                "teacherName": "郑晶晶",
+                "spaceName": "",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "18:30:00",
+                "jcjssj": "20:10:00",
+                "studentCount": 50,
+                "DayIndex": 7,
+                "sections": "11-12",
+                "sectionsShow": "9-10",
+                "section": "晚上",
+                "startNode": "11",
+                "endNode": "12",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1571964,
+                "teachingTaskId": 143671,
+                "mergeTaskId": "",
+                "skfsmc": "考试",
+                "fdjs": "",
+                "course": "体育",
+                "courseCode": "10010000010",
+                "date": "2026-12-29",
+                "teacherName": "乐加生",
+                "spaceName": "",
+                "className": "分组教学班17127",
+                "xqmc": "龙腰校区",
+                "jckssj": "16:20:00",
+                "jcjssj": "18:00:00",
+                "studentCount": 0,
+                "DayIndex": 2,
+                "sections": "9-10",
+                "sectionsShow": "7-8",
+                "section": "下午",
+                "startNode": "9",
+                "endNode": "10",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1521327,
+                "teachingTaskId": 140636,
+                "mergeTaskId": "",
+                "skfsmc": "讲授",
+                "fdjs": "",
+                "course": "电子技术基础",
+                "courseCode": "10010002910",
+                "date": "2026-12-30",
+                "teacherName": "汤婕",
+                "spaceName": "物联网通信实验室(综205-206）(龙腰校区综合楼北楼)",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "08:10:00",
+                "jcjssj": "09:50:00",
+                "studentCount": 0,
+                "DayIndex": 3,
+                "sections": "1-2",
+                "sectionsShow": "1-2",
+                "section": "上午",
+                "startNode": "1",
+                "endNode": "2",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1521595,
+                "teachingTaskId": 140615,
+                "mergeTaskId": 9700,
+                "skfsmc": "",
+                "fdjs": "",
+                "course": "体育",
+                "courseCode": "10010000010",
+                "date": "2026-12-29",
+                "teacherName": "",
+                "spaceName": "",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "16:20:00",
+                "jcjssj": "18:00:00",
+                "studentCount": 0,
+                "DayIndex": 2,
+                "sections": "9-10",
+                "sectionsShow": "7-8",
+                "section": "下午",
+                "startNode": "9",
+                "endNode": "10",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1521649,
+                "teachingTaskId": 140627,
+                "mergeTaskId": "",
+                "skfsmc": "讲授",
+                "fdjs": "",
+                "course": "高等数学",
+                "courseCode": "10030000020",
+                "date": "2026-12-31",
+                "teacherName": "林伟奇",
+                "spaceName": "",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "14:30:00",
+                "jcjssj": "16:10:00",
+                "studentCount": 0,
+                "DayIndex": 4,
+                "sections": "7-8",
+                "sectionsShow": "5-6",
+                "section": "下午",
+                "startNode": "7",
+                "endNode": "8",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1521397,
+                "teachingTaskId": 140638,
+                "mergeTaskId": "",
+                "skfsmc": "一体化",
+                "fdjs": "",
+                "course": "程序设计基础（C语言）",
+                "courseCode": "10010019230",
+                "date": "2026-12-30",
+                "teacherName": "林启招",
+                "spaceName": "网络安全培训认证中心（7B)(龙腰校区物智实训楼)",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "10:10:00",
+                "jcjssj": "11:50:00",
+                "studentCount": 0,
+                "DayIndex": 3,
+                "sections": "3-4",
+                "sectionsShow": "3-4",
+                "section": "上午",
+                "startNode": "3",
+                "endNode": "4",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
+                "id": 1537275,
+                "teachingTaskId": 140634,
+                "mergeTaskId": "",
+                "skfsmc": "一体化",
+                "fdjs": "",
+                "course": "数据库应用技术",
+                "courseCode": "10020012800",
+                "date": "2026-12-31",
+                "teacherName": "谢呈茜",
+                "spaceName": "JDL智能服务机器人实训中心(综合楼103)(龙腰校区综合楼北楼)",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "16:20:00",
+                "jcjssj": "18:00:00",
+                "studentCount": 0,
+                "DayIndex": 4,
+                "sections": "9-10",
+                "sectionsShow": "7-8",
+                "section": "下午",
+                "startNode": "9",
+                "endNode": "10",
+                "week": 17,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "正常",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            }
+        ]
+    }
+}

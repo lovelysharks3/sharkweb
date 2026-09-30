@@ -1,0 +1,11 @@
+{"code":1,"msg":"操作成功","time":1790769725,"data":{"list":[
+     {
+        "course": "鲨鱼课",
+        "spaceName": "无",
+        "jckssj": "22:10:00",
+        "jcjssj": "23:50:00",
+        "date": "2026-09-30",
+        "DayIndex": 1,
+        "endNode": "14"
+    }
+]}}
