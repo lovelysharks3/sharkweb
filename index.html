@@ -785,8 +785,8 @@ function 加载卡片_表格(i,id,n){
 }
 async function 请求课表(){
     时间戳= (new Date()).getTime()
-    // let 周数 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
-    let 周数 = 0
+    let 周数 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
+    // let 周数 = 0
     let res = await fetch(`./公告/课表(${周数}).json`)
     let data = await res.json()
     课表 = data.data.list
