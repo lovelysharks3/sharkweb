@@ -5,7 +5,7 @@
 <!-- #region 元信息 -->
 <meta charset="UTF-8" />
 <meta name="viewport"
-    content="width=device-width, initial-scale=0.4">
+    content="width=device-width, initial-scale=1">
 <title>鲨鱼福信</title>
 <link rel="icon" href="./shark.png">
 
@@ -61,23 +61,6 @@ body{
     /* margin-right:auto */
     flex: 1;
 }
-#用户{
-    position:absolute;
-    top:8px;
-    right: 0;
-    z-index:1;
-    height:60px;
-    min-width:60px;
-    background:white;
-    border-radius:100px;
-    box-shadow:0 0 10px rgba(0,0,0,0.15);
-    border:1px solid lightgrey;
-    padding:0px 16px;
-    margin:0;
-    border:0;
-    font-size:24px;
-    transition: 0.5s;
-}
 button{
     transition: 0.1s;
     cursor:pointer;
@@ -105,6 +88,10 @@ button:active{
 .横排{
     display:flex;
     flex-direction:row;
+}
+.居中{
+    justify-content:center;
+    align-items:center;
 }
 /* #endregion */
 /* #region 投稿 */
@@ -139,12 +126,12 @@ button:active{
     background: #34D0F4;
 }
 /* #endregion */
-/* #region 其他 */
+/* #region 顶栏 */
 #顶栏{
     position:absolute;
     top:8px;
     z-index:1;
-    height:60px;
+    height:64px;
     background:white;
     border-radius:100px;
     box-shadow:0 0 10px rgba(0,0,0,0.15);
@@ -154,8 +141,8 @@ button:active{
     align-items:center;
 }
 #顶栏 button{
-    font-size:20px;
-    min-width:100px;
+    font-size:25px;
+    min-width:120px;
     height: 100%;
     margin:4px;
     background: lightgrey;
@@ -163,6 +150,25 @@ button:active{
     border-radius:100px;
     box-shadow:0 0 5px rgba(0,0,0,0.1);
 }
+#用户{
+    position:absolute;
+    top:8px;
+    right: 0;
+    z-index:1;
+    height:64px;
+    min-width:64px;
+    background:white;
+    border-radius:100px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+    border:1px solid lightgrey;
+    padding:0px 16px;
+    margin:0;
+    border:0;
+    font-size:24px;
+    transition: 0.5s;
+}
+/* #endregion */
+/* #region 其他 */
 .文章 :is(h1,h2,h3,h4,h5,h6){
     margin-bottom:4px;
     white-space: pre-wrap;
@@ -193,7 +199,7 @@ button:active{
     transform: translate(-100vw)
 }
 #主页{
-    padding:68px 4px 128px 4px;
+    padding:72px 4px 128px 4px;
     min-height: 100vh;
     justify-content: flex-start;
     align-items: center;
@@ -205,59 +211,6 @@ button:active{
     padding:20px;
     border-radius:16px;
     box-shadow:0 0 20px rgba(0,0,0,0.1);
-}
-#设置卡片{
-    display: flex;
-    position: fixed;
-    min-width: 400px;
-    background: white;
-    transition: 0.2s;
-    transform: scale(0.8);
-    opacity: 0.95;
-}
-.设置选项{
-    font-size:20px;
-    justify-content: space-between;
-    align-items:center;
-    width: 100%;
-    height: 64px;
-}
-.设置选项:not(:last-child){
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-.设置开关{
-    background: lightgrey;
-    width: 64px;
-    height: 32px;
-    border-radius:100px;
-    padding: 4px;
-    box-shadow:0 0 10px rgba(0,0,0,0.2);
-    justify-content: flex-start;
-}
-.设置开关.开关开启{
-    justify-content: flex-end;
-    background: #34D0F4;
-}
-.开关圆点{
-border-radius:100px;
-background: white;
-height: 100%;
-width: 24px;
-transition: 0.1s;
-}
-#模糊{
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.1);
-    backdrop-filter: blur(3px);
-    z-index: 2;
-    transition: 0.2s;
-    pointer-events:none;
-    opacity: 0;
-}
-.居中{
-    justify-content:center;
-    align-items:center;
 }
 #登录卡片{
     position:fixed;
@@ -291,6 +244,67 @@ transition: 0.1s;
 .渐显.卡片.删除{
     transform: translate(100vw)!important;
 }
+#主页 .文章 button{
+    width: 50px;
+    height: 50px;
+    background: none;
+    border: 0;
+    font-size: 30px;
+    margin: 0 10px 0 10px;
+}
+/* #endregion */
+/* #region 设置 */
+#设置卡片{
+    display: flex;
+    position: fixed;
+    min-width: 400px;
+    background: white;
+    transition: 0.2s;
+    transform: scale(0.8);
+    opacity: 0.95;
+}
+.设置选项{
+    font-size:20px;
+    justify-content: space-between;
+    align-items:center;
+    width: 100%;
+    height: 64px;
+}
+.设置选项:not(:last-child){
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.设置开关{
+    background: lightgrey;
+    width: 64px;
+    height: 32px;
+    border-radius:100px;
+    padding: 4px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+    justify-content: flex-start;
+}
+.设置开关.开关开启{
+    justify-content: flex-end;
+    background: #34D0F4;
+}
+.开关圆点{
+    border-radius:100px;
+    background: white;
+    height: 100%;
+    width: 24px;
+    transition: 0.1s;
+}
+#模糊{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(3px);
+    z-index: 2;
+    transition: 0.2s;
+    pointer-events:none;
+    opacity: 0;
+}
+/* #endregion */
+/* #region 音乐播放器 */
 #音乐卡片{
     justify-content: flex-start;
     align-items:center;
@@ -320,14 +334,6 @@ transition: 0.1s;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-}
-#主页 .文章 button{
-    width: 50px;
-    height: 50px;
-    background: none;
-    border: 0;
-    font-size: 30px;
-    margin: 0 10px 0 10px;
 }
 .音乐按钮栏{
     display: grid;
@@ -417,6 +423,7 @@ table[data-表格='3'] {
 }
 .课程进度条{
     position: absolute;
+    left: 0;
     width: 0;
     height: 100%;
     background:rgba(200,245,200,0.5);
@@ -427,11 +434,11 @@ table[data-表格='3'] {
     position: relative;
     width: 100%;
     height: 100%;
+    justify-content: space-between;
 }
-.定位容器 span{
+#课程进度提示{
     position: relative;
     z-index: 1;
-    height: 100%;
 }
 /* #endregion */
 </style>
@@ -455,13 +462,10 @@ table[data-表格='3'] {
 <!-- #endregion -->
 <script>
 //#region 初始化
-let 循环播放 = true
-let 音乐列表
-let 播放中 = false
-let 音乐索引 = 0
 let 用户名
-let 时间戳
-let 课表;let 表格1
+let 音乐列表, 循环播放 = true,播放中 = false,音乐索引 = 0
+let 时间戳,周数指针
+let 课表
 const 开学时间 = new Date('2026-9-7')
 const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.8',音乐开关]]
 //#endregion
@@ -619,14 +623,14 @@ document.querySelector('#发布按钮').onclick = function(){
     切换主页()
     清除文章()
 };
-document.addEventListener('click', function(e) {
-    const 文章i = e.target.closest('.删除按钮').closest('.文章');
-    if (文章i) {
-        文章i.classList.add('删除');
-        删除文章(文章i.dataset.id)
-        setTimeout(function(){文章i.remove()},500)
-    }
-});
+// document.addEventListener('click', function(e) {
+//     const 文章i = e.target.closest('.删除按钮').closest('.文章');
+//     if (文章i) {
+//         文章i.classList.add('删除');
+//         删除文章(文章i.dataset.id)
+//         setTimeout(function(){文章i.remove()},500)
+//     }
+// });
 function 蓝色背景(){
     if(this.classList.contains('开关开启')){
         this.classList.remove('开关开启');
@@ -784,29 +788,42 @@ function 加载卡片_表格(i,id,n){
     if(i['id']==1){请求课表()}
 }
 async function 请求课表(){
-    时间戳= (new Date()).getTime()
-    let 周数 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
-    // let 周数 = 0
-    let res = await fetch(`./公告/课表(${周数}).json`)
+    let res = await fetch(`./公告/课表(${周数指针}).json`)
     let data = await res.json()
     课表 = data.data.list
-    表格1 = document.querySelector('table[data-表格="1"]')
+    let 表格1 = document.querySelector('table[data-表格="1"]')
     表格1.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){
         i.remove()
     })
     表格1.rows[3].cells[1].colSpan = 7
-    表格1.rows[0].cells[0].innerText=`第${周数}周`
+    表格1.rows[0].cells[0].innerText=`第${周数指针}周`
+    document.querySelector('table[data-表格="1"]')
+        .querySelectorAll('th:not([data-列]):not([data-行])')
+        .forEach(i => i.innerText = '')
     课表.forEach(function(课程){
         表格1.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
     })
+    表格1.rows[3].cells[1].innerHTML = `<div class='定位容器 居中 横排'>
+        <button class="左箭头"><img src='./svg/左箭头.svg'></button><div class='课程进度条'></div><span id='课程进度提示'></span><button class="右箭头"><img src='./svg/右箭头.svg'></button>
+        </div>`
     加载课表()
+    
+    document.querySelector('table[data-表格="1"] .左箭头').onclick = function(){
+        if(周数指针==1){周数指针=20}
+        else{周数指针--};
+        请求课表()
+    };
+    document.querySelector('table[data-表格="1"] .右箭头').onclick = function(){
+        if(周数指针===20){周数指针=1}
+        else{周数指针++};
+        请求课表()
+    };
+
 }
 function 加载课表() {
     时间戳= (new Date()).getTime()
-    let 开始差值 = Infinity
-    let 结束差值 = Infinity
-    let 当前课程
-    let 课程开始
+    let 开始差值 = Infinity,结束差值 = Infinity
+    let 当前课程,课程开始
     let 课程进度 = 0
 
     课表.forEach(function(课程){
@@ -826,9 +843,8 @@ function 加载课表() {
     }
     if(课程开始){课程开始=`距离下课:${差值计算(结束差值)}`;课程进度=100-结束差值/1000/60}
     else{课程开始=`距离上课:${差值计算(开始差值)}`}
-    console.log(课程开始)
-    if(当前课程){表格1.rows[3].cells[1].innerHTML = `<div class='定位容器'><div class='课程进度条'></div><span class='居中 竖排'>${课程开始}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}</span></div>`}
-    else{表格1.rows[3].cells[1].innerHTML = `<div class='定位容器'><div class='课程进度条'></div><span class='居中 竖排'>本周没有课程了\n休息一下吧~</span></div>`}
+    if(当前课程){document.querySelector('#课程进度提示').innerText=`${课程开始}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`}
+    else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
     document.querySelector('.课程进度条').style.width=课程进度 + '%'
 }
 function 发布动态(标题,内容,作者){
@@ -901,6 +917,8 @@ function 请求音乐(){
 }
 function 刷新(){
     document.querySelector('#主页').replaceChildren(document.querySelector('#用户'))
+    时间戳= (new Date()).getTime()
+    周数指针 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
     文章列表.forEach(function(i,n){
         if (i['类型']==='文本'){加载卡片_文本(i,-1,n)}
         else if (i['类型']==='音乐播放器'){加载卡片_音乐(n)}
@@ -944,14 +962,17 @@ function 复制文字(){
     setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
 }
 function 实验按钮(){
-document.querySelector('table[data-表格="1"]')
-    .querySelectorAll('th:not([data-列]):not([data-行])')
-    .forEach(i => i.innerText = '')
+    console.log('按钮')
 }
 setTimeout(function(){
     登录切换()
 },10)
-
+if (window.innerWidth < 512) {
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.4')
+}
+else if ((window.innerWidth < 1024)){
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
+}
 function 计数器_秒(){
     setTimeout(() => {
         加载课表()
