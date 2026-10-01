@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="./shark512.png">
 <!-- #endregion -->
 <style>
-/* #region 通用 */
+/* #region 网页框架 */
 *{
     box-sizing:border-box;
     padding: 0;
@@ -23,23 +23,6 @@
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
-/* h1, h2, h3, h4, h5, h6, span, p {
-    user-select: text !important;
-} */
-::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.1);
-}
-::-webkit-scrollbar-thumb {
-    border-radius: 100px;
-    background: rgba(44,63,85,0.25);
-    /* border-left: 1px solid transparent;
-    border-right: 1px solid transparent; */
-    background-clip: padding-box;
-}
-
 html{
     scrollbar-gutter: stable;
     background:#f5f5f5;
@@ -57,7 +40,24 @@ body{
     touch-action: manipulation;
     overscroll-behavior-y: none;
 }
-
+/* h1, h2, h3, h4, h5, h6, span, p {
+    user-select: text !important;
+} */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    background: rgba(44,63,85,0.25);
+    /* border-left: 1px solid transparent;
+    border-right: 1px solid transparent; */
+    background-clip: padding-box;
+}
+/* #endregion */
+/* #region 通用 */
 .填充{
     /* margin-right:auto */
     flex: 1;
@@ -93,6 +93,19 @@ button:active{
 .居中{
     justify-content:center;
     align-items:center;
+}
+
+.渐显:not(.卡片){
+    opacity: 1!important;
+    pointer-events:auto!important;
+}
+.渐显.卡片{
+    transform:scale(1) translate(0)!important;
+    opacity: 1!important;
+    pointer-events:auto!important;
+}
+.渐显.卡片.删除{
+    transform: translate(100vw)!important;
 }
 /* #endregion */
 /* #region 投稿 */
@@ -181,7 +194,7 @@ button:active{
 .文章{
     position: relative;
     margin:8px 0;
-    width:min(calc(600px + 20vw),100vw);
+    width:var(--文章宽度,min(600px + 20vw,95vw));
     transition: 0.5s;
 }
 .文章 .删除按钮{
@@ -200,7 +213,7 @@ button:active{
     transform: translate(-100vw)
 }
 #主页{
-    padding:72px 4px 128px 4px;
+    padding:72px 4px 64px 4px;
     min-height: 100vh;
     justify-content: flex-start;
     align-items: center;
@@ -232,18 +245,6 @@ button:active{
     font-size:20px;
     padding:10px 30px;
     margin:10px;
-}
-.渐显:not(.卡片){
-    opacity: 1!important;
-    pointer-events:auto!important;
-}
-.渐显.卡片{
-    transform:scale(1) translate(0)!important;
-    opacity: 1!important;
-    pointer-events:auto!important;
-}
-.渐显.卡片.删除{
-    transform: translate(100vw)!important;
 }
 #主页 .文章 button{
     width: 50px;
@@ -422,24 +423,36 @@ table[data-表格='1'] tr:nth-child(4)> th {
 table[data-表格='3'] {
     table-layout: auto;
 }
-.课程进度条{
-    position: absolute;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background:rgba(200,245,200,0.5);
-    z-index: 1;
-    box-shadow:0 0 0 1px rgba(200,245,200,0.5)
-}
 .定位容器{
     position: relative;
     width: 100%;
     height: 100%;
     justify-content: space-between;
 }
+.课程进度条{
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background:rgba(200,245,200,0.5);
+    box-shadow:0 0 0 1px rgba(200,245,200,0.5)
+}
 #课程进度提示{
     position: relative;
     z-index: 1;
+}
+.定位容器 button{
+    position: relative;
+    z-index: 1;
+}
+.定位容器 button:hover{
+    filter: brightness(1.05);
+    transform: scale(1.1);
+}
+.定位容器 button:active{
+    filter: brightness(0.9);
+    transform: scale(0.9);
 }
 /* #endregion */
 </style>
@@ -487,7 +500,7 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
         <a href="https://m.fjpit.com/#/">智慧教务</a>
     </div>`,
     列:['周一','周二','周三','周四','周五','周六','周日'],
-    行:['课表','第一节\n8:10-9:50','第二节\n10:10-11:50','午休','第三节\n2:30-4:10','第四节\n4:20-6:00','第五节\n6:15-8:10','第六节\n8:20-10:00'],
+    行:['课表加载中','第一节\n8:10-9:50','第二节\n10:10-11:50','午休','第三节\n2:30-4:10','第四节\n4:20-6:00','第五节\n6:15-8:10','第六节\n8:20-10:00'],
     内容:``,
     作者:'shark',
     类型:'表格'},
@@ -810,7 +823,7 @@ async function 请求课表(){
     加载课表()
     
     document.querySelector('table[data-表格="1"] .左箭头').onclick = function(){
-        if(周数指针==1){周数指针=20}
+        if(周数指针==0){周数指针=20}
         else{周数指针--};
         请求课表()
     };
@@ -836,15 +849,17 @@ function 加载课表() {
     })
     function 差值计算(差值){
         差值 = Math.ceil(差值/1000/60)
-        if (差值===Infinity){差值='本周没有课程了'}
+        if (差值===Infinity){差值=false}
         else if (差值>60*24){差值=Math.floor(差值/60/24)+'天' +Math.ceil(差值/60)%24+'时'}
         else if (差值>60){差值=Math.floor(差值/60)+'时'+差值%60+'分'}
         else {差值=差值+'分'}
         return 差值
     }
-    if(课程开始){课程开始=`距离下课:${差值计算(结束差值)}`;课程进度=100-结束差值/1000/60}
-    else{课程开始=`距离上课:${差值计算(开始差值)}`}
-    if(当前课程){document.querySelector('#课程进度提示').innerText=`${课程开始}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`}
+    if(当前课程){
+        if(课程开始){课程开始=`下课倒计时:${差值计算(结束差值)}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`;课程进度=100-结束差值/1000/60}
+        else{课程开始=`上课倒计时:${差值计算(开始差值)}  -  下节课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`}
+        document.querySelector('#课程进度提示').innerText=课程开始
+    }
     else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
     document.querySelector('.课程进度条').style.width=课程进度 + '%'
 }
@@ -965,22 +980,25 @@ function 复制文字(){
 function 实验按钮(){
     console.log('按钮')
 }
-setTimeout(function(){
-    登录切换()
-},10)
-if (window.innerWidth < 512) {
-    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.4')
-}
-else if ((window.innerWidth < 1024)){
-    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
-}
 function 计数器_秒(){
     setTimeout(() => {
         加载课表()
         计数器_秒()
     },1000);
 }
-计数器_秒()
+//#region 启动程序
+if (screen.width < 512) {
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.5')
+    document.documentElement.style.setProperty('--文章宽度', 'min(75vw + 128px,95vw)')
+}
+else if (screen.width < 1024){
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
+}
+setTimeout(function(){
+    登录切换()
+    计数器_秒()
+},10)
+//#endregion 
 </script>
 
 </body>
