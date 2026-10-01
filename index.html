@@ -447,12 +447,10 @@ table[data-表格='3'] {
     z-index: 1;
 }
 .定位容器 button:hover{
-    filter: brightness(1.05);
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 .定位容器 button:active{
-    filter: brightness(0.9);
-    transform: scale(0.9);
+    transform: scale(0.8);
 }
 /* #endregion */
 </style>
@@ -823,7 +821,7 @@ async function 请求课表(){
     加载课表()
     
     document.querySelector('table[data-表格="1"] .左箭头').onclick = function(){
-        if(周数指针==0){周数指针=20}
+        if(周数指针===1){周数指针=20}
         else{周数指针--};
         请求课表()
     };
@@ -988,8 +986,9 @@ function 计数器_秒(){
 }
 //#region 启动程序
 if (screen.width < 512) {
-    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.5')
-    document.documentElement.style.setProperty('--文章宽度', 'min(75vw + 128px,95vw)')
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.45')
+    // document.documentElement.style.setProperty('--文章宽度', 'min(75vw + 128px,95vw)')
+    document.documentElement.style.setProperty('--文章宽度','95vw')
 }
 else if (screen.width < 1024){
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
