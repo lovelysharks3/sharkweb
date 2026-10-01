@@ -58,6 +58,13 @@ body{
 }
 /* #endregion */
 /* #region 通用 */
+.卡片{
+    min-height:200px;
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 0 20px rgba(0,0,0,0.1);
+}
 .填充{
     /* margin-right:auto */
     flex: 1;
@@ -155,7 +162,7 @@ button:active{
     align-items:center;
 }
 #顶栏 button{
-    font-size:25px;
+    font-size:24px;
     min-width:120px;
     height: 100%;
     margin:4px;
@@ -182,50 +189,7 @@ button:active{
     transition: 0.5s;
 }
 /* #endregion */
-/* #region 其他 */
-.文章 :is(h1,h2,h3,h4,h5,h6){
-    margin-bottom:4px;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
-.文章 :is(h3,h4,h5,h6){
-    color:grey
-}
-.文章{
-    position: relative;
-    margin:8px 0;
-    width:var(--文章宽度,min(600px + 20vw,95vw));
-    transition: 0.5s;
-}
-.文章 .删除按钮{
-    position: absolute;
-    right:5px;
-    top: 20px;
-    height: 40px;
-    width: 40px;
-    opacity: 0;
-    transition: 0.2s;
-}
-.文章:hover .删除按钮{
-    opacity: 0.8;
-}
-#主页 .文章{
-    transform: translate(-100vw)
-}
-#主页{
-    padding:72px 4px 64px 4px;
-    min-height: 100vh;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-}
-.卡片{
-    min-height:200px;
-    background:white;
-    padding:20px;
-    border-radius:16px;
-    box-shadow:0 0 20px rgba(0,0,0,0.1);
-}
+/* #region 登录 */
 #登录卡片{
     position:fixed;
     width:400px;
@@ -245,14 +209,6 @@ button:active{
     font-size:20px;
     padding:10px 30px;
     margin:10px;
-}
-#主页 .文章 button{
-    width: 50px;
-    height: 50px;
-    background: none;
-    border: 0;
-    font-size: 30px;
-    margin: 0 10px 0 10px;
 }
 /* #endregion */
 /* #region 设置 */
@@ -453,6 +409,52 @@ table[data-表格='3'] {
     transform: scale(0.8);
 }
 /* #endregion */
+/* #region 主页文章 */
+#主页{
+    padding:72px 4px 64px 4px;
+    min-height: 100vh;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+#主页 .文章{
+    transform: translate(-100vw)
+}
+#主页 .文章 button{
+    width: 50px;
+    height: 50px;
+    background: none;
+    border: 0;
+    font-size: 30px;
+    margin: 0 10px 0 10px;
+}
+.文章 :is(h1,h2,h3,h4,h5,h6){
+    margin-bottom:4px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+.文章 :is(h3,h4,h5,h6){
+    color:grey
+}
+.文章{
+    position: relative;
+    margin:8px 0;
+    width:var(--文章宽度,min(600px + 20vw,95vw));
+    transition: 0.5s;
+}
+.文章 .删除按钮{
+    position: absolute;
+    right:5px;
+    top: 20px;
+    height: 40px;
+    width: 40px;
+    opacity: 0;
+    transition: 0.2s;
+}
+.文章:hover .删除按钮{
+    opacity: 0.8;
+}
+/* #endregion */
 </style>
 
 </head>
@@ -475,7 +477,7 @@ table[data-表格='3'] {
 <script>
 //#region 初始化
 let 用户名
-let 音乐列表, 循环播放 = true,播放中 = false,音乐索引 = 0
+let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0
 let 时间戳,周数指针
 let 课表
 const 开学时间 = new Date('2026-9-7')
@@ -635,14 +637,28 @@ document.querySelector('#发布按钮').onclick = function(){
     切换主页()
     清除文章()
 };
-// document.addEventListener('click', function(e) {
+// {//按钮检测
+//     button.addEventListener('pointerdown', () => {
+//         按钮.classList.add('按下')
+//     })
+
+//     button.addEventListener('pointerup', () => {
+//         按钮.classList.remove('按下')
+//     })
+
+//     button.addEventListener('pointercancel', () => {
+//         按钮.classList.remove('按下')
+//     })
+
+//     document.addEventListener('click', function(e) {
 //     const 文章i = e.target.closest('.删除按钮').closest('.文章');
 //     if (文章i) {
 //         文章i.classList.add('删除');
 //         删除文章(文章i.dataset.id)
 //         setTimeout(function(){文章i.remove()},500)
 //     }
-// });
+//     })
+// }
 function 蓝色背景(){
     if(this.classList.contains('开关开启')){
         this.classList.remove('开关开启');
@@ -830,7 +846,6 @@ async function 请求课表(){
         else{周数指针++};
         请求课表()
     };
-
 }
 function 加载课表() {
     时间戳= (new Date()).getTime()
@@ -976,13 +991,34 @@ function 复制文字(){
     setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
 }
 function 实验按钮(){
-    console.log('按钮')
+    // confirm('确定要删除吗？')
+    // let 名字 = [prompt('请输入名字'),prompt('请输入名字')]
+//     Notification.requestPermission().then(权限 => {
+//     if (权限 === 'granted') {
+//         new Notification('鲨鱼网站', {
+//             body: '登录成功！'
+//         })
+//     }
+// })
+申请通知()
+
+alert(`
+    投掷硬币：${随机数(0,1) === 0 ? '正面' : '反面'}
+    四面骰：${随机数(1,4)}
+    六面骰：${随机数(1,6)}
+    1-10随机数：${随机数(1,10)}
+    1-50随机数：${随机数(1,50)}
+    1-100随机数：${随机数(1,100)}
+`)
 }
 function 计数器_秒(){
     setTimeout(() => {
         加载课表()
         计数器_秒()
     },1000);
+}
+function 随机数(最小, 最大) {
+    return Math.floor(Math.random() * (最大 - 最小 + 1)) + 最小
 }
 //#region 启动程序
 if (screen.width < 512) {
@@ -998,6 +1034,17 @@ setTimeout(function(){
     计数器_秒()
 },10)
 //#endregion 
+
+async function 申请通知() {
+    let 权限 = await Notification.requestPermission()
+
+    if (权限 === 'granted') {
+        new Notification('鲨鱼网站', {
+            body: '测试通知',
+            icon: './shark.png'
+        })
+    }
+}
 </script>
 
 </body>
