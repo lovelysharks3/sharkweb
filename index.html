@@ -15,6 +15,22 @@
 <link rel="apple-touch-icon" href="./shark512.png">
 <!-- #endregion -->
 <style>
+/* #region 变量 */
+:root{
+    --背景颜色:#f0f0f2;
+    --卡片颜色:white;
+    --表头颜色:lightgray;
+    --表格颜色:#f5f5f5;
+    --文字颜色:black;
+}
+.变量_深色{
+    --背景颜色:#222228;
+    --卡片颜色:#282836;
+    --表头颜色:#323250;
+    --表格颜色:#303042;
+    --文字颜色:#f5f5f5;
+}
+/* #endregion */
 /* #region 网页框架 */
 *{
     box-sizing:border-box;
@@ -22,10 +38,13 @@
     margin: 0;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    /* color: white; */
 }
 html{
+    color: var(--文字颜色);
+    background-color:var(--背景颜色);
+    transition:0.5s;
     scrollbar-gutter: stable;
-    background:#f5f5f5;
     touch-action: manipulation;
     overscroll-behavior-y: none;
     -webkit-text-size-adjust: 100%;
@@ -60,7 +79,7 @@ body{
 /* #region 通用 */
 .卡片{
     min-height:200px;
-    background:white;
+    background:var(--卡片颜色);
     padding:20px;
     border-radius:16px;
     box-shadow:0 0 20px rgba(0,0,0,0.1);
@@ -72,6 +91,8 @@ body{
 button{
     transition: 0.1s;
     cursor:pointer;
+    color: var(--文字颜色);
+    background: var(--表头颜色);
     /* user-select: none; */
 }
 button:hover{
@@ -84,9 +105,8 @@ button:active{
 .方按钮{
     font-size: 20px;
     border-radius:6px;
-    border: 0;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
-    border:1px solid lightgrey;
+    border:1px solid var(--表格颜色);
 }
 .竖排{
     display:flex;
@@ -114,48 +134,16 @@ button:active{
     transform: translate(100vw)!important;
 }
 /* #endregion */
-/* #region 投稿 */
-#动态编辑{
-    display: none;
-    margin-top:68px;
-    margin-bottom:8px;
-    position: relative;
-}
-#标题编辑{
-    border-bottom: 1px solid lightgrey;
-    min-height: 48px;
-    font-size: 32px;
-    margin-bottom: 8px;
-}
-#内容编辑{
-    font-size: 20px;
-    color: grey;
-    margin-bottom: 30px;
-    min-height: 200px;
-}
-.文本编辑{
-    outline: none;
-    overflow-wrap: break-word;
-}
-#发布按钮{
-    position: absolute;
-    width: 80px;
-    height: 40px;
-    bottom: 10px;
-    right: 20px;
-    background: #34D0F4;
-}
-/* #endregion */
 /* #region 顶栏 */
 #顶栏{
     position:absolute;
     top:8px;
     z-index:1;
     height:64px;
-    background:white;
+    background:var(--卡片颜色);
     border-radius:100px;
     box-shadow:0 0 10px rgba(0,0,0,0.15);
-    border-bottom:1px solid lightgrey;
+    border-bottom:1px solid --表格颜色;
     padding:8px;
     justify-content:flex-start;
     align-items:center;
@@ -165,7 +153,7 @@ button:active{
     min-width:120px;
     height: 100%;
     margin:4px;
-    background: lightgrey;
+    background: var(--表头颜色);
     border: 0;
     border-radius:100px;
     box-shadow:0 0 5px rgba(0,0,0,0.1);
@@ -177,10 +165,10 @@ button:active{
     z-index:1;
     height:64px;
     min-width:64px;
-    background:white;
+    background:var(--表格颜色);
     border-radius:100px;
     box-shadow:0 0 10px rgba(0,0,0,0.15);
-    border:1px solid lightgrey;
+    border:1px solid var(--表格颜色);
     padding:0px 16px;
     margin:0;
     border:0;
@@ -202,11 +190,19 @@ button:active{
     margin:5px;
     padding:10px;
     width:250px;
+    background: var(--表头颜色);
+    border-radius: 12px;
+    border: 0;
+    color: var(--文字颜色);
+}
+#登录卡片 :is(h1,h2,h3,h4,h5,h6,span,p){
+    margin-bottom:12px;
 }
 #登录卡片 button{
-    font-size:20px;
-    padding:10px 30px;
-    margin:10px;
+    width: 100px;
+    height: 52px;
+    font-size:24px;
+    margin:12px;
 }
 /* #endregion */
 /* #region 设置 */
@@ -274,7 +270,7 @@ button:active{
     height: 12px;
     width: 100%;
     border-radius: 100px;
-    background: lightgrey;
+    background: var(--表头颜色);
     overflow:hidden;
     cursor: pointer;
     margin-bottom: 5px;
@@ -334,7 +330,7 @@ table {
     border-collapse: collapse;
     width: calc(100% + 40px);
     table-layout: fixed;
-    background-color: #f5f5f5;
+    background-color: var(--表格颜色);
     border-radius: 8px;
     overflow: hidden;
     margin: 0px -20px -20px -20px;
@@ -347,7 +343,7 @@ th, td {
     font-size: 15px;
 }
 table tr:nth-child(1)> th {
-    background-color: lightgray;
+    background-color: var(--表头颜色);
 }
 
 table tr:first-child > * {
@@ -367,11 +363,10 @@ table[data-表格='1'] th {
     height:var(--课表高度,64px);
 }
 table[data-表格='1'] th:nth-child(1) {
-    background-color: lightgray;
+    background-color: var(--表头颜色);
 }
 table[data-表格='1'] tr:nth-child(4)> th {
     height: 54px;
-    /* font-size: 15px; */
 }
 table[data-表格='3'] {
     table-layout: auto;
@@ -405,11 +400,13 @@ table[data-表格='3'] {
 /* #endregion */
 /* #region 主页文章 */
 #主页{
+    display: flex;
     padding:72px 4px 64px 4px;
     min-height: 100vh;
     justify-content: flex-start;
     align-items: center;
     position: relative;
+    width: var(--文章宽度,min(600px + 20vw,95vw));
 }
 #主页 .文章{
     transform: translate(-100vw)
@@ -422,13 +419,13 @@ table[data-表格='3'] {
     font-size: 30px;
     margin: 0 10px 0 10px;
 }
-.文章 :is(h1,h2,h3,h4,h5,h6){
+.文章 :is(h1,h2,h3,h4,h5,h6,span,p){
     margin-bottom:4px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 .文章 :is(h3,h4,h5,h6){
-    color:grey
+    color: grey !important;
 }
 .文章{
     position: relative;
@@ -455,38 +452,30 @@ table[data-表格='3'] {
 <!-- #region 界面 -->
 <body class='竖排 居中'>
 <div id='顶栏' class="横排">
-    <button id="设置按钮" onclick='模块_顶栏.设置()'>设置</button>
+    <button onclick='模块_顶栏.设置()'>设置</button>
     <button onclick='模块_顶栏.百宝箱()'>百宝箱</button>
-    <button onclick='模块_顶栏.登录()'>萌鲨无敌</button>
+    <button id="姓名" onclick='模块_顶栏.登录()'>萌鲨无敌</button>
 </div>
 <div id="模糊" class="居中 竖排">
     <div id='设置卡片' class="卡片 居中 竖排"></div>
     <div id="登录卡片" class='卡片 居中 竖排'>
         <h2 style='padding-top:10px'>智慧教务登录</h2>
         <input id="用户名" placeholder="用户名" maxlength="20">
-        <input id="密码" type="password" placeholder="密码">
+        <input id="密码" placeholder="密码" maxlength="20">
         <button id='登录按钮' class="方按钮" onclick='登录切换()'>登录</button>
     </div>
 </div>
-<div id='主页' class='竖排' style='display:none'></div>
+<div id='主页' class='竖排'><button id="用户" onclick='刷新()'></button></div>
 </div>
 <!-- #endregion -->
 <script>
 //#region 初始化
-let 用户名
-let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0, 音乐 = new Audio('./music/!toy.mp3')
-    音乐.loop = false
-    音乐.volume = 0.1
+let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0, 音乐
 let 时间戳,周数指针,课表,表格1
+let 缓存 = {设置:JSON.parse(localStorage.getItem('设置'))||{},登录信息:JSON.parse(localStorage.getItem('登录信息'))||{}}
 const 开学时间 = new Date('2026-9-7')
 //#endregion
 let 文章列表 = [
-    {id:0,
-    标题:`音乐播放器`,
-    内容:`music`,
-    作者:'shark',
-    类型:'音乐播放器'},
-
     {id:1,
     标题:`<div class='横排' style='justify-content: space-around'>
         <a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
@@ -603,15 +592,40 @@ let 文章列表 = [
     类型:'文本'},
 ]
 const 模块_设置 = {
-    蓝色背景(){
+    设置列表 : [
+        ['深色模式','深色模式'],
+        ['音乐播放器','音乐播放器'],
+        ['版本:1.8','无']
+    ],
+    缓存存储(属性名,值){
+        缓存.设置[属性名]=值
+        localStorage.setItem('设置',JSON.stringify(缓存.设置))
+    },
+    深色模式(){
         if(this.classList.contains('开关开启')){
             this.classList.remove('开关开启');
-            document.documentElement.style.background = '#f5f5f5';
+            模块_设置.缓存存储('深色模式',false)
+            document.documentElement.classList.remove('变量_深色')
             }
         else
             {this.classList.add('开关开启');
-            document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
+            模块_设置.缓存存储('深色模式',true)
+            document.documentElement.classList.add('变量_深色')
+            // document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
     }},
+    音乐播放器(){
+        if(this.classList.contains('开关开启')){
+            this.classList.remove('开关开启');
+            模块_设置.缓存存储('音乐播放器',false)
+            文章列表.shift()
+        }
+        else{
+            this.classList.add('开关开启');
+            模块_设置.缓存存储('音乐播放器',true)
+            文章列表.unshift({id:0,标题:`音乐播放器`,内容:`music`,作者:'shark',类型:'音乐播放器'})
+            // document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
+        }
+    },
     无(){
         if(this.classList.contains('开关开启')){
             this.classList.remove('开关开启');
@@ -619,10 +633,24 @@ const 模块_设置 = {
         else
             {this.classList.add('开关开启');
     }},
-    设置列表 : [
-        ['蓝色背景','蓝色背景'],
-        ['版本:1.8','无']
-    ]
+    加载(){
+        模块_设置.设置列表.forEach(function([选项文本,选项功能]){ //设置功能
+            const 设置选项 = document.createElement('div')
+            设置选项.className = '设置选项 横排';
+            设置选项.textContent = 选项文本;
+            const 设置开关 = document.createElement('div');
+            设置开关.className = '设置开关 横排';
+            const 开关圆点 = document.createElement('div');
+            开关圆点.className = '开关圆点';
+            document.querySelector('#设置卡片').appendChild(设置选项);
+            设置选项.appendChild(设置开关);
+            设置开关.appendChild(开关圆点);
+            设置开关.onclick = 模块_设置[选项功能];
+            if(缓存.设置[选项功能]){设置开关.classList.add('开关开启');}
+        })
+        if(缓存.设置['深色模式']){document.documentElement.classList.add('变量_深色')}
+        if(缓存.设置['音乐播放器']){文章列表.unshift({id:0,标题:`音乐播放器`,内容:`music`,作者:'shark',类型:'音乐播放器'})}
+    },
 }
 const 模块_顶栏 = {
     设置(){
@@ -792,6 +820,7 @@ const 模块_文章加载 = {
         if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
         if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
         setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
+        请求音乐()
     },
     文本(i,id,n){
         const 文章i = document.createElement('div')
@@ -862,10 +891,9 @@ function 刷新(){
     周数指针 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
     文章列表.forEach(function(i,n){
         if (i['类型']==='文本'){模块_文章加载.文本(i,-1,n)}
-        else if (i['类型']==='音乐播放器'){模块_文章加载.音乐(n)}
-        if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
+        else if (i['类型']==='音乐播放器'){if(!音乐){音乐 = new Audio('./music/!toy.mp3');音乐.loop = false;音乐.volume = 0.1};模块_文章加载.音乐(n)}
+        else if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
     })
-    请求音乐()
 }
 function 音乐时间显示(秒i){
     let 分 = Math.floor(秒i/60);
@@ -875,16 +903,15 @@ function 音乐时间显示(秒i){
 }
 function 登录切换(){
     let 用户名 = document.querySelector("#用户名").value
-    if (用户名 !== 'baka' && document.querySelector("#密码").value === '')
-        {document.querySelector('#登录卡片').classList.remove('渐显');
+    let 密码 = document.querySelector("#密码").value
+    if (用户名 !== 'baka' && 密码 !== 'baka'){
+        document.querySelector('#登录卡片').classList.remove('渐显');
         document.querySelector('#模糊').classList.remove('渐显')
+        智慧教务(用户名,密码)
         setTimeout(function(){
-            document.querySelector("#主页").style.display='flex';
-            document.querySelector('#主页').insertAdjacentHTML("afterbegin",`<button id="用户">${用户名}</button>`);
-            document.querySelector('#用户').onclick = function(){刷新()};
             刷新();
         },200)
-        }
+    }
     else {alert("错了，笨蛋")}
 }
 function 复制文字(){
@@ -892,6 +919,31 @@ function 复制文字(){
     navigator.clipboard.writeText("我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:");
     document.querySelector('#复制提示').innerHTML='请假提示(复制成功)';
     setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
+}
+function 智慧教务(username,password){
+    fetch("https://jw-api.fjpit.com/api/auth/login", {
+        "headers": {
+            "accept": "*/*",
+            "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+            "content-type": "application/json",
+            "platform": "h5",
+            "server": "1",
+            "Referer": "https://m.fjpit.com/"
+        },
+        "body": JSON.stringify({username, password}),
+        "method": "POST"
+    }).then(res => res.json())
+    .then(data =>{
+        console.log(data)
+        if(data.code!==1){alert('登录失败\n智慧教务默认密码是身份证\n请不要频繁尝试，账户可能被冻结')}
+        else if (data.code===1){
+        缓存.登录信息=data.data.userInfo
+        document.querySelector('#姓名').innerText = 缓存.登录信息.realname
+        localStorage.setItem('登录信息',JSON.stringify(缓存.登录信息))
+        alert('登录成功\n姓名：' + 缓存.登录信息.realname)
+        }
+
+    })
 }
 function 随机数(最小,最大){
     return Math.floor(Math.random() * (最大 - 最小 + 1)) + 最小
@@ -912,7 +964,6 @@ if (screen.width < 512) {
 else{
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
 }
-
 document.querySelector("#模糊").addEventListener("click",function(e){
     if (e.target === e.currentTarget){
     document.querySelector('#模糊').classList.remove('渐显');
@@ -920,27 +971,16 @@ document.querySelector("#模糊").addEventListener("click",function(e){
     document.querySelector('#登录卡片').classList.remove('渐显');
     e.stopPropagation;
     }});
-模块_设置.设置列表.forEach(function([选项文本,选项功能]){ //设置功能
-    const 设置选项 = document.createElement('div')
-    设置选项.className = '设置选项 横排';
-    设置选项.textContent = 选项文本;
-    const 设置开关 = document.createElement('div');
-    设置开关.className = '设置开关 横排';
-    const 开关圆点 = document.createElement('div');
-    开关圆点.className = '开关圆点';
-    document.querySelector('#设置卡片').appendChild(设置选项);
-    设置选项.appendChild(设置开关);
-    设置开关.appendChild(开关圆点);
-    设置开关.onclick = 模块_设置[选项功能];
-})
+模块_设置.加载()
 setTimeout(function(){
-    登录切换()
+    刷新()
     计数器_秒()
 },10)
 // navigator.serviceWorker.register('./sw.js')
-//#endregion 
+//#endregion
 </script>
 
 </body>
 </html>
 <!--ui:https://heroicons.com/?utm_source=chatgpt.com-->
+<!-- localStorage.clear() -->
