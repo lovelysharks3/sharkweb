@@ -75,12 +75,11 @@ button{
     /* user-select: none; */
 }
 button:hover{
-    filter: brightness(1.05);
-    transform: scale(1.01);
+    filter: brightness(0.9);
 }
 button:active{
     filter: brightness(0.9);
-    transform: scale(0.99);
+    transform: scale(0.95);
 }
 .方按钮{
     font-size: 20px;
@@ -191,13 +190,12 @@ button:active{
 /* #endregion */
 /* #region 登录 */
 #登录卡片{
-    position:fixed;
+    position: absolute;
     width:400px;
     opacity: 0;
     transition: 0.2s;
     transform: scale(0.8);
-    z-index: 1;
-    pointer-events:none;
+    pointer-events: none;
 }
 #登录卡片 input{
     font-size:20px;
@@ -213,13 +211,12 @@ button:active{
 /* #endregion */
 /* #region 设置 */
 #设置卡片{
-    display: flex;
-    position: fixed;
+    pointer-events: none;
+    position: absolute;
     min-width: 400px;
-    background: white;
+    opacity: 0;
     transition: 0.2s;
     transform: scale(0.8);
-    opacity: 0.95;
 }
 .设置选项{
     font-size:20px;
@@ -373,7 +370,7 @@ table[data-表格='1'] th:nth-child(1) {
     background-color: lightgray;
 }
 table[data-表格='1'] tr:nth-child(4)> th {
-    height: 48px;
+    height: 54px;
     /* font-size: 15px; */
 }
 table[data-表格='3'] {
@@ -401,9 +398,6 @@ table[data-表格='3'] {
 .定位容器 button{
     position: relative;
     z-index: 1;
-}
-.定位容器 button:hover{
-    transform: scale(1.05);
 }
 .定位容器 button:active{
     transform: scale(0.8);
@@ -460,17 +454,20 @@ table[data-表格='3'] {
 </head>
 <!-- #region 界面 -->
 <body class='竖排 居中'>
-<div id='顶栏' class="横排"><button id="设置按钮">设置</button><button onclick='实验按钮()'>作者→</button><button>萌鲨无敌</button></div>
+<div id='顶栏' class="横排">
+    <button id="设置按钮" onclick='模块_顶栏.设置()'>设置</button>
+    <button onclick='模块_顶栏.百宝箱()'>百宝箱</button>
+    <button onclick='模块_顶栏.登录()'>萌鲨无敌</button>
+</div>
 <div id="模糊" class="居中 竖排">
     <div id='设置卡片' class="卡片 居中 竖排"></div>
+    <div id="登录卡片" class='卡片 居中 竖排'>
+        <h2 style='padding-top:10px'>智慧教务登录</h2>
+        <input id="用户名" placeholder="用户名" maxlength="20">
+        <input id="密码" type="password" placeholder="密码">
+        <button id='登录按钮' class="方按钮" onclick='登录切换()'>登录</button>
+    </div>
 </div>
-<div id="登录卡片" class='卡片 居中 竖排'>
-    <h2 style='padding-top:10px'>鲨鱼网站测试</h2>
-    <input id="用户名" placeholder="用户名" maxlength="20">
-    <input id="密码" type="password" placeholder="密码">
-    <button id='登录按钮' class="方按钮">登录</button>
-</div>
-<div id="动态编辑" class='卡片 竖排 文章'><div id="标题编辑" class="文本编辑" contenteditable="true">标题</div><div id="内容编辑" class="文本编辑" contenteditable="true">请输入文本</div><button id="发布按钮" class="方按钮">发布</button></div>
 <div id='主页' class='竖排' style='display:none'></div>
 </div>
 <!-- #endregion -->
@@ -478,10 +475,8 @@ table[data-表格='3'] {
 //#region 初始化
 let 用户名
 let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0
-let 时间戳,周数指针
-let 课表
+let 时间戳,周数指针,课表,表格1
 const 开学时间 = new Date('2026-9-7')
-const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.8',音乐开关]]
 //#endregion
 let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
 //     {标题:`<div class='横排' style='justify-content: space-between'>
@@ -500,7 +495,7 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
         <a href="https://m.fjpit.com/#/">智慧教务</a>
     </div>`,
     列:['周一','周二','周三','周四','周五','周六','周日'],
-    行:['课表加载中','第一节\n8:10-9:50','第二节\n10:10-11:50','午休','第三节\n2:30-4:10','第四节\n4:20-6:00','第五节\n6:15-8:10','第六节\n8:20-10:00'],
+    行:['课程表','第一节\n8:10-9:50','第二节\n10:10-11:50','午休','第三节\n2:30-4:10','第四节\n4:20-6:00','第五节\n6:15-8:10','第六节\n8:20-10:00'],
     内容:``,
     作者:'shark',
     类型:'表格'},
@@ -606,287 +601,250 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
     作者:'shark',
     类型:'文本'},
 ]
-设置列表.forEach(function([选项文本,选项功能]){ //设置功能
-    const 设置选项 = document.createElement('div')
-    设置选项.className = '设置选项 横排';
-    设置选项.textContent = 选项文本;
-    const 设置开关 = document.createElement('div');
-    设置开关.className = '设置开关 横排';
-    const 开关圆点 = document.createElement('div');
-    开关圆点.className = '开关圆点';
-    document.querySelector('#设置卡片').appendChild(设置选项);
-    设置选项.appendChild(设置开关);
-    设置开关.appendChild(开关圆点);
-    设置开关.onclick = 选项功能;
-})
-document.querySelector("#模糊").addEventListener("click",function(e){
-    if (e.target === e.currentTarget){
-    document.querySelector('#模糊').classList.remove('渐显');
-    document.querySelector('#设置卡片').classList.remove('渐显');
-    e.stopPropagation;
-    }});
-document.querySelector("#登录按钮").onclick = function(){//登录>主页
-登录切换()
-    };//登录>主页
-document.querySelector('#设置按钮').onclick = function(){
-    document.querySelector('#模糊').classList.add('渐显')
-    document.querySelector('#设置卡片').classList.add('渐显')
-};
-document.querySelector('#发布按钮').onclick = function(){
-    发布动态(document.querySelector('#标题编辑').innerText,document.querySelector('#内容编辑').innerText,用户名);
-    切换主页()
-    清除文章()
-};
-// {//按钮检测
-//     button.addEventListener('pointerdown', () => {
-//         按钮.classList.add('按下')
-//     })
+const 模块_设置 = {
+    蓝色背景(){
+        if(this.classList.contains('开关开启')){
+            this.classList.remove('开关开启');
+            document.documentElement.style.background = '#f5f5f5';
+            }
+        else
+            {this.classList.add('开关开启');
+            document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
+    }},
+    音乐开关(){
+        if(this.classList.contains('开关开启')){
+            this.classList.remove('开关开启');
+            音乐.pause();
+            }
+        else
+            {this.classList.add('开关开启');
+            音乐.play();
+    }},
+    设置列表 : [
+        ['蓝色背景','蓝色背景'],
+        ['版本:1.8','音乐开关']
+    ]
+}
+const 模块_顶栏 = {
+    设置(){
+        document.querySelector('#模糊').classList.add('渐显')
+        document.querySelector('#设置卡片').classList.add('渐显')
+    },
+    百宝箱(){
+        alert(`
+            投掷硬币：${随机数(0,1) === 0 ? '正面' : '反面'}
+            四面骰：${随机数(1,4)}
+            六面骰：${随机数(1,6)}
+            1-10随机数：${随机数(1,10)}
+            1-50随机数：${随机数(1,50)}
+            1-100随机数：${随机数(1,100)}
+        `)
+    },
+    登录(){
+        document.querySelector('#模糊').classList.add('渐显')
+        document.querySelector('#登录卡片').classList.add('渐显')
+    }
+}
+const 模块_课表 = {
+    创建(){
+        表格1 = document.querySelector('table[data-表格="1"]')
+        表格1.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){i.remove()})
+        表格1.rows[3].cells[1].colSpan = 7
+        表格1.rows[3].cells[1].innerHTML = `<div class='定位容器 居中 横排'>
+            <button class="左箭头"><img src='./svg/左箭头.svg'></button><div class='课程进度条'></div><span id='课程进度提示'>课表加载中...</span><button class="右箭头"><img src='./svg/右箭头.svg'></button>
+        </div>`
+        document.querySelector('table[data-表格="1"] .左箭头').onclick = function(){
+            if(周数指针===1){周数指针=20}
+            else{周数指针--};
+            请求课表()
+        };
+        document.querySelector('table[data-表格="1"] .右箭头').onclick = function(){
+            if(周数指针===20){周数指针=1}
+            else{周数指针++};
+            请求课表()
+        };
+        模块_课表.请求()
+    },
+    请求(){
+        fetch(`./公告/课表(${周数指针}).json`).then(res => res.json()).then(data => {
+            课表 = data.data.list
+            表格1.querySelectorAll('tr:not(:nth-child(4)) th:not([data-列]):not([data-行])').forEach(i => i.innerText = '')
+            表格1.rows[0].cells[0].innerText=`第${周数指针}周`
+            课表.forEach(function(课程){
+                表格1.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
+            })
+            模块_课表.更新()
+        })
+    },
+    更新(){
+        时间戳= (new Date()).getTime()
+        let 开始差值 = Infinity,结束差值 = Infinity
+        let 当前课程,课程开始
+        let 课程进度 = 0
 
-//     button.addEventListener('pointerup', () => {
-//         按钮.classList.remove('按下')
-//     })
-
-//     button.addEventListener('pointercancel', () => {
-//         按钮.classList.remove('按下')
-//     })
-
-//     document.addEventListener('click', function(e) {
-//     const 文章i = e.target.closest('.删除按钮').closest('.文章');
-//     if (文章i) {
-//         文章i.classList.add('删除');
-//         删除文章(文章i.dataset.id)
-//         setTimeout(function(){文章i.remove()},500)
-//     }
-//     })
-// }
-function 蓝色背景(){
-    if(this.classList.contains('开关开启')){
-        this.classList.remove('开关开启');
-        document.documentElement.style.background = '#f5f5f5';
+        课表.forEach(function(课程){
+            let 开始时间差=(new Date(`${课程.date}T${课程.jckssj}`)).getTime()-时间戳
+            let 结束时间差=(new Date(`${课程.date}T${课程.jcjssj}`)).getTime()-时间戳
+            if(开始时间差<=0&&结束时间差>=0){课程开始=true}
+            if(开始时间差>=0&&开始时间差<开始差值){开始差值 = 开始时间差}
+            if(结束时间差>=0&&结束时间差<结束差值){结束差值 = 结束时间差;当前课程=课程}
+        })
+        function 差值计算(差值){
+            差值 = Math.ceil(差值/1000/60)
+            if (差值===Infinity){差值=false}
+            else if (差值>60*24){差值=Math.floor(差值/60/24)+'天' +Math.ceil(差值/60)%24+'时'}
+            else if (差值>60){差值=Math.floor(差值/60)+'时'+差值%60+'分'}
+            else {差值=差值+'分'}
+            return 差值
         }
-    else
-        {this.classList.add('开关开启');
-        document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
-}}
-function 音乐开关(){
-    if(this.classList.contains('开关开启')){
-        this.classList.remove('开关开启');
-        音乐.pause();
+        if(当前课程){
+            if(课程开始){课程开始=`下课倒计时:${差值计算(结束差值)}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`;课程进度=100-结束差值/1000/60}
+            else{课程开始=`上课倒计时:${差值计算(开始差值)}  -  下节课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`}
+            document.querySelector('#课程进度提示').innerText=课程开始
         }
-    else
-        {this.classList.add('开关开启');
-        音乐.play();
-}}
-function 加载卡片_音乐(n){
-    function 下一首(){
-        if(音乐索引===音乐列表.length-1){音乐索引=0}
-        else{音乐索引++};
-        音乐.src = './music/' + 音乐列表[音乐索引];
-        document.querySelector('.进度').style.width = 0
-    };
-    document.querySelector('#主页').insertAdjacentHTML('afterbegin',
-    `<div id="音乐卡片" class="卡片 文章 竖排">
-        <h1>标题加载中</h1>
-        <div class="进度条"><div class="进度"></div></div>
-        <div class="横排 时间条"><h3 class="当前时间">0:00</h3><h3 class="总时间">0:00</h3></div>
-        <div class="音乐按钮栏 横排">
-            <div class='grid左'>
-                <button class="循环按钮"><img src='./svg/循环.svg'></button>
-            </div>
-            <div class='grid中'>
-                <button class="左箭头"><img src='./svg/左箭头.svg'></button>
-                <button class="播放按钮"><img src='./svg/播放按钮.svg'></button>
-                <button class="右箭头"><img src='./svg/右箭头.svg'></button>
-            </div>
-            <div class='grid右'>
-                <div class='音量区域 横排 居中'>
-                    <div class='音量条区域 横排 居中'><input class='音量条' type="range" min="0" max="100" value="20" step="10"></div>
-                    <button class="音量按钮"><img src='./svg/声音开.svg'></button>
+        else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
+        document.querySelector('.课程进度条').style.width=课程进度 + '%'
+    }
+}
+const 模块_文章加载 = {
+    音乐(n){
+        function 下一首(){
+            if(音乐索引===音乐列表.length-1){音乐索引=0}
+            else{音乐索引++};
+            音乐.src = './music/' + 音乐列表[音乐索引];
+            document.querySelector('.进度').style.width = 0
+        };
+        document.querySelector('#主页').insertAdjacentHTML('afterbegin',
+        `<div id="音乐卡片" class="卡片 文章 竖排">
+            <h1>标题加载中</h1>
+            <div class="进度条"><div class="进度"></div></div>
+            <div class="横排 时间条"><h3 class="当前时间">0:00</h3><h3 class="总时间">0:00</h3></div>
+            <div class="音乐按钮栏 横排">
+                <div class='grid左'>
+                    <button class="循环按钮"><img src='./svg/循环.svg'></button>
+                </div>
+                <div class='grid中'>
+                    <button class="左箭头"><img src='./svg/左箭头.svg'></button>
+                    <button class="播放按钮"><img src='./svg/播放按钮.svg'></button>
+                    <button class="右箭头"><img src='./svg/右箭头.svg'></button>
+                </div>
+                <div class='grid右'>
+                    <div class='音量区域 横排 居中'>
+                        <div class='音量条区域 横排 居中'><input class='音量条' type="range" min="0" max="100" value="20" step="10"></div>
+                        <button class="音量按钮"><img src='./svg/声音开.svg'></button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>`);
-    document.querySelector('.音量条').addEventListener('input',function(){
-        音乐.volume =this.value *0.005
-    });
-    document.querySelector('.播放按钮').onclick = function(){
-        if(播放中){this.querySelector('img').src='./svg/播放按钮.svg';音乐.pause()}
-        else{this.querySelector('img').src='./svg/暂停按钮.svg';音乐.play()};
-        播放中=!播放中
-    };
-    document.querySelector('.循环按钮').onclick = function(){
-        if(循环播放){this.querySelector('img').src='./svg/双箭头.svg'}
-        else{this.querySelector('img').src='./svg/循环.svg'};
-        循环播放=!循环播放
-    };
-    document.querySelector('.左箭头').onclick = function(){
-        if(音乐索引===0){音乐索引=音乐列表.length-1}
-        else{音乐索引--};
-        音乐.src = './music/' + 音乐列表[音乐索引];
-        document.querySelector('.进度').style.width = 0
-    };
-    document.querySelector('.右箭头').onclick = 下一首
-    let 长按 = false;
-    document.querySelector('.进度条').addEventListener('mousedown',function(e){
-        长按 = true;
-        音乐.currentTime = e.offsetX / this.offsetWidth * 音乐.duration;
-        e.preventDefault();
-        音乐.pause();
-    });
-    document.addEventListener('mousemove',function(e){
-        if(长按){
-        const rect = document.querySelector('.进度条').getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        x = Math.max(0, Math.min(x, rect.width));
-        音乐.currentTime = (x / rect.width) * 音乐.duration;
+        </div>`);
+        document.querySelector('.音量条').addEventListener('input',function(){
+            音乐.volume =this.value *0.005
+        });
+        document.querySelector('.播放按钮').onclick = function(){
+            if(播放中){this.querySelector('img').src='./svg/播放按钮.svg';音乐.pause()}
+            else{this.querySelector('img').src='./svg/暂停按钮.svg';音乐.play()};
+            播放中=!播放中
+        };
+        document.querySelector('.循环按钮').onclick = function(){
+            if(循环播放){this.querySelector('img').src='./svg/双箭头.svg'}
+            else{this.querySelector('img').src='./svg/循环.svg'};
+            循环播放=!循环播放
+        };
+        document.querySelector('.左箭头').onclick = function(){
+            if(音乐索引===0){音乐索引=音乐列表.length-1}
+            else{音乐索引--};
+            音乐.src = './music/' + 音乐列表[音乐索引];
+            document.querySelector('.进度').style.width = 0
+        };
+        document.querySelector('.右箭头').onclick = 下一首
+        let 长按 = false;
+        document.querySelector('.进度条').addEventListener('mousedown',function(e){
+            长按 = true;
+            音乐.currentTime = e.offsetX / this.offsetWidth * 音乐.duration;
+            e.preventDefault();
+            音乐.pause();
+        });
+        document.addEventListener('mousemove',function(e){
+            if(长按){
+            const rect = document.querySelector('.进度条').getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            x = Math.max(0, Math.min(x, rect.width));
+            音乐.currentTime = (x / rect.width) * 音乐.duration;
+            }
+        });
+        document.addEventListener('mouseup',function(){
+            if(播放中&&长按){音乐.play()};
+            长按 = false;
+        });
+        音乐.addEventListener('timeupdate',function(){
+            let 百分比 = this.currentTime / this.duration *100;
+            document.querySelector('.进度').style.width = 百分比 + '%';
+            document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
+        });
+        音乐.addEventListener('canplay',function(){
+            document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
+            document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
+            if(播放中&&!长按){音乐.play()};
+        });
+        音乐.addEventListener('ended',function(){
+            if(循环播放){音乐.currentTime = 0}
+            else{下一首()}
+        });
+        document.querySelector('.进度').style.width = 0;
+        if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
+        if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
+        setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
+    },
+    文本(i,id,n){
+        const 文章i = document.createElement('div')
+        文章i.className = '卡片 文章'
+        const 标题i = document.createElement('h1')
+        标题i.innerHTML = i['标题']
+        const 内容i = document.createElement('h3')
+        内容i.innerHTML = i['内容']
+        document.querySelector('#主页').append(文章i)
+        文章i.dataset.id = id
+        if (i['作者']!=='shark'){
+            文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
         }
-    });
-    document.addEventListener('mouseup',function(){
-        if(播放中&&长按){音乐.play()};
-        长按 = false;
-    });
-    音乐.addEventListener('timeupdate',function(){
-        let 百分比 = this.currentTime / this.duration *100;
-        document.querySelector('.进度').style.width = 百分比 + '%';
-        document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
-    });
-    音乐.addEventListener('canplay',function(){
-        document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
-        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
-        if(播放中&&!长按){音乐.play()};
-    });
-    音乐.addEventListener('ended',function(){
-        if(循环播放){音乐.currentTime = 0}
-        else{下一首()}
-    });
-    document.querySelector('.进度').style.width = 0;
-    if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
-    if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
-    setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
-}
-function 加载卡片_文本(i,id,n){
-    const 文章i = document.createElement('div')
-    文章i.className = '卡片 文章'
-    const 标题i = document.createElement('h1')
-    标题i.innerHTML = i['标题']
-    const 内容i = document.createElement('h3')
-    内容i.innerHTML = i['内容']
-    document.querySelector('#主页').append(文章i)
-    文章i.dataset.id = id
-    if (i['作者']!=='shark'){
-        文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
-    }
-    文章i.append(标题i,内容i)
-    setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
-}
-function 加载卡片_表格(i,id,n){
-    const 文章i = document.createElement('div')
-    文章i.className = '卡片 文章'
-    const 标题i = document.createElement('h1')
-    标题i.innerHTML = i['标题']
-    const 内容i = document.createElement('table')
-    if(i['id']){内容i.dataset.表格=i['id']}
+        文章i.append(标题i,内容i)
+        setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
+    },
+    表格(i,id,n){
+        const 文章i = document.createElement('div')
+        文章i.className = '卡片 文章'
+        const 标题i = document.createElement('h1')
+        标题i.innerHTML = i['标题']
+        const 内容i = document.createElement('table')
+        if(i['id']){内容i.dataset.表格=i['id']}
 
-    function 加载表头(行,行n){
-        let tr = document.createElement('tr')
-        if(i['行']){tr.innerHTML = `<th data-行='0'>${行}</th>`}
-        内容i.append(tr)
-    
-        i['列'].forEach(function(列,列n){
-            let th = document.createElement('th')
-            if(行n==0){th.innerHTML = 列;th.dataset.列=0}
-            else if(i['内容']){th.innerHTML = 行[列n]}
-            else(th.innerHTML = ' ')
-            tr.append(th)
-        })
-    }
+        function 加载表头(行,行n){
+            let tr = document.createElement('tr')
+            if(i['行']){tr.innerHTML = `<th data-行='0'>${行}</th>`}
+            内容i.append(tr)
+        
+            i['列'].forEach(function(列,列n){
+                let th = document.createElement('th')
+                if(行n==0){th.innerHTML = 列;th.dataset.列=0}
+                else if(i['内容']){th.innerHTML = 行[列n]}
+                else(th.innerHTML = ' ')
+                tr.append(th)
+            })
+        }
 
-    if (i['行']){i['行'].forEach(加载表头)}
-    else{
-        if(i['内容']&&i['列']){([i['列'],...i['内容']]).forEach(加载表头)}
-    }
+        if (i['行']){i['行'].forEach(加载表头)}
+        else{
+            if(i['内容']&&i['列']){([i['列'],...i['内容']]).forEach(加载表头)}
+        }
 
-    document.querySelector('#主页').append(文章i)
-    文章i.dataset.id = id
-    if (i['作者']!=='shark'){
-        文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
+        document.querySelector('#主页').append(文章i)
+        文章i.dataset.id = id
+        if (i['作者']!=='shark'){
+            文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
+        }
+        文章i.append(标题i,内容i)
+        setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
+        if(i['id']==1){模块_课表.创建()}
     }
-    文章i.append(标题i,内容i)
-    setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
-    if(i['id']==1){请求课表()}
-}
-async function 请求课表(){
-    let res = await fetch(`./公告/课表(${周数指针}).json`)
-    let data = await res.json()
-    课表 = data.data.list
-    let 表格1 = document.querySelector('table[data-表格="1"]')
-    表格1.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){
-        i.remove()
-    })
-    表格1.rows[3].cells[1].colSpan = 7
-    表格1.rows[0].cells[0].innerText=`第${周数指针}周`
-    document.querySelector('table[data-表格="1"]')
-        .querySelectorAll('th:not([data-列]):not([data-行])')
-        .forEach(i => i.innerText = '')
-    课表.forEach(function(课程){
-        表格1.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
-    })
-    表格1.rows[3].cells[1].innerHTML = `<div class='定位容器 居中 横排'>
-        <button class="左箭头"><img src='./svg/左箭头.svg'></button><div class='课程进度条'></div><span id='课程进度提示'></span><button class="右箭头"><img src='./svg/右箭头.svg'></button>
-        </div>`
-    加载课表()
-    
-    document.querySelector('table[data-表格="1"] .左箭头').onclick = function(){
-        if(周数指针===1){周数指针=20}
-        else{周数指针--};
-        请求课表()
-    };
-    document.querySelector('table[data-表格="1"] .右箭头').onclick = function(){
-        if(周数指针===20){周数指针=1}
-        else{周数指针++};
-        请求课表()
-    };
-}
-function 加载课表() {
-    时间戳= (new Date()).getTime()
-    let 开始差值 = Infinity,结束差值 = Infinity
-    let 当前课程,课程开始
-    let 课程进度 = 0
-
-    课表.forEach(function(课程){
-        let 开始时间差=(new Date(`${课程.date}T${课程.jckssj}`)).getTime()-时间戳
-        let 结束时间差=(new Date(`${课程.date}T${课程.jcjssj}`)).getTime()-时间戳
-        if(开始时间差<=0&&结束时间差>=0){课程开始=true}
-        if(开始时间差>=0&&开始时间差<开始差值){开始差值 = 开始时间差}
-        if(结束时间差>=0&&结束时间差<结束差值){结束差值 = 结束时间差;当前课程=课程}
-    })
-    function 差值计算(差值){
-        差值 = Math.ceil(差值/1000/60)
-        if (差值===Infinity){差值=false}
-        else if (差值>60*24){差值=Math.floor(差值/60/24)+'天' +Math.ceil(差值/60)%24+'时'}
-        else if (差值>60){差值=Math.floor(差值/60)+'时'+差值%60+'分'}
-        else {差值=差值+'分'}
-        return 差值
-    }
-    if(当前课程){
-        if(课程开始){课程开始=`下课倒计时:${差值计算(结束差值)}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`;课程进度=100-结束差值/1000/60}
-        else{课程开始=`上课倒计时:${差值计算(开始差值)}  -  下节课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`}
-        document.querySelector('#课程进度提示').innerText=课程开始
-    }
-    else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
-    document.querySelector('.课程进度条').style.width=课程进度 + '%'
-}
-function 发布动态(标题,内容,作者){
-    const 文章i = document.createElement('div')
-    文章i.className = '卡片 文章'
-    const 标题i = document.createElement('h1')
-    标题i.textContent = 标题
-    const 内容i = document.createElement('h3')
-    内容i.textContent = 内容
-    document.querySelector('#主页').prepend(文章i)
-    文章i.append(标题i,内容i)
-    存储文章(标题,内容,作者)
-    setTimeout(function(){文章i.classList.add('渐显')},10)
 }
 function 切换主页(){
         document.querySelector('#主页').style.display='flex';
@@ -897,41 +855,6 @@ function 切换主页(){
 function 清除文章(){
     document.querySelector('#标题编辑').innerText = '标题';
     document.querySelector('#内容编辑').innerText = '请输入文本';
-}
-function 存储文章(标题,内容,作者){
-    fetch("/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            标题: 标题,
-            内容: 内容,
-            作者: 作者
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data + 作者)
-    })
-}
-function 请求文章(){
-    fetch("/api/load")
-    .then(res => res.json())
-    .then(data => {
-        data.forEach(function(i,n){
-            刷新动态(i['标题'],i['内容'],i['作者'],i['id'],n+文章列表.length)
-        })
-    })
-}
-function 删除文章(id){
-    fetch("/api/delete/"+id,{
-        method:'DELETE'
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data)
-    })
 }
 function 请求音乐(){
     fetch("./music/music.json")
@@ -949,9 +872,9 @@ function 刷新(){
     时间戳= (new Date()).getTime()
     周数指针 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
     文章列表.forEach(function(i,n){
-        if (i['类型']==='文本'){加载卡片_文本(i,-1,n)}
-        else if (i['类型']==='音乐播放器'){加载卡片_音乐(n)}
-        if (i['类型']==='表格'){加载卡片_表格(i,-1,n)}
+        if (i['类型']==='文本'){模块_文章加载.文本(i,-1,n)}
+        else if (i['类型']==='音乐播放器'){模块_文章加载.音乐(n)}
+        if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
     })
     // 请求文章()
     // 请求音乐()
@@ -966,6 +889,7 @@ function 登录切换(){
     let 用户名 = document.querySelector("#用户名").value
     if (用户名 !== 'baka' && document.querySelector("#密码").value === '')
         {document.querySelector('#登录卡片').classList.remove('渐显');
+        document.querySelector('#模糊').classList.remove('渐显')
         setTimeout(function(){
         document.querySelector("#主页").style.display='flex';
         //造三按钮
@@ -990,35 +914,14 @@ function 复制文字(){
     document.querySelector('#复制提示').innerHTML='请假提示(复制成功)';
     setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
 }
-function 实验按钮(){
-    // confirm('确定要删除吗？')
-    // let 名字 = [prompt('请输入名字'),prompt('请输入名字')]
-//     Notification.requestPermission().then(权限 => {
-//     if (权限 === 'granted') {
-//         new Notification('鲨鱼网站', {
-//             body: '登录成功！'
-//         })
-//     }
-// })
-申请通知()
-
-alert(`
-    投掷硬币：${随机数(0,1) === 0 ? '正面' : '反面'}
-    四面骰：${随机数(1,4)}
-    六面骰：${随机数(1,6)}
-    1-10随机数：${随机数(1,10)}
-    1-50随机数：${随机数(1,50)}
-    1-100随机数：${随机数(1,100)}
-`)
+function 随机数(最小,最大){
+    return Math.floor(Math.random() * (最大 - 最小 + 1)) + 最小
 }
 function 计数器_秒(){
     setTimeout(() => {
-        加载课表()
         计数器_秒()
+        if(课表){模块_课表.更新()}
     },1000);
-}
-function 随机数(最小, 最大) {
-    return Math.floor(Math.random() * (最大 - 最小 + 1)) + 最小
 }
 //#region 启动程序
 if (screen.width < 512) {
@@ -1029,22 +932,32 @@ if (screen.width < 512) {
 else if (screen.width < 1024){
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
 }
+document.querySelector("#模糊").addEventListener("click",function(e){
+    if (e.target === e.currentTarget){
+    document.querySelector('#模糊').classList.remove('渐显');
+    document.querySelector('#设置卡片').classList.remove('渐显');
+    document.querySelector('#登录卡片').classList.remove('渐显');
+    e.stopPropagation;
+    }});
+模块_设置.设置列表.forEach(function([选项文本,选项功能]){ //设置功能
+    const 设置选项 = document.createElement('div')
+    设置选项.className = '设置选项 横排';
+    设置选项.textContent = 选项文本;
+    const 设置开关 = document.createElement('div');
+    设置开关.className = '设置开关 横排';
+    const 开关圆点 = document.createElement('div');
+    开关圆点.className = '开关圆点';
+    document.querySelector('#设置卡片').appendChild(设置选项);
+    设置选项.appendChild(设置开关);
+    设置开关.appendChild(开关圆点);
+    设置开关.onclick = 模块_设置[选项功能];
+})
 setTimeout(function(){
     登录切换()
     计数器_秒()
 },10)
+// navigator.serviceWorker.register('./sw.js')
 //#endregion 
-
-async function 申请通知() {
-    let 权限 = await Notification.requestPermission()
-
-    if (权限 === 'granted') {
-        new Notification('鲨鱼网站', {
-            body: '测试通知',
-            icon: './shark.png'
-        })
-    }
-}
 </script>
 
 </body>
