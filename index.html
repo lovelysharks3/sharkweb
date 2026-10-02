@@ -364,7 +364,7 @@ table tr > *:last-child {
 }
 
 table[data-表格='1'] th {
-    height:80px;
+    height:var(--课表高度,64px);
 }
 table[data-表格='1'] th:nth-child(1) {
     background-color: lightgray;
@@ -474,19 +474,18 @@ table[data-表格='3'] {
 <script>
 //#region 初始化
 let 用户名
-let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0
+let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0, 音乐 = new Audio('./music/!toy.mp3')
+    音乐.loop = false
+    音乐.volume = 0.1
 let 时间戳,周数指针,课表,表格1
 const 开学时间 = new Date('2026-9-7')
 //#endregion
-let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
-//     {标题:`<div class='横排' style='justify-content: space-between'>
-// <a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
-// <a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
-// <a href="https://m.fjpit.com/#/">智慧教务</a>
-//     </div>`,
-//     内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="750" frameborder='0' style="zoom: 1.2;border-radius: 6px"></iframe></div>`,
-//     作者:'shark',
-//     类型:'文本'},
+let 文章列表 = [
+    {id:0,
+    标题:`音乐播放器`,
+    内容:`music`,
+    作者:'shark',
+    类型:'音乐播放器'},
 
     {id:1,
     标题:`<div class='横排' style='justify-content: space-around'>
@@ -588,12 +587,14 @@ let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
     作者:'shark',
     类型:'表格'},
 
-    {标题:`备忘录`,
+    {id:4,
+    标题:`备忘录`,
     内容:`右上角小圆点刷新\n记得多喝热水，别忘了断电倒垃圾\n上午 7:00晨跑  7:30英语单词  12:00午休\n下午 7:00晚自习  9:30晚点点名  10:30熄灯`,
     作者:'shark',
     类型:'文本'},
 
-    {标题:`<span id='复制提示' onclick='复制文字()' class='复制按钮'>请假提示(点击内容以复制)</span>`,
+    {id:5,
+    标题:`<span id='复制提示' onclick='复制文字()' class='复制按钮'>请假提示(点击内容以复制)</span>`,
     内容:`<div onclick='复制文字()' class='复制按钮'><span>\
 📌请假需提前联系老师短信或电话，请假格式如下，回来记得销假
 我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:\
@@ -611,18 +612,16 @@ const 模块_设置 = {
             {this.classList.add('开关开启');
             document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
     }},
-    音乐开关(){
+    无(){
         if(this.classList.contains('开关开启')){
             this.classList.remove('开关开启');
-            音乐.pause();
             }
         else
             {this.classList.add('开关开启');
-            音乐.play();
     }},
     设置列表 : [
         ['蓝色背景','蓝色背景'],
-        ['版本:1.8','音乐开关']
+        ['版本:1.8','无']
     ]
 }
 const 模块_顶栏 = {
@@ -846,16 +845,6 @@ const 模块_文章加载 = {
         if(i['id']==1){模块_课表.创建()}
     }
 }
-function 切换主页(){
-        document.querySelector('#主页').style.display='flex';
-        document.querySelector('#动态编辑').style.display='none';
-        document.querySelector('#发动态').style.display='block';
-        document.querySelector('#主页按钮').style.display='none';
-}
-function 清除文章(){
-    document.querySelector('#标题编辑').innerText = '标题';
-    document.querySelector('#内容编辑').innerText = '请输入文本';
-}
 function 请求音乐(){
     fetch("./music/music.json")
     .then(res => res.json())
@@ -876,8 +865,7 @@ function 刷新(){
         else if (i['类型']==='音乐播放器'){模块_文章加载.音乐(n)}
         if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
     })
-    // 请求文章()
-    // 请求音乐()
+    请求音乐()
 }
 function 音乐时间显示(秒i){
     let 分 = Math.floor(秒i/60);
@@ -891,20 +879,11 @@ function 登录切换(){
         {document.querySelector('#登录卡片').classList.remove('渐显');
         document.querySelector('#模糊').classList.remove('渐显')
         setTimeout(function(){
-        document.querySelector("#主页").style.display='flex';
-        //造三按钮
-        document.querySelector('#主页').insertAdjacentHTML("afterbegin",`<button id="用户">${用户名}</button>`);
+            document.querySelector("#主页").style.display='flex';
+            document.querySelector('#主页').insertAdjacentHTML("afterbegin",`<button id="用户">${用户名}</button>`);
             document.querySelector('#用户').onclick = function(){刷新()};
             刷新();
-        // document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="发动态">投稿</button>`);
-        //     document.querySelector('#发动态').onclick = function(){
-        //     document.querySelector('#主页').style.display='none';
-        //     document.querySelector('#动态编辑').style.display='flex';
-        //     document.querySelector('#发动态').style.display='none';
-        //     document.querySelector('#主页按钮').style.display='block';}
         },200)
-        document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="主页按钮" style="display:none">主页</button>`);
-            document.querySelector('#主页按钮').onclick = 切换主页
         }
     else {alert("错了，笨蛋")}
 }
@@ -928,10 +907,12 @@ if (screen.width < 512) {
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.45')
     // document.documentElement.style.setProperty('--文章宽度', 'min(75vw + 128px,95vw)')
     document.documentElement.style.setProperty('--文章宽度','95vw')
+    document.documentElement.style.setProperty('--课表高度','80px')
 }
-else if (screen.width < 1024){
+else{
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
 }
+
 document.querySelector("#模糊").addEventListener("click",function(e){
     if (e.target === e.currentTarget){
     document.querySelector('#模糊').classList.remove('渐显');
