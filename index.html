@@ -655,12 +655,12 @@ const 模块_课表 = {
         document.querySelector('table[data-表格="1"] .左箭头').onclick = function(){
             if(周数指针===1){周数指针=20}
             else{周数指针--};
-            请求课表()
+            模块_课表.请求()
         };
         document.querySelector('table[data-表格="1"] .右箭头').onclick = function(){
             if(周数指针===20){周数指针=1}
             else{周数指针++};
-            请求课表()
+            模块_课表.请求()
         };
         模块_课表.请求()
     },
