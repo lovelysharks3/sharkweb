@@ -2,65 +2,22 @@
 <html>
 
 <head>
-<!-- #region 元信息 -->
 <meta charset="UTF-8" />
 <meta name="viewport"
-    content="width=device-width, initial-scale=1">
-<title>鲨鱼福信</title>
-<link rel="icon" href="./shark.png">
+    content="width=device-width, initial-scale=0.4">
+<title>baka</title>
+<link rel="icon" href="shark.png">
 
-<!-- pwa -->
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#ffffff">
-<link rel="apple-touch-icon" href="./shark512.png">
-<!-- #endregion -->
 <style>
-/* #region 变量 */
-:root{
-    --背景颜色:#f0f0f5;
-    --卡片颜色:white;
-    --表头颜色:lightgray;
-    --表格颜色:#f5f5f5;
-    --文字颜色:black;
-}
-.变量_深色{
-    --背景颜色:#222228;
-    --卡片颜色:#282836;
-    --表头颜色:#303049;
-    --表格颜色:#2c2c3c;
-    --文字颜色:#f5f5f5;
-}
-.变量_深色 img {
-    filter: invert(1);
-}
-/* #endregion */
-/* #region 网页框架 */
+/* 通用 */
 *{
     box-sizing:border-box;
     padding: 0;
     margin: 0;
     user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    /* color: white; */
 }
-html{
-    color: var(--文字颜色);
-    background-color:var(--背景颜色);
-    transition:0.5s;
-    scrollbar-gutter: stable;
-    touch-action: manipulation;
-    overscroll-behavior-y: none;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-body{
-    margin:0;
-    min-height:100vh;
-    font-family: Arial;
-    background:transparent;
-    box-sizing:border-box;
-    touch-action: manipulation;
-    overscroll-behavior-y: none;
+h1,h2,h3,h4,h5,h6,span,p{
+    user-select: text;
 }
 ::-webkit-scrollbar {
     width: 10px;
@@ -75,24 +32,59 @@ body{
     border-right: 1px solid transparent; */
     background-clip: padding-box;
 }
-/* #endregion */
-/* #region 通用标签 */
-.卡片{
-    min-height:200px;
-    background:var(--卡片颜色);
-    padding:20px;
-    border-radius:16px;
-    box-shadow:0 0 20px rgba(0,0,0,0.1);
+
+html{
+    scrollbar-gutter: stable;
+    background:#f5f5f5;
 }
+body{
+    margin:0;
+    min-height:100vh;
+    font-family: Arial;
+    background:transparent;
+    box-sizing:border-box;
+}
+
 .填充{
     /* margin-right:auto */
     flex: 1;
 }
+#用户{
+    position:absolute;
+    top:8px;
+    right: 0;
+    z-index:1;
+    height:60px;
+    min-width:60px;
+    background:white;
+    border-radius:100px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+    border:1px solid lightgrey;
+    padding:0px 16px;
+    margin:0;
+    border:0;
+    font-size:24px;
+    transition: 0.5s;
+}
+button{
+    transition: 0.1s;
+    cursor:pointer;
+    /* user-select: none; */
+}
+button:hover{
+    filter: brightness(1.05);
+    transform: scale(1.01);
+}
+button:active{
+    filter: brightness(0.9);
+    transform: scale(0.99);
+}
 .方按钮{
     font-size: 20px;
     border-radius:6px;
+    border: 0;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
-    border:1px solid var(--表格颜色);
+    border:1px solid lightgrey;
 }
 .竖排{
     display:flex;
@@ -102,132 +94,113 @@ body{
     display:flex;
     flex-direction:row;
 }
-.居中{
-    justify-content:center;
-    align-items:center;
+/* 投稿 */
+#动态编辑{
+    display: none;
+    margin-top:68px;
+    margin-bottom:8px;
+    position: relative;
 }
-.渐显:not(.卡片){
-    opacity: 1!important;
-    pointer-events:auto!important;
+#标题编辑{
+    border-bottom: 1px solid lightgrey;
+    min-height: 48px;
+    font-size: 32px;
+    margin-bottom: 8px;
 }
-.渐显.卡片{
-    transform:scale(1) translate(0)!important;
-    opacity: 1!important;
-    pointer-events:auto!important;
+#内容编辑{
+    font-size: 20px;
+    color: grey;
+    margin-bottom: 30px;
+    min-height: 200px;
 }
-.渐显.卡片.删除{
-    transform: translate(100vw)!important;
+.文本编辑{
+    outline: none;
+    overflow-wrap: break-word;
 }
-/* #endregion */
-/* #region 通用元素 */
-button{
-    transition: 0.1s;
-    cursor:pointer;
-    color: var(--文字颜色);
-    background: var(--表头颜色);
-    /* user-select: none; */
+#发布按钮{
+    position: absolute;
+    width: 80px;
+    height: 40px;
+    bottom: 10px;
+    right: 20px;
+    background: #34D0F4;
 }
-button:hover{
-    filter: brightness(0.9);
-}
-button:active{
-    filter: brightness(0.9);
-    transform: scale(0.95);
-}
-img{
-    width: 100%;
-    height: 100%;
-}
-/* h1, h2, h3, h4, h5, h6, span, p {
-    user-select: text !important;
-} */
-/* #endregion */
-/* #region 顶栏 */
+/* 其他 */
 #顶栏{
     position:absolute;
     top:8px;
     z-index:1;
-    height:64px;
-    background:var(--卡片颜色);
+    height:60px;
+    background:white;
     border-radius:100px;
     box-shadow:0 0 10px rgba(0,0,0,0.15);
-    border-bottom:1px solid --表格颜色;
+    border-bottom:1px solid lightgrey;
     padding:8px;
     justify-content:flex-start;
     align-items:center;
 }
 #顶栏 button{
-    font-size:24px;
-    min-width:120px;
+    font-size:20px;
+    min-width:100px;
     height: 100%;
     margin:4px;
-    background: var(--表头颜色);
+    background: lightgrey;
     border: 0;
     border-radius:100px;
     box-shadow:0 0 5px rgba(0,0,0,0.1);
 }
-#用户{
-    position:absolute;
-    top:8px;
-    right: 0;
-    z-index:1;
-    height:64px;
-    min-width:64px;
-    background:var(--表格颜色);
-    border-radius:100px;
-    box-shadow:0 0 10px rgba(0,0,0,0.15);
-    border:1px solid var(--表格颜色);
-    padding:0px 16px;
-    font-size:24px;
+.文章 :is(h1,h2,h3,h4,h5,h6){
+    margin-bottom:4px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+.文章 :is(h3,h4,h5,h6){
+    color:grey
+}
+.文章{
+    position: relative;
+    margin:8px 0;
+    width:min(calc(600px + 20vw),100vw);
     transition: 0.5s;
 }
-#模糊{
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.1);
-    backdrop-filter: blur(3px);
-    z-index: 2;
-    transition: 0.2s;
-    pointer-events:none;
-    opacity: 0;
-}
-#模糊 .卡片{
+.文章 .删除按钮{
     position: absolute;
+    right:5px;
+    top: 20px;
+    height: 40px;
+    width: 40px;
     opacity: 0;
+    transition: 0.2s;
+}
+.文章:hover .删除按钮{
+    opacity: 0.8;
+}
+#主页 .文章{
+    transform: translate(-100vw)
+}
+#主页{
+    padding:68px 4px 8px 4px;
+    min-height: 100vh;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+.卡片{
+    min-height:200px;
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 0 20px rgba(0,0,0,0.1);
+}
+#设置卡片{
+    display: flex;
+    position: fixed;
+    min-width: 400px;
+    background: white;
     transition: 0.2s;
     transform: scale(0.8);
-    pointer-events: none;
-    min-width: 400px;
+    opacity: 0.95;
 }
-/* #endregion */
-/* #region 登录 */
-/* #登录卡片{
-    width:400px;
-} */
-#登录卡片 input{
-    font-size:20px;
-    margin:5px;
-    padding:10px;
-    width:250px;
-    background: var(--表头颜色);
-    border-radius: 12px;
-    border: 0;
-    color: var(--文字颜色);
-}
-#登录卡片 :is(h1,h2,h3,h4,h5,h6,span,p){
-    margin:4px 0 20px 0;
-}
-#登录卡片 button{
-    width: 100px;
-    height: 52px;
-    font-size:24px;
-    margin:12px;
-}
-/* #endregion */
-/* #region 设置 */
-/* #设置卡片{
-    width:400px;
-} */
 .设置选项{
     font-size:20px;
     justify-content: space-between;
@@ -252,14 +225,58 @@ img{
     background: #34D0F4;
 }
 .开关圆点{
-    border-radius:100px;
-    background: white;
-    height: 100%;
-    width: 24px;
-    transition: 0.1s;
+   border-radius:100px;
+   background: white;
+   height: 100%;
+   width: 24px;
+   transition: 0.1s;
 }
-/* #endregion */
-/* #region 音乐播放器 */
+#模糊{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(3px);
+    z-index: 2;
+    transition: 0.2s;
+    pointer-events:none;
+    opacity: 0;
+}
+.居中{
+    justify-content:center;
+    align-items:center;
+}
+#登录卡片{
+    position:fixed;
+    width:400px;
+    opacity: 0;
+    transition: 0.2s;
+    transform: scale(0.8);
+    z-index: 1;
+    pointer-events:none;
+}
+#登录卡片 input{
+    font-size:20px;
+    margin:5px;
+    padding:10px;
+    width:250px;
+}
+#登录卡片 button{
+    font-size:20px;
+    padding:10px 30px;
+    margin:10px;
+}
+.渐显:not(.卡片){
+    opacity: 1!important;
+    pointer-events:auto!important;
+}
+.渐显.卡片{
+    transform:scale(1) translate(0)!important;
+    opacity: 1!important;
+    pointer-events:auto!important;
+}
+.渐显.卡片.删除{
+    transform: translate(100vw)!important;
+}
 #音乐卡片{
     justify-content: flex-start;
     align-items:center;
@@ -274,14 +291,14 @@ img{
     height: 12px;
     width: 100%;
     border-radius: 100px;
-    background: var(--表头颜色);
+    background: lightgrey;
     overflow:hidden;
     cursor: pointer;
     margin-bottom: 5px;
 }
 .进度{
     height: 100%;
-    width: 0;
+    width: 10%;
     background: #34D0F4;
     /* transition: 1s; */
 }
@@ -289,6 +306,14 @@ img{
     justify-content: space-between;
     align-items: center;
     width: 100%;
+}
+#主页 .文章 button{
+    width: 50px;
+    height: 50px;
+    background: none;
+    border: 0;
+    font-size: 30px;
+    margin: 0 10px 0 10px;
 }
 .音乐按钮栏{
     display: grid;
@@ -324,595 +349,292 @@ img{
     opacity: 1;
     pointer-events:auto;
 }
-/* #endregion */
-/* #region 表格 */
-table {
-    border-collapse: collapse;
-    width: calc(100% + 40px);
-    table-layout: fixed;
-    background-color: var(--表格颜色);
-    border-radius: 12px;
-    overflow: hidden;
-    margin: 0px -20px -20px -20px;
-}
-th, td {
-    border: 1px solid rgba(0,0,0,0.1);
-    padding: 2px;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    font-size: 15px;
-}
-table tr:nth-child(1)> th {
-    background-color: var(--表头颜色);
-}
-
-table tr:first-child > * {
-    border-top: none;
-}
-table tr:last-child > * {
-    border-bottom: none;
-}
-table tr > *:first-child {
-    border-left: none;
-}
-table tr > *:last-child {
-    border-right: none;
-}
-
-table[data-表格='1'] th {
-    height:var(--课表高度,68px);
-}
-table[data-表格='1'] th:nth-child(1) {
-    background-color: var(--表头颜色);
-}
-table[data-表格='1'] tr:nth-child(4)> th {
-    height: 54px;
-}
-/* table[data-表格='3'] {
-    table-layout: auto;
-} */
-.定位容器{
-    position: relative;
+img{
     width: 100%;
     height: 100%;
-    justify-content: space-between;
 }
-.课程进度条{
-    position: absolute;
-    z-index: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background:rgba(200,245,200,0.5);
-    box-shadow:0 0 0 1px rgba(200,245,200,0.5)
-}
-#课程进度提示{
-    position: relative;
-    z-index: 1;
-}
-.定位容器 button{
-    position: relative;
-    z-index: 1;
-}
-.定位容器 button:active{
-    transform: scale(0.8);
-}
-/* #endregion */
-/* #region 主页文章 */
-#主页{
-    display: flex;
-    padding:72px 4px 48px 4px;
-    min-height: 100vh;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-    width: var(--文章宽度,min(600px + 20vw,95vw));
-}
-#主页 .文章{
-    transform: translate(-100vw)
-}
-#主页 .文章 button{
-    width: 50px;
-    height: 50px;
-    background: none;
-    border: 0;
-    font-size: 30px;
-    margin: 0 10px 0 10px;
-}
-.文章 :is(h1,h2,h3,h4,h5,h6,span,p){
-    margin-bottom:4px;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
-.文章 :is(h3,h4,h5,h6){
-    color: grey !important;
-}
-.文章{
-    position: relative;
-    margin:8px 0;
-    width:var(--文章宽度,min(600px + 20vw,95vw));
-    transition: 0.5s;
-}
-.文章 .删除按钮{
-    position: absolute;
-    right:5px;
-    top: 20px;
-    height: 40px;
-    width: 40px;
-    opacity: 0;
-    transition: 0.2s;
-}
-.文章:hover .删除按钮{
-    opacity: 0.8;
-}
-/* #endregion */
 </style>
 
 </head>
-<!-- #region 界面 -->
+
 <body class='竖排 居中'>
-<div id='顶栏' class="横排">
-    <button onclick='模块_顶栏.设置()'>设置</button>
-    <button onclick='模块_顶栏.百宝箱()'>百宝箱</button>
-    <button id="姓名" onclick='模块_顶栏.登录()'>萌鲨无敌</button>
-</div>
+<div id='顶栏' class="横排"><button id="设置按钮">设置</button><button>作者→</button><button>萌鲨无敌</button></div>
 <div id="模糊" class="居中 竖排">
     <div id='设置卡片' class="卡片 居中 竖排"></div>
-    <div id='百宝箱卡片' class="卡片 居中 竖排"></div>
-    <div id="登录卡片" class='卡片 居中 竖排'>
-        <h2 style='padding-top:10px'>智慧教务登录</h2>
-        <input id="用户名" placeholder="用户名" maxlength="20">
-        <input id="密码" placeholder="密码" maxlength="20">
-        <button id='登录按钮' class="方按钮" onclick='登录切换()'>登录</button>
-    </div>
 </div>
-<div id='主页' class='竖排'><button id="用户" onclick='刷新()'></button></div>
+<div id="登录卡片" class='卡片 居中 竖排'>
+    <h2 style='padding-top:10px'>鲨鱼网站测试</h2>
+    <input id="用户名" placeholder="用户名" maxlength="20">
+    <input id="密码" type="password" placeholder="密码">
+    <button id='登录按钮' class="方按钮">登录</button>
 </div>
-<!-- #endregion -->
+<div id="动态编辑" class='卡片 竖排 文章'><div id="标题编辑" class="文本编辑" contenteditable="true">标题</div><div id="内容编辑" class="文本编辑" contenteditable="true">请输入文本</div><button id="发布按钮" class="方按钮">发布</button></div>
+<div id='主页' class='竖排' style='display:none'></div>
+</div>
+
 <script>
-//#region 初始化
-let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0
-const 音乐 = new Audio()
-音乐.loop = false;音乐.volume = 0.1
-let 时间戳,周数指针,课表,表格1
-let 缓存 = {设置:JSON.parse(localStorage.getItem('设置'))||{},登录信息:JSON.parse(localStorage.getItem('登录信息'))||{}}
-const 开学时间 = new Date('2026-9-7')
-//#endregion
-let 文章列表 = [
-    {id:1,
-    标题:`<div class='横排' style='justify-content: space-around'>
-        <a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
-        <span class='居中 横排'>课程表</span>\n
-        <a href="https://m.fjpit.com/#/">智慧教务</a>
-    </div>`,
-    列:['周一','周二','周三','周四','周五','周六','周日'],
-    行:['课程表','第一节\n8:10-9:50','第二节\n10:10-11:50','午休','第三节\n2:30-4:10','第四节\n4:20-6:00','第五节\n6:15-8:10','第六节\n8:20-10:00'],
-    内容:``,
+const 音乐= new Audio('./music/!toy.mp3')
+    音乐.loop = false
+    音乐.volume = 0.1
+let 循环播放 = true
+let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
+    {标题:'音乐播放器',
+    内容:'',
     作者:'shark',
-    类型:'表格'},
-
-    {id:2,
-    标题:`<span class='居中 横排'>第四周晨跑表</span>`,
-    列:['周一','周二','周三','周四','周五'],
-    行:``,
-    内容:[
-        ["软件技术2522", "软件技术2511", "物联网2512", "", ""],
-        ["网络技术2522", "大数据2511", "软件技术2521", "", ""],
-        ["电子信息2512", "物联网2511", "电子信息2511", "", ""],
-        ["电子信息2521", "网络技术2521", "网络技术2511", "", ""],
-        ["物联网2331", "电子信息2621", "大数据2621", "", ""],
-        ["软件技术2621", "物联网2612", "电子信息2612", "", ""],
-        ["电子信息2333", "软件技术2622", "网络技术2621", "", ""],
-        ["电子信息2332", "软件技术2611", "电子信息2611", "", ""],
-        ["大数据2611", "电子信息2331", "物联网2611", "", ""],
-        ["网络技术2611", "", "物联网2332", "",""]
-    ],
-    作者:'shark',
-    类型:'表格'},
-
-    {id:3,
-    标题:`<span class='居中 横排'>值日表</span>`,
-    列:["星期","组别","组长","组员"],
-    行:``,
-    内容:[
-    [
-        "周一",
-        "第 1 组",
-        "陈墨阳",
-        "李煜烨、方礼程、占鑫淼、杜仁博"
-    ],
-    [
-        "周二",
-        "第 2 组",
-        "徐培超",
-        "徐淑婷、王记、何岳恒、张佳惠"
-    ],
-    [
-        "周三",
-        "第 3 组",
-        "林嘉琪",
-        "刘文俊、方伟炫、郑佳宝、郑戴俞萱"
-    ],
-    [
-        "周四",
-        "第 4 组",
-        "张钰玲",
-        "鲁城君、杨子鉴、林欣怡、郑洁"
-    ],
-    [
-        "周五",
-        "第 5 组",
-        "柯诗琳",
-        "刘智宏、邱函楸、李运、吴敬榆"
-    ],
-    [
-        "周一",
-        "第 6 组",
-        "沈一铭",
-        "陈雅诗、万龙、陈伟斌、陈巧莹"
-    ],
-    [
-        "周二",
-        "第 7 组",
-        "黄菡羽",
-        "杨昊、朱晨琳、陈宇杰、叶广霖"
-    ],
-    [
-        "周三",
-        "第 8 组",
-        "叶雯鑫",
-        "詹灿彬、朱铭航、吴京思、蔡星怀"
-    ],
-    [
-        "周四",
-        "第 9 组",
-        "洪梓杭",
-        "李泓燊、潘欣怡、刘鸣、余晨"
-    ],
-    [
-        "周五",
-        "第 10 组",
-        "程安琪",
-        "赖欣怡、黄洋、胡应超、刘子轩"
-    ]
-],
-    作者:'shark',
-    类型:'表格'},
-
-    {id:4,
-    标题:`备忘录`,
-    内容:`右上角小圆点刷新\n记得多喝热水，别忘了断电倒垃圾\n上午 7:00晨跑  7:30英语单词  12:00午休\n下午 7:00晚自习  9:30晚点点名  10:30熄灯`,
+    类型:'音乐播放器'},
+    {标题:'冷知识：鲨鱼是世界上最可爱的动物',
+    内容:'啊😲？云朵☁️😄，哒↘哒↗哒↘哒↗哒↘，好想玩原神😨，云☁️原神😙，当当当当当😊，看精彩纷纷👍🎊😆，云☁️原神😄，呜呜呜呜呜，好想玩原神😭😭😭云☁️原神，朋友已就位😊😃😆，一起玩原神，云☁️原神！啊啊啊啊啊😙，好想玩原神😙云☁️原神，哈哈哈哈哈🤣🤣🤣，一起玩原神，云☁️原神，好好好想，🤩想玩玩原神😋网页云端，低功耗不失真😌， WiFi网线🥰，都可以60帧😍，来来来来👏，进入云☁️原神',
     作者:'shark',
     类型:'文本'},
-
-    {id:5,
-    标题:`<span id='复制提示' onclick='复制文字()' class='复制按钮'>请假提示(点击内容以复制)</span>`,
-    内容:`<div onclick='复制文字()' class='复制按钮'><span>\
-📌请假需提前联系老师短信或电话，请假格式如下，回来记得销假
-我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:\
-</span></div>`,
+    {标题:'冷知识：卡片拥有最小高度',
+    内容:'卡片大小会随窗口大小增大而略微增大',
+    作者:'shark',
+    类型:'文本'},
+    {标题:'冷知识：冷知识不是冷的',
+    内容:'你说得对，但是你说的也不完全对。从某种角度来说，你说的有一点对，可是从另一个角度看，你说得不对。也不能说是完全不对，只能说离完全对之间还有一点不对。如果忽略这点不对，哪你说的当然是对的，可是以一个更严谨的态度去审视你说的对不对，那么你说的又不是对的了。其实回头一想，你说的对之处在静止的世界中有可能是对的，你说的不对之处以形而上的观点来看有可能是错的。但是以发展的眼光看，你说得对之处在运动的时空里有可能是不对的，你说的不对之处以辩证的观点看有可能是对的。在此时此刻你说的有可能对也有可能不对，在往后未来你说的有可能不对也有可能对。总而言之，言而总之，一言以蔽之，观其全貌后论之，知其今后历来往事所以评议之，你说得对，但是你说的不对。你说得对，但是你说的也不完全对。从某种角度来说，你说的有一点对，可是从另一个角度看，你说得不对。也不能说是完全不对，只能说离完全对之间还有一点不对。如果忽略这点不对，哪你说的当然是对的，可是以一个更严谨的态度去审视你说的对不对，那么你说的又不是对的了。其实回头一想，你说的对之处在静止的世界中有可能是对的，你说的不对之处以形而上的观点来看有可能是错的。但是以发展的眼光看，你说得对之处在运动的时空里有可能是不对的，你说的不对之处以辩证的观点看有可能是对的。在此时此刻你说的有可能对也有可能不对，在往后未来你说的有可能不对也有可能对。总而言之，言而总之，一言以蔽之，观其全貌后论之，知其今后历来往事所以评议之，你说得对，但是你说的不对。你说得对，但是你说的也不完全对。从某种角度来说，你说的有一点对，可是从另一个角度看，你说得不对。也不能说是完全不对，只能说离完全对之间还有一点不对。如果忽略这点不对，哪你说的当然是对的，可是以一个更严谨的态度去审视你说的对不对，那么你说的又不是对的了。其实回头一想，你说的对之处在静止的世界中有可能是对的，你说的不对之处以形而上的观点来看有可能是错的。但是以发展的眼光看，你说得对之处在运动的时空里有可能是不对的，你说的不对之处以辩证的观点看有可能是对的。在此时此刻你说的有可能对也有可能不对，在往后未来你说的有可能不对也有可能对。总而言之，言而总之，一言以蔽之，观其全貌后论之，知其今后历来往事所以评议之，你说得对，但是你说的不对',
     作者:'shark',
     类型:'文本'},
 ]
-const 模块_设置 = {
-    设置列表 : [
-        ['深色模式','深色模式'],
-        ['音乐播放器','音乐播放器'],
-        ['版本:2.0','无']
-    ],
-    缓存存储(属性名,值){
-        缓存.设置[属性名]=值
-        localStorage.setItem('设置',JSON.stringify(缓存.设置))
-    },
-    深色模式(){
-        if(this.classList.contains('开关开启')){
-            this.classList.remove('开关开启');
-            模块_设置.缓存存储('深色模式',false)
-            document.documentElement.classList.remove('变量_深色')
-        }
-        else
-            {this.classList.add('开关开启');
-            模块_设置.缓存存储('深色模式',true)
-            document.documentElement.classList.add('变量_深色')
-            // document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
-        }
-    },
-    音乐播放器(){
-        if(this.classList.contains('开关开启')){
-            this.classList.remove('开关开启');
-            模块_设置.缓存存储('音乐播放器',false)
-            文章列表.shift()
-            刷新()
-            音乐.pause()
-            播放中=false
-        }
-        else{
-            this.classList.add('开关开启');
-            模块_设置.缓存存储('音乐播放器',true)
-            文章列表.unshift({id:0,标题:`音乐播放器`,内容:`music`,作者:'shark',类型:'音乐播放器'})
-            // document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
-            刷新()
-        }
-    },
-    无(){
-        if(this.classList.contains('开关开启')){
-            this.classList.remove('开关开启');
-            }
-        else
-            {this.classList.add('开关开启');
-    }},
-    加载(){
-        模块_设置.设置列表.forEach(function([选项文本,选项功能]){ //设置功能
-            const 设置选项 = document.createElement('div')
-            设置选项.className = '设置选项 横排';
-            设置选项.textContent = 选项文本;
-            const 设置开关 = document.createElement('div');
-            设置开关.className = '设置开关 横排';
-            const 开关圆点 = document.createElement('div');
-            开关圆点.className = '开关圆点';
-            document.querySelector('#设置卡片').appendChild(设置选项);
-            设置选项.appendChild(设置开关);
-            设置开关.appendChild(开关圆点);
-            设置开关.onclick = 模块_设置[选项功能];
-            if(缓存.设置[选项功能]){设置开关.classList.add('开关开启');}
-        })
-        if(缓存.设置['深色模式']){document.documentElement.classList.add('变量_深色')}
-        if(缓存.设置['音乐播放器']){文章列表.unshift({id:0,标题:`音乐播放器`,内容:`music`,作者:'shark',类型:'音乐播放器'})}
-    },
-}
-const 模块_顶栏 = {
-    设置(){
-        document.querySelector('#模糊').classList.add('渐显')
-        document.querySelector('#设置卡片').classList.add('渐显')
-    },
-    百宝箱(){
-        document.querySelector('#模糊').classList.add('渐显')
-        document.querySelector('#百宝箱卡片').classList.add('渐显')
-        document.querySelector('#百宝箱卡片').innerHTML=(`<h1>随机数</h1><br>
-        <h2>
-            硬币：${随机数(0,1) === 0 ? '正面' : '反面'}<br>
-            四面骰：${随机数(1,4)}<br>
-            六面骰：${随机数(1,6)}<br>
-            1-10随机数：${随机数(1,10)}<br>
-            1-50随机数：${随机数(1,50)}<br>
-            1-100随机数：${随机数(1,100)}
-        </h2>`)
-    },
-    登录(){
-        document.querySelector('#模糊').classList.add('渐显')
-        document.querySelector('#登录卡片').classList.add('渐显')
+let 音乐列表
+let 播放中 = false
+let 音乐索引 = 0
+let 用户名
+const 设置列表 = [['蓝色背景',蓝色背景],['背景音乐',音乐开关]]
+设置列表.forEach(function([选项文本,选项功能]){ //设置功能
+    const 设置选项 = document.createElement('div')
+    设置选项.className = '设置选项 横排';
+    设置选项.textContent = 选项文本;
+    const 设置开关 = document.createElement('div');
+    设置开关.className = '设置开关 横排';
+    const 开关圆点 = document.createElement('div');
+    开关圆点.className = '开关圆点';
+    document.querySelector('#设置卡片').appendChild(设置选项);
+    设置选项.appendChild(设置开关);
+    设置开关.appendChild(开关圆点);
+    设置开关.onclick = 选项功能;
+})
+document.querySelector("#模糊").addEventListener("click",function(e){
+     if (e.target === e.currentTarget){
+    document.querySelector('#模糊').classList.remove('渐显');
+    document.querySelector('#设置卡片').classList.remove('渐显');
+    e.stopPropagation;
+    }});
+document.querySelector("#登录按钮").onclick = function(){//登录>主页
+登录切换()
+    };//登录>主页
+document.querySelector('#设置按钮').onclick = function(){
+    document.querySelector('#模糊').classList.add('渐显')
+    document.querySelector('#设置卡片').classList.add('渐显')
+};
+document.querySelector('#发布按钮').onclick = function(){
+    发布动态(document.querySelector('#标题编辑').innerText,document.querySelector('#内容编辑').innerText,用户名);
+    切换主页()
+    清除文章()
+};
+document.addEventListener('click', function(e) {
+    const 文章i = e.target.closest('.删除按钮').closest('.文章');
+    if (文章i) {
+        文章i.classList.add('删除');
+        删除文章(文章i.dataset.id)
+        setTimeout(function(){文章i.remove()},500)
     }
-}
-const 模块_课表 = {
-    创建(){
-        表格1 = document.querySelector('table[data-表格="1"]')
-        表格1.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){i.remove()})
-        表格1.rows[3].cells[1].colSpan = 7
-        表格1.rows[3].cells[1].innerHTML = `<div class='定位容器 居中 横排'>
-            <button class="左箭头"><img src='./svg/左箭头.svg'></button><div class='课程进度条'></div><span id='课程进度提示'>课表加载中...</span><button class="右箭头"><img src='./svg/右箭头.svg'></button>
-        </div>`
-        document.querySelector('table[data-表格="1"] .左箭头').onclick = function(){
-            if(周数指针===1){周数指针=20}
-            else{周数指针--};
-            模块_课表.请求()
-        };
-        document.querySelector('table[data-表格="1"] .右箭头').onclick = function(){
-            if(周数指针===20){周数指针=1}
-            else{周数指针++};
-            模块_课表.请求()
-        };
-        模块_课表.请求()
-    },
-    请求(){
-        fetch(`./公告/课表(${周数指针}).json`).then(res => res.json()).then(data => {
-            课表 = data.data.list
-            表格1.querySelectorAll('tr:not(:nth-child(4)) th:not([data-列]):not([data-行])').forEach(i => i.innerText = '')
-            表格1.rows[0].cells[0].innerText=`第${周数指针}周`
-            课表.forEach(function(课程){
-                表格1.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
-            })
-            模块_课表.更新()
-        })
-    },
-    更新(){
-        时间戳= (new Date()).getTime()
-        let 开始差值 = Infinity,结束差值 = Infinity
-        let 当前课程,课程开始,课程进度
-        let 课程进度条 = document.querySelector('.课程进度条')
-
-        课表.forEach(function(课程){
-            let 开始时间差=(new Date(`${课程.date}T${课程.jckssj}`)).getTime()-时间戳
-            let 结束时间差=(new Date(`${课程.date}T${课程.jcjssj}`)).getTime()-时间戳
-            if(开始时间差<=0&&结束时间差>=0){课程开始=true}
-            if(开始时间差>=0&&开始时间差<开始差值){开始差值 = 开始时间差}
-            if(结束时间差>=0&&结束时间差<结束差值){结束差值 = 结束时间差;当前课程=课程}
-        })
-        function 差值计算(差值){
-            差值 = Math.ceil(差值/1000/60)
-            if (差值===Infinity){差值=false}
-            else if (差值>60*24){差值=Math.floor(差值/60/24)+'天' +Math.ceil(差值/60)%24+'时'}
-            else if (差值>60){差值=Math.floor(差值/60)+'时'+差值%60+'分'}
-            else {差值=差值+'分'}
-            return 差值
+});
+function 蓝色背景(){
+    if(this.classList.contains('开关开启')){
+        this.classList.remove('开关开启');
+        document.documentElement.style.background = '#f5f5f5';
         }
-        if(当前课程){
-            if(课程开始){课程开始=`下课倒计时:${差值计算(结束差值)}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`;课程进度=100-结束差值/1000/60}
-            else{课程开始=`上课倒计时:${差值计算(开始差值)}  -  下节课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`}
-            document.querySelector('#课程进度提示').innerText=课程开始
+    else
+        {this.classList.add('开关开启');
+        document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
+}}
+function 音乐开关(){
+    if(this.classList.contains('开关开启')){
+        this.classList.remove('开关开启');
+        音乐.pause();
         }
-        else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
-        if(课程进度){课程进度条.style.display='flex';课程进度条.style.width=课程进度 + '%'}
-        else{课程进度条.style.display='none'}
-    }    
-}
-const 模块_文章加载 = {
-    音乐(n){
-        let 长按 = false;
-        document.querySelector('#主页').insertAdjacentHTML('afterbegin',
-        `<div id="音乐卡片" class="卡片 文章 竖排">
-            <h1>标题加载中</h1>
-            <div class="进度条"><div class="进度"></div></div>
-            <div class="横排 时间条"><h3 class="当前时间">0:00</h3><h3 class="总时间">0:00</h3></div>
-            <div class="音乐按钮栏 横排">
-                <div class='grid左'>
-                    <button class="循环按钮"><img src='./svg/循环.svg'></button>
-                </div>
-                <div class='grid中'>
-                    <button class="左箭头"><img src='./svg/左箭头.svg'></button>
-                    <button class="播放按钮"><img src='./svg/播放按钮.svg'></button>
-                    <button class="右箭头"><img src='./svg/右箭头.svg'></button>
-                </div>
-                <div class='grid右'>
-                    <div class='音量区域 横排 居中'>
-                        <div class='音量条区域 横排 居中'><input class='音量条' type="range" min="0" max="100" value="20" step="10"></div>
-                        <button class="音量按钮"><img src='./svg/声音开.svg'></button>
-                    </div>
+    else
+        {this.classList.add('开关开启');
+        音乐.play();
+}}
+function 加载音乐卡片(n){
+    function 下一首(){
+        if(音乐索引===音乐列表.length-1){音乐索引=0}
+        else{音乐索引++};
+        音乐.src = '/music/' + 音乐列表[音乐索引];
+        document.querySelector('.进度').style.width = 0
+    };
+    document.querySelector('#主页').insertAdjacentHTML('afterbegin',
+    `<div id="音乐卡片" class="卡片 文章 竖排">
+        <h1>标题加载中</h1>
+        <div class="进度条"><div class="进度"></div></div>
+        <div class="横排 时间条"><h3 class="当前时间">0:00</h3><h3 class="总时间">0:00</h3></div>
+        <div class="音乐按钮栏 横排">
+            <div class='grid左'>
+                <button class="循环按钮"><img src='./svg/循环.svg'></button>
+            </div>
+            <div class='grid中'>
+                <button class="左箭头"><img src='./svg/左箭头.svg'></button>
+                <button class="播放按钮"><img src='./svg/播放按钮.svg'></button>
+                <button class="右箭头"><img src='./svg/右箭头.svg'></button>
+            </div>
+            <div class='grid右'>
+                <div class='音量区域 横排 居中'>
+                    <div class='音量条区域 横排 居中'><input class='音量条' type="range" min="0" max="100" value="20" step="10"></div>
+                    <button class="音量按钮"><img src='./svg/声音开.svg'></button>
                 </div>
             </div>
-        </div>`);
-        if(!音乐.src){
-            音乐.addEventListener('timeupdate',function (){
-                let 百分比 = this.currentTime / this.duration *100;
-                document.querySelector('.进度').style.width = 百分比 + '%';
-                document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
-            });
-            音乐.addEventListener('loadedmetadata',function(){
-                document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
-                document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
-            });
-            音乐.addEventListener('canplay',function(){
-                if(播放中&&!长按){音乐.play()};
-            });
-            音乐.addEventListener('ended',function(){
-                if(循环播放){音乐.currentTime = 0}
-                else{document.querySelector('.右箭头').click()}
-            });
+        </div>
+    </div>`);
+    document.querySelector('.音量条').addEventListener('input',function(){
+        音乐.volume =this.value *0.005
+    });
+    document.querySelector('.播放按钮').onclick = function(){
+        if(播放中){this.querySelector('img').src='./svg/播放按钮.svg';音乐.pause()}
+        else{this.querySelector('img').src='./svg/暂停按钮.svg';音乐.play()};
+        播放中=!播放中
+    };
+    document.querySelector('.循环按钮').onclick = function(){
+        if(循环播放){this.querySelector('img').src='./svg/双箭头.svg'}
+        else{this.querySelector('img').src='./svg/循环.svg'};
+        循环播放=!循环播放
+    };
+    document.querySelector('.左箭头').onclick = function(){
+        if(音乐索引===0){音乐索引=音乐列表.length-1}
+        else{音乐索引--};
+        音乐.src = './music/' + 音乐列表[音乐索引];
+        document.querySelector('.进度').style.width = 0
+    };
+    document.querySelector('.右箭头').onclick = 下一首
+    let 长按 = false;
+    document.querySelector('.进度条').addEventListener('mousedown',function(e){
+        长按 = true;
+        音乐.currentTime = e.offsetX / this.offsetWidth * 音乐.duration;
+        e.preventDefault();
+        音乐.pause();
+    });
+    document.addEventListener('mousemove',function(e){
+        if(长按){
+        const rect = document.querySelector('.进度条').getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        x = Math.max(0, Math.min(x, rect.width));
+        音乐.currentTime = (x / rect.width) * 音乐.duration;
         }
-        请求音乐()
-        document.querySelector('.音量条').addEventListener('input',function(){
-            音乐.volume =this.value *0.005
-        });
-        document.querySelector('.播放按钮').onclick = function(){
-            if(播放中){this.querySelector('img').src='./svg/播放按钮.svg';音乐.pause()}
-            else{this.querySelector('img').src='./svg/暂停按钮.svg';音乐.play()};
-            播放中=!播放中
-        };
-        document.querySelector('.循环按钮').onclick = function(){
-            if(循环播放){this.querySelector('img').src='./svg/双箭头.svg'}
-            else{this.querySelector('img').src='./svg/循环.svg'};
-            循环播放=!循环播放
-        };
-        document.querySelector('.左箭头').onclick = function(){
-            if(音乐索引===0){音乐索引=音乐列表.length-1}
-            else{音乐索引--};
-            音乐.pause()
-            音乐.currentTime = 0
-            document.querySelector('.进度').style.width = 0
-            音乐.src = './music/' + 音乐列表[音乐索引];
-        };
-        document.querySelector('.右箭头').onclick = function (){
-            if(音乐索引===音乐列表.length-1){音乐索引=0}
-            else{音乐索引++};
-            音乐.pause()
-            音乐.currentTime = 0
-            document.querySelector('.进度').style.width = 0
-            音乐.src = './music/' + 音乐列表[音乐索引];
-        };
-        document.querySelector('.进度条').addEventListener('mousedown',function(e){
-            长按 = true;
-            音乐.currentTime = e.offsetX / this.offsetWidth * 音乐.duration;
-            e.preventDefault();
-            音乐.pause();
-        });
-        document.addEventListener('mousemove',function(e){
-            if(长按){
-            const rect = document.querySelector('.进度条').getBoundingClientRect();
-            let x = e.clientX - rect.left;
-            x = Math.max(0, Math.min(x, rect.width));
-            音乐.currentTime = (x / rect.width) * 音乐.duration;
-            }
-        });
-        document.addEventListener('mouseup',function(){
-            if(播放中&&长按){音乐.play()};
-            长按 = false;
-        });
-        if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
-        if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
-        音乐.dispatchEvent(new Event('timeupdate'))
-        setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
-    },
-    文本(i,id,n){
-        const 文章i = document.createElement('div')
-        文章i.className = '卡片 文章'
-        const 标题i = document.createElement('h1')
-        标题i.innerHTML = i['标题']
-        const 内容i = document.createElement('h3')
-        内容i.innerHTML = i['内容']
-        document.querySelector('#主页').append(文章i)
-        文章i.dataset.id = id
-        if (i['作者']!=='shark'){
-            文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
-        }
-        文章i.append(标题i,内容i)
-        setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
-    },
-    表格(i,id,n){
-        const 文章i = document.createElement('div')
-        文章i.className = '卡片 文章'
-        const 标题i = document.createElement('h1')
-        标题i.innerHTML = i['标题']
-        const 内容i = document.createElement('table')
-        if(i['id']){内容i.dataset.表格=i['id']}
-
-        function 加载表头(行,行n){
-            let tr = document.createElement('tr')
-            if(i['行']){tr.innerHTML = `<th data-行='0'>${行}</th>`}
-            内容i.append(tr)
-        
-            i['列'].forEach(function(列,列n){
-                let th = document.createElement('th')
-                if(行n==0){th.innerHTML = 列;th.dataset.列=0}
-                else if(i['内容']){th.innerHTML = 行[列n]}
-                else(th.innerHTML = ' ')
-                tr.append(th)
-            })
-        }
-
-        if (i['行']){i['行'].forEach(加载表头)}
-        else{
-            if(i['内容']&&i['列']){([i['列'],...i['内容']]).forEach(加载表头)}
-        }
-
-        document.querySelector('#主页').append(文章i)
-        文章i.dataset.id = id
-        if (i['作者']!=='shark'){
-            文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
-        }
-        文章i.append(标题i,内容i)
-        setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
-        if(i['id']==1){模块_课表.创建()}
-                else if(i['id']==3){内容i.querySelectorAll("tr > :nth-child(4)").forEach(内容 => {内容.colSpan = 5})}
-    }
+    });
+    document.addEventListener('mouseup',function(){
+        if(播放中&&长按){音乐.play()};
+        长按 = false;
+    });
+    音乐.addEventListener('timeupdate',function(){
+        let 百分比 = this.currentTime / this.duration *100;
+        document.querySelector('.进度').style.width = 百分比 + '%';
+        document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
+    });
+    音乐.addEventListener('canplay',function(){
+        document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
+        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
+        if(播放中&&!长按){音乐.play()};
+    });
+    音乐.addEventListener('ended',function(){
+        if(循环播放){音乐.currentTime = 0}
+        else{下一首()}
+    });
+    document.querySelector('.进度').style.width = 0;
+    if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
+    if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
+    setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
 }
-function 刷新(){
-    document.querySelector('#主页').replaceChildren(document.querySelector('#用户'))
-    时间戳= (new Date()).getTime()
-    周数指针 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
-    文章列表.forEach(function(i,n){
-        if (i['类型']==='文本'){模块_文章加载.文本(i,-1,n)}
-        else if (i['类型']==='音乐播放器'){模块_文章加载.音乐(n)}
-        else if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
+function 刷新动态(标题,内容,作者,id,n){
+    const 文章i = document.createElement('div')
+    文章i.className = '卡片 文章'
+    const 标题i = document.createElement('h1')
+    标题i.textContent = 标题
+    const 内容i = document.createElement('h3')
+    内容i.textContent = 内容
+    document.querySelector('#主页').append(文章i)
+    文章i.dataset.id = id
+    if (作者!=='shark'){
+        文章i.insertAdjacentHTML("afterbegin",`<button class='删除按钮'><img src='./svg/删除按钮.svg'></button>`)
+    }
+    文章i.append(标题i,内容i)
+    setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
+}
+function 发布动态(标题,内容,作者){
+    const 文章i = document.createElement('div')
+    文章i.className = '卡片 文章'
+    const 标题i = document.createElement('h1')
+    标题i.textContent = 标题
+    const 内容i = document.createElement('h3')
+    内容i.textContent = 内容
+    document.querySelector('#主页').prepend(文章i)
+    文章i.append(标题i,内容i)
+    存储文章(标题,内容,作者)
+    setTimeout(function(){文章i.classList.add('渐显')},10)
+}
+function 切换主页(){
+        document.querySelector('#主页').style.display='flex';
+        document.querySelector('#动态编辑').style.display='none';
+        document.querySelector('#发动态').style.display='block';
+        document.querySelector('#主页按钮').style.display='none';
+}
+function 清除文章(){
+    document.querySelector('#标题编辑').innerText = '标题';
+    document.querySelector('#内容编辑').innerText = '请输入文本';
+}
+function 存储文章(标题,内容,作者){
+    fetch("/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            标题: 标题,
+            内容: 内容,
+            作者: 作者
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data + 作者)
+    })
+}
+function 请求文章(){
+    fetch("/api/load")
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(function(i,n){
+            刷新动态(i['标题'],i['内容'],i['作者'],i['id'],n+文章列表.length)
+        })
+    })
+}
+function 删除文章(id){
+    fetch("/api/delete/"+id,{
+        method:'DELETE'
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
     })
 }
 function 请求音乐(){
-    fetch("./music/music.json")
+    fetch("/api/music")
     .then(res => res.json())
     .then(data=>{
         音乐列表=data;
-        if(!音乐.src){音乐.src = './music/' + 音乐列表[音乐索引]}
+        // 音乐索引=Math.floor(Math.random()*音乐列表.length);
+        // 音乐.src = '/music/' + 音乐列表[音乐索引];
         document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration);
         document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
     })
+}
+function 刷新(){
+    document.querySelector('#主页').replaceChildren(document.querySelector('#用户'))
+    文章列表.forEach(function(i,n){
+        if (i['类型']==='文本'){刷新动态(i['标题'],i['内容'],i['作者'],-1,n)}
+        else if (i['类型']==='音乐播放器'){加载音乐卡片(n)}
+    })
+    请求文章()
+    请求音乐()
 }
 function 音乐时间显示(秒i){
     let 分 = Math.floor(秒i/60);
@@ -922,81 +644,32 @@ function 音乐时间显示(秒i){
 }
 function 登录切换(){
     let 用户名 = document.querySelector("#用户名").value
-    let 密码 = document.querySelector("#密码").value
-    document.querySelector('#登录卡片').classList.remove('渐显')
-    document.querySelector('#模糊').classList.remove('渐显')
-    if (用户名 !== '' && 密码 !== ''){智慧教务(用户名,密码)}
-}
-function 复制文字(){
-    document.querySelector('.复制按钮').style.pointerEvents = "none";
-    navigator.clipboard.writeText("我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:");
-    document.querySelector('#复制提示').innerHTML='请假提示(复制成功)';
-    setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
-}
-function 智慧教务(username,password){
-    return
-    fetch("https://jw-api.fjpit.com/api/auth/login", {
-        "headers": {
-            "accept": "*/*",
-            "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
-            "content-type": "application/json",
-            "platform": "h5",
-            "server": "1",
-            "Referer": "https://m.fjpit.com/"
-        },
-        "body": JSON.stringify({username, password}),
-        "method": "POST"
-    }).then(res => res.json())
-    .then(data =>{
-        console.log(data)
-        if(data.code!==1){alert(`登录失败！\n${data.msg}\n\ntip:智慧教务默认密码是身份证\n请不要频繁尝试，账户可能被冻结`)}
-        else if (data.code===1){
-        缓存.登录信息=data.data.userInfo
-        document.querySelector('#姓名').innerText = 缓存.登录信息.realname
-        localStorage.setItem('登录信息',JSON.stringify(缓存.登录信息))
-        alert('登录成功\n姓名：' + 缓存.登录信息.realname)
+    if (用户名 !== 'baka' && document.querySelector("#密码").value === '')
+        {document.querySelector('#登录卡片').classList.remove('渐显');
+        setTimeout(function(){
+        document.querySelector("#主页").style.display='flex';
+        //造三按钮
+        document.querySelector('#主页').insertAdjacentHTML("afterbegin",`<button id="用户">${用户名}</button>`);
+            document.querySelector('#用户').onclick = function(){刷新()};
+            刷新();
+        document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="发动态">投稿</button>`);
+            document.querySelector('#发动态').onclick = function(){
+            document.querySelector('#主页').style.display='none';
+            document.querySelector('#动态编辑').style.display='flex';
+            document.querySelector('#发动态').style.display='none';
+            document.querySelector('#主页按钮').style.display='block';
+        }},200)
+        document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="主页按钮" style="display:none">主页</button>`);
+            document.querySelector('#主页按钮').onclick = 切换主页
         }
-        setTimeout(function(){刷新()},100)
-    })
-    .catch(error => {
-        alert(`网络错误，登录失败`)
-    })
+    else {alert("错了，笨蛋")}
 }
-function 随机数(最小,最大){
-    return Math.floor(Math.random() * (最大 - 最小 + 1)) + 最小
-}
-function 计数器_秒(){
-    setTimeout(() => {
-        计数器_秒()
-        if(课表){模块_课表.更新()}
-    },1000);
-}
-//#region 启动程序
-if (screen.width < 512) {
-    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.45')
-    // document.documentElement.style.setProperty('--文章宽度', 'min(75vw + 128px,95vw)')
-    document.documentElement.style.setProperty('--文章宽度','95vw')
-    document.documentElement.style.setProperty('--课表高度','80px')
-}
-else{
-    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
-}
-document.querySelector("#模糊").addEventListener("click",function(e){
-    if (e.target === e.currentTarget){
-    document.querySelector('#模糊').classList.remove('渐显');
-    document.querySelectorAll('#模糊 .卡片').forEach(function(卡片){卡片.classList.remove('渐显')})
-    e.stopPropagation;
-    }});
-模块_设置.加载()
 setTimeout(function(){
-    刷新()
-    计数器_秒()
-},10)
-// navigator.serviceWorker.register('./sw.js')
-//#endregion
+    document.querySelector('#登录卡片').classList.add('渐显');
+    // 登录切换()
+},0)
 </script>
 
 </body>
 </html>
 <!--ui:https://heroicons.com/?utm_source=chatgpt.com-->
-<!-- localStorage.clear() -->
