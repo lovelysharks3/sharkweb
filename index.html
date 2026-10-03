@@ -742,13 +742,7 @@ const 模块_课表 = {
 }
 const 模块_文章加载 = {
     音乐(n){
-        请求音乐()
-        function 下一首(){
-            if(音乐索引===音乐列表.length-1){音乐索引=0}
-            else{音乐索引++};
-            音乐.src = './music/' + 音乐列表[音乐索引];
-            document.querySelector('.进度').style.width = 0
-        };
+        let 长按 = false;
         document.querySelector('#主页').insertAdjacentHTML('afterbegin',
         `<div id="音乐卡片" class="卡片 文章 竖排">
             <h1>标题加载中</h1>
@@ -771,6 +765,23 @@ const 模块_文章加载 = {
                 </div>
             </div>
         </div>`);
+        if(!音乐.src){
+            音乐.addEventListener('timeupdate',function (){
+                let 百分比 = this.currentTime / this.duration *100;
+                document.querySelector('.进度').style.width = 百分比 + '%';
+                document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
+            });
+            音乐.addEventListener('canplay',function(){
+                document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
+                document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
+                if(播放中&&!长按){音乐.play()};
+            });
+            音乐.addEventListener('ended',function(){
+                if(循环播放){音乐.currentTime = 0}
+                else{document.querySelector('.右箭头').click()}
+            });
+        }
+        请求音乐()
         document.querySelector('.音量条').addEventListener('input',function(){
             音乐.volume =this.value *0.005
         });
@@ -790,8 +801,12 @@ const 模块_文章加载 = {
             音乐.src = './music/' + 音乐列表[音乐索引];
             document.querySelector('.进度').style.width = 0
         };
-        document.querySelector('.右箭头').onclick = 下一首
-        let 长按 = false;
+        document.querySelector('.右箭头').onclick = function (){
+            if(音乐索引===音乐列表.length-1){音乐索引=0}
+            else{音乐索引++};
+            音乐.src = './music/' + 音乐列表[音乐索引];
+            document.querySelector('.进度').style.width = 0
+        };
         document.querySelector('.进度条').addEventListener('mousedown',function(e){
             长按 = true;
             音乐.currentTime = e.offsetX / this.offsetWidth * 音乐.duration;
@@ -809,20 +824,6 @@ const 模块_文章加载 = {
         document.addEventListener('mouseup',function(){
             if(播放中&&长按){音乐.play()};
             长按 = false;
-        });
-        音乐.addEventListener('timeupdate',function (){
-            let 百分比 = this.currentTime / this.duration *100;
-            document.querySelector('.进度').style.width = 百分比 + '%';
-            document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
-        });
-        音乐.addEventListener('canplay',function(){
-            document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
-            document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
-            if(播放中&&!长按){音乐.play()};
-        });
-        音乐.addEventListener('ended',function(){
-            if(循环播放){音乐.currentTime = 0}
-            else{下一首()}
         });
         if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
         if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
@@ -899,7 +900,9 @@ function 请求音乐(){
         音乐列表=data;
         // 音乐索引=Math.floor(Math.random()*音乐列表.length);
         // 音乐.src = '/music/' + 音乐列表[音乐索引];
-        if(!音乐.src){音乐.src = './music/' + 音乐列表[音乐索引]}
+        if(!音乐.src){
+            音乐.src = './music/' + 音乐列表[音乐索引]
+        }
         document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration);
         document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
     })
