@@ -911,6 +911,7 @@ function 请求音乐(){
         音乐列表=data;
         if(!音乐.src){音乐.src = './music/' + 音乐列表[音乐索引]}
         document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration);
+        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
     })
 }
 function 音乐时间显示(秒i){
