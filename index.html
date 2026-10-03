@@ -805,16 +805,18 @@ const 模块_文章加载 = {
         document.querySelector('.左箭头').onclick = function(){
             if(音乐索引===0){音乐索引=音乐列表.length-1}
             else{音乐索引--};
-            音乐.src = './music/' + 音乐列表[音乐索引];
-            document.querySelector('.进度').style.width = 0
             音乐.pause()
+            音乐.currentTime = 0
+            document.querySelector('.进度').style.width = 0
+            音乐.src = './music/' + 音乐列表[音乐索引];
         };
         document.querySelector('.右箭头').onclick = function (){
             if(音乐索引===音乐列表.length-1){音乐索引=0}
             else{音乐索引++};
-            音乐.src = './music/' + 音乐列表[音乐索引];
-            document.querySelector('.进度').style.width = 0
             音乐.pause()
+            音乐.currentTime = 0
+            document.querySelector('.进度').style.width = 0
+            音乐.src = './music/' + 音乐列表[音乐索引];
         };
         document.querySelector('.进度条').addEventListener('mousedown',function(e){
             长按 = true;
