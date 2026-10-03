@@ -26,7 +26,7 @@
 .变量_深色{
     --背景颜色:#222228;
     --卡片颜色:#282836;
-    --表头颜色:#30304d;
+    --表头颜色:#30304b;
     --表格颜色:#2f2f42;
     --文字颜色:#f5f5f5;
 }
@@ -710,8 +710,8 @@ const 模块_课表 = {
     更新(){
         时间戳= (new Date()).getTime()
         let 开始差值 = Infinity,结束差值 = Infinity
-        let 当前课程,课程开始
-        let 课程进度 = 0
+        let 当前课程,课程开始,课程进度
+        let 课程进度条 = document.querySelector('.课程进度条')
 
         课表.forEach(function(课程){
             let 开始时间差=(new Date(`${课程.date}T${课程.jckssj}`)).getTime()-时间戳
@@ -734,8 +734,9 @@ const 模块_课表 = {
             document.querySelector('#课程进度提示').innerText=课程开始
         }
         else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
-        document.querySelector('.课程进度条').style.width=课程进度 + '%'
-    }
+        if(课程进度){课程进度条.style.display='flex';课程进度条.style.width=课程进度 + '%'}
+        else{课程进度条.style.display='none'}
+    }    
 }
 const 模块_文章加载 = {
     音乐(n){
