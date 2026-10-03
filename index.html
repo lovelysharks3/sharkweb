@@ -196,7 +196,7 @@ button:active{
     color: var(--文字颜色);
 }
 #登录卡片 :is(h1,h2,h3,h4,h5,h6,span,p){
-    margin-bottom:12px;
+    margin:4px 0 20px 0;
 }
 #登录卡片 button{
     width: 100px;
@@ -331,13 +331,13 @@ table {
     width: calc(100% + 40px);
     table-layout: fixed;
     background-color: var(--表格颜色);
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
     margin: 0px -20px -20px -20px;
 }
 th, td {
     border: 1px solid rgba(0,0,0,0.1);
-    padding: 1px;
+    padding: 2px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
     font-size: 15px;
@@ -368,9 +368,9 @@ table[data-表格='1'] th:nth-child(1) {
 table[data-表格='1'] tr:nth-child(4)> th {
     height: 54px;
 }
-table[data-表格='3'] {
+/* table[data-表格='3'] {
     table-layout: auto;
-}
+} */
 .定位容器{
     position: relative;
     width: 100%;
@@ -401,7 +401,7 @@ table[data-表格='3'] {
 /* #region 主页文章 */
 #主页{
     display: flex;
-    padding:72px 4px 64px 4px;
+    padding:72px 4px 48px 4px;
     min-height: 100vh;
     justify-content: flex-start;
     align-items: center;
@@ -872,6 +872,7 @@ const 模块_文章加载 = {
         文章i.append(标题i,内容i)
         setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
         if(i['id']==1){模块_课表.创建()}
+                else if(i['id']==3){内容i.querySelectorAll("tr > :nth-child(4)").forEach(内容 => {内容.colSpan = 3})}
     }
 }
 function 请求音乐(){
@@ -904,15 +905,14 @@ function 音乐时间显示(秒i){
 function 登录切换(){
     let 用户名 = document.querySelector("#用户名").value
     let 密码 = document.querySelector("#密码").value
-    if (用户名 !== 'baka' && 密码 !== 'baka'){
-        document.querySelector('#登录卡片').classList.remove('渐显');
-        document.querySelector('#模糊').classList.remove('渐显')
+    document.querySelector('#登录卡片').classList.remove('渐显')
+    document.querySelector('#模糊').classList.remove('渐显')
+    if (用户名 !== '' && 密码 !== ''){
         智慧教务(用户名,密码)
         setTimeout(function(){
             刷新();
         },200)
     }
-    else {alert("错了，笨蛋")}
 }
 function 复制文字(){
     document.querySelector('.复制按钮').style.pointerEvents = "none";
@@ -935,7 +935,7 @@ function 智慧教务(username,password){
     }).then(res => res.json())
     .then(data =>{
         console.log(data)
-        if(data.code!==1){alert('登录失败\n智慧教务默认密码是身份证\n请不要频繁尝试，账户可能被冻结')}
+        if(data.code!==1){alert(`登录失败！\n${data.msg}\n\ntip:智慧教务默认密码是身份证\n请不要频繁尝试，账户可能被冻结`)}
         else if (data.code===1){
         缓存.登录信息=data.data.userInfo
         document.querySelector('#姓名').innerText = 缓存.登录信息.realname
