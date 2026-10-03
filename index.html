@@ -5,7 +5,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport"
     content="width=device-width, initial-scale=0.4">
-<title>鲨鱼福信</title>
+<title>baka</title>
 <link rel="icon" href="./shark.png">
 
 <!-- pwa -->
@@ -21,15 +21,9 @@
     margin: 0;
     user-select: none;
 }
-/* h1, h2, h3, h4, h5, h6, span, p {
-    user-select: text !important;
-} */
-@media (width<600px){
-    html{
-        zoom:1.5
-    }
+h1,h2,h3,h4,h5,h6,span,p{
+    user-select: text;
 }
-
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -47,8 +41,6 @@
 html{
     scrollbar-gutter: stable;
     background:#f5f5f5;
-    touch-action: manipulation;
-    overscroll-behavior-y: none;
 }
 body{
     margin:0;
@@ -56,8 +48,6 @@ body{
     font-family: Arial;
     background:transparent;
     box-sizing:border-box;
-    touch-action: manipulation;
-    overscroll-behavior-y: none;
 }
 
 .填充{
@@ -240,11 +230,11 @@ button:active{
     background: #34D0F4;
 }
 .开关圆点{
-border-radius:100px;
-background: white;
-height: 100%;
-width: 24px;
-transition: 0.1s;
+   border-radius:100px;
+   background: white;
+   height: 100%;
+   width: 24px;
+   transition: 0.1s;
 }
 #模糊{
     position: fixed;
@@ -393,23 +383,20 @@ const 音乐= new Audio('./music/!toy.mp3')
     音乐.volume = 0.1
 let 循环播放 = true
 let 文章列表 = [//{标题:'测试',内容:'测试内容'}]
-    {标题:`<span id='复制提示'>📌请假提示(点击内容以复制文字)</span>`,
-    内容:`<div onclick='复制文字()' id='复制按钮'><span>\
-    请假需提前联系老师短信或电话，请假格式如下，回来记得销假
-我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:\
-</span></div>`,
+    {标题:'音乐播放器',
+    内容:'',
+    作者:'shark',
+    类型:'音乐播放器'},
+    {标题:'冷知识：鲨鱼是世界上最可爱的动物',
+    内容:'啊😲？云朵☁️😄，哒↘哒↗哒↘哒↗哒↘，好想玩原神😨，云☁️原神😙，当当当当当😊，看精彩纷纷👍🎊😆，云☁️原神😄，呜呜呜呜呜，好想玩原神😭😭😭云☁️原神，朋友已就位😊😃😆，一起玩原神，云☁️原神！啊啊啊啊啊😙，好想玩原神😙云☁️原神，哈哈哈哈哈🤣🤣🤣，一起玩原神，云☁️原神，好好好想，🤩想玩玩原神😋网页云端，低功耗不失真😌， WiFi网线🥰，都可以60帧😍，来来来来👏，进入云☁️原神',
     作者:'shark',
     类型:'文本'},
-    {标题:`<div class='横排' style='justify-content: space-between'>
-<a href="https://superapp.paas.fjpit.cn/pages/tab/my/my">数字福信</a>\n
-<a href="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable">学校课表</a>\n
-<a href="https://m.fjpit.com/#/">智慧教务</a>
-    </div>`,
-    内容:`<div style='overflow:hidden;border-radius:6px'><iframe src="https://m.fjpit.com/#/pages/student/StudentSchedule/scheduleTable" width="100%" height="900" frameborder='0' style="zoom: 1.5;border-radius: 6px"></iframe></div>`,
+    {标题:'冷知识：卡片拥有最小高度',
+    内容:'卡片大小会随窗口大小增大而略微增大',
     作者:'shark',
     类型:'文本'},
-    {标题:`小公告栏(手动写的，可能更新不及时)`,
-    内容:`<img src="./公告/公告.png">`,
+    {标题:'冷知识：冷知识不是冷的',
+    内容:'你说得对，但是你说的也不完全对。从某种角度来说，你说的有一点对，可是从另一个角度看，你说得不对。也不能说是完全不对，只能说离完全对之间还有一点不对。如果忽略这点不对，哪你说的当然是对的，可是以一个更严谨的态度去审视你说的对不对，那么你说的又不是对的了。其实回头一想，你说的对之处在静止的世界中有可能是对的，你说的不对之处以形而上的观点来看有可能是错的。但是以发展的眼光看，你说得对之处在运动的时空里有可能是不对的，你说的不对之处以辩证的观点看有可能是对的。在此时此刻你说的有可能对也有可能不对，在往后未来你说的有可能不对也有可能对。总而言之，言而总之，一言以蔽之，观其全貌后论之，知其今后历来往事所以评议之，你说得对，但是你说的不对。你说得对，但是你说的也不完全对。从某种角度来说，你说的有一点对，可是从另一个角度看，你说得不对。也不能说是完全不对，只能说离完全对之间还有一点不对。如果忽略这点不对，哪你说的当然是对的，可是以一个更严谨的态度去审视你说的对不对，那么你说的又不是对的了。其实回头一想，你说的对之处在静止的世界中有可能是对的，你说的不对之处以形而上的观点来看有可能是错的。但是以发展的眼光看，你说得对之处在运动的时空里有可能是不对的，你说的不对之处以辩证的观点看有可能是对的。在此时此刻你说的有可能对也有可能不对，在往后未来你说的有可能不对也有可能对。总而言之，言而总之，一言以蔽之，观其全貌后论之，知其今后历来往事所以评议之，你说得对，但是你说的不对。你说得对，但是你说的也不完全对。从某种角度来说，你说的有一点对，可是从另一个角度看，你说得不对。也不能说是完全不对，只能说离完全对之间还有一点不对。如果忽略这点不对，哪你说的当然是对的，可是以一个更严谨的态度去审视你说的对不对，那么你说的又不是对的了。其实回头一想，你说的对之处在静止的世界中有可能是对的，你说的不对之处以形而上的观点来看有可能是错的。但是以发展的眼光看，你说得对之处在运动的时空里有可能是不对的，你说的不对之处以辩证的观点看有可能是对的。在此时此刻你说的有可能对也有可能不对，在往后未来你说的有可能不对也有可能对。总而言之，言而总之，一言以蔽之，观其全貌后论之，知其今后历来往事所以评议之，你说得对，但是你说的不对',
     作者:'shark',
     类型:'文本'},
 ]
@@ -417,7 +404,7 @@ let 音乐列表
 let 播放中 = false
 let 音乐索引 = 0
 let 用户名
-const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.4',音乐开关]]
+const 设置列表 = [['蓝色背景',蓝色背景],['背景音乐',音乐开关]]
 设置列表.forEach(function([选项文本,选项功能]){ //设置功能
     const 设置选项 = document.createElement('div')
     设置选项.className = '设置选项 横排';
@@ -432,7 +419,7 @@ const 设置列表 = [['蓝色背景',蓝色背景],['版本:1.4',音乐开关]]
     设置开关.onclick = 选项功能;
 })
 document.querySelector("#模糊").addEventListener("click",function(e){
-    if (e.target === e.currentTarget){
+     if (e.target === e.currentTarget){
     document.querySelector('#模糊').classList.remove('渐显');
     document.querySelector('#设置卡片').classList.remove('渐显');
     e.stopPropagation;
@@ -566,9 +553,9 @@ function 刷新动态(标题,内容,作者,id,n){
     const 文章i = document.createElement('div')
     文章i.className = '卡片 文章'
     const 标题i = document.createElement('h1')
-    标题i.innerHTML = 标题
+    标题i.textContent = 标题
     const 内容i = document.createElement('h3')
-    内容i.innerHTML = 内容
+    内容i.textContent = 内容
     document.querySelector('#主页').append(文章i)
     文章i.dataset.id = id
     if (作者!=='shark'){
@@ -651,8 +638,8 @@ function 刷新(){
         if (i['类型']==='文本'){刷新动态(i['标题'],i['内容'],i['作者'],-1,n)}
         else if (i['类型']==='音乐播放器'){加载音乐卡片(n)}
     })
-    // 请求文章()
-    // 请求音乐()
+    请求文章()
+    请求音乐()
 }
 function 音乐时间显示(秒i){
     let 分 = Math.floor(秒i/60);
@@ -670,25 +657,20 @@ function 登录切换(){
         document.querySelector('#主页').insertAdjacentHTML("afterbegin",`<button id="用户">${用户名}</button>`);
             document.querySelector('#用户').onclick = function(){刷新()};
             刷新();
-        // document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="发动态">投稿</button>`);
-        //     document.querySelector('#发动态').onclick = function(){
-        //     document.querySelector('#主页').style.display='none';
-        //     document.querySelector('#动态编辑').style.display='flex';
-        //     document.querySelector('#发动态').style.display='none';
-        //     document.querySelector('#主页按钮').style.display='block';}
-        },200)
+        document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="发动态">投稿</button>`);
+            document.querySelector('#发动态').onclick = function(){
+            document.querySelector('#主页').style.display='none';
+            document.querySelector('#动态编辑').style.display='flex';
+            document.querySelector('#发动态').style.display='none';
+            document.querySelector('#主页按钮').style.display='block';
+        }},200)
         document.querySelector('#设置按钮').insertAdjacentHTML("afterend",`<button id="主页按钮" style="display:none">主页</button>`);
             document.querySelector('#主页按钮').onclick = 切换主页
         }
     else {alert("错了，笨蛋")}
 }
-function 复制文字(){
-    document.querySelector('#复制按钮').style.pointerEvents = "none";
-    navigator.clipboard.writeText("我是物联网2611XXX的爸爸/妈妈XXX\n我已知晓我孩子将于2026年9月13日14:30时至2026年9月14日18:00时请假离校\n期间所有责任由学生和家长自负，与学校无关\n目的地:\n离校原因:\n学生:\n学生联系电话:\n紧急联系人:\n紧急联系电话:");
-    document.querySelector('#复制提示').innerHTML='📌请假提示(复制成功)';
-    setTimeout(function(){document.querySelector('#复制提示').innerHTML='📌请假提示(点击文字自动复制)';document.querySelector('#复制按钮').style.pointerEvents = "auto";},2500)
-}
 setTimeout(function(){
+    // document.querySelector('#登录卡片').classList.add('渐显');
     登录切换()
 },10)
 </script>
