@@ -17,7 +17,7 @@
 <style>
 /* #region 变量 */
 :root{
-    --背景颜色:#f0f0f2;
+    --背景颜色:#f0f0f5;
     --卡片颜色:white;
     --表头颜色:lightgray;
     --表格颜色:#f5f5f5;
@@ -26,9 +26,12 @@
 .变量_深色{
     --背景颜色:#222228;
     --卡片颜色:#282836;
-    --表头颜色:#30304b;
-    --表格颜色:#2f2f42;
+    --表头颜色:#303049;
+    --表格颜色:#2c2c3c;
     --文字颜色:#f5f5f5;
+}
+.变量_深色 img {
+    filter: invert(1);
 }
 /* #endregion */
 /* #region 网页框架 */
@@ -59,9 +62,6 @@ body{
     touch-action: manipulation;
     overscroll-behavior-y: none;
 }
-/* h1, h2, h3, h4, h5, h6, span, p {
-    user-select: text !important;
-} */
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -76,7 +76,7 @@ body{
     background-clip: padding-box;
 }
 /* #endregion */
-/* #region 通用 */
+/* #region 通用标签 */
 .卡片{
     min-height:200px;
     background:var(--卡片颜色);
@@ -87,20 +87,6 @@ body{
 .填充{
     /* margin-right:auto */
     flex: 1;
-}
-button{
-    transition: 0.1s;
-    cursor:pointer;
-    color: var(--文字颜色);
-    background: var(--表头颜色);
-    /* user-select: none; */
-}
-button:hover{
-    filter: brightness(0.9);
-}
-button:active{
-    filter: brightness(0.9);
-    transform: scale(0.95);
 }
 .方按钮{
     font-size: 20px;
@@ -120,7 +106,6 @@ button:active{
     justify-content:center;
     align-items:center;
 }
-
 .渐显:not(.卡片){
     opacity: 1!important;
     pointer-events:auto!important;
@@ -133,6 +118,29 @@ button:active{
 .渐显.卡片.删除{
     transform: translate(100vw)!important;
 }
+/* #endregion */
+/* #region 通用元素 */
+button{
+    transition: 0.1s;
+    cursor:pointer;
+    color: var(--文字颜色);
+    background: var(--表头颜色);
+    /* user-select: none; */
+}
+button:hover{
+    filter: brightness(0.9);
+}
+button:active{
+    filter: brightness(0.9);
+    transform: scale(0.95);
+}
+img{
+    width: 100%;
+    height: 100%;
+}
+/* h1, h2, h3, h4, h5, h6, span, p {
+    user-select: text !important;
+} */
 /* #endregion */
 /* #region 顶栏 */
 #顶栏{
@@ -315,10 +323,6 @@ button:active{
 .音量区域:hover .音量条区域{
     opacity: 1;
     pointer-events:auto;
-}
-img{
-    width: 100%;
-    height: 100%;
 }
 /* #endregion */
 /* #region 表格 */
@@ -605,13 +609,14 @@ const 模块_设置 = {
             this.classList.remove('开关开启');
             模块_设置.缓存存储('深色模式',false)
             document.documentElement.classList.remove('变量_深色')
-            }
+        }
         else
             {this.classList.add('开关开启');
             模块_设置.缓存存储('深色模式',true)
             document.documentElement.classList.add('变量_深色')
             // document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
-    }},
+        }
+    },
     音乐播放器(){
         if(this.classList.contains('开关开启')){
             this.classList.remove('开关开启');
@@ -771,9 +776,11 @@ const 模块_文章加载 = {
                 document.querySelector('.进度').style.width = 百分比 + '%';
                 document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
             });
-            音乐.addEventListener('canplay',function(){
+            音乐.addEventListener('loadedmetadata',function(){
                 document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
                 document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
+            });
+            音乐.addEventListener('canplay',function(){
                 if(播放中&&!长按){音乐.play()};
             });
             音乐.addEventListener('ended',function(){
@@ -898,13 +905,8 @@ function 请求音乐(){
     .then(res => res.json())
     .then(data=>{
         音乐列表=data;
-        // 音乐索引=Math.floor(Math.random()*音乐列表.length);
-        // 音乐.src = '/music/' + 音乐列表[音乐索引];
-        if(!音乐.src){
-            音乐.src = './music/' + 音乐列表[音乐索引]
-        }
+        if(!音乐.src){音乐.src = './music/' + 音乐列表[音乐索引]}
         document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration);
-        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
     })
 }
 function 音乐时间显示(秒i){
@@ -927,6 +929,7 @@ function 复制文字(){
     setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
 }
 function 智慧教务(username,password){
+    return
     fetch("https://jw-api.fjpit.com/api/auth/login", {
         "headers": {
             "accept": "*/*",
