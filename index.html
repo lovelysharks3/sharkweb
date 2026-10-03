@@ -360,7 +360,7 @@ table tr > *:last-child {
 }
 
 table[data-表格='1'] th {
-    height:var(--课表高度,64px);
+    height:var(--课表高度,68px);
 }
 table[data-表格='1'] th:nth-child(1) {
     background-color: var(--表头颜色);
@@ -470,7 +470,9 @@ table[data-表格='1'] tr:nth-child(4)> th {
 <!-- #endregion -->
 <script>
 //#region 初始化
-let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0, 音乐
+let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0
+const 音乐 = new Audio()
+音乐.loop = false;音乐.volume = 0.1
 let 时间戳,周数指针,课表,表格1
 let 缓存 = {设置:JSON.parse(localStorage.getItem('设置'))||{},登录信息:JSON.parse(localStorage.getItem('登录信息'))||{}}
 const 开学时间 = new Date('2026-9-7')
@@ -595,7 +597,7 @@ const 模块_设置 = {
     设置列表 : [
         ['深色模式','深色模式'],
         ['音乐播放器','音乐播放器'],
-        ['版本:1.8','无']
+        ['版本:2.0','无']
     ],
     缓存存储(属性名,值){
         缓存.设置[属性名]=值
@@ -618,12 +620,14 @@ const 模块_设置 = {
             this.classList.remove('开关开启');
             模块_设置.缓存存储('音乐播放器',false)
             文章列表.shift()
+            刷新()
         }
         else{
             this.classList.add('开关开启');
             模块_设置.缓存存储('音乐播放器',true)
             文章列表.unshift({id:0,标题:`音乐播放器`,内容:`music`,作者:'shark',类型:'音乐播放器'})
             // document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
+            刷新()
         }
     },
     无(){
@@ -735,6 +739,7 @@ const 模块_课表 = {
 }
 const 模块_文章加载 = {
     音乐(n){
+        请求音乐()
         function 下一首(){
             if(音乐索引===音乐列表.length-1){音乐索引=0}
             else{音乐索引++};
@@ -820,7 +825,6 @@ const 模块_文章加载 = {
         if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
         if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
         setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
-        请求音乐()
     },
     文本(i,id,n){
         const 文章i = document.createElement('div')
@@ -872,8 +876,18 @@ const 模块_文章加载 = {
         文章i.append(标题i,内容i)
         setTimeout(function(){文章i.classList.add('渐显')},80*n+10)
         if(i['id']==1){模块_课表.创建()}
-                else if(i['id']==3){内容i.querySelectorAll("tr > :nth-child(4)").forEach(内容 => {内容.colSpan = 3})}
+                else if(i['id']==3){内容i.querySelectorAll("tr > :nth-child(4)").forEach(内容 => {内容.colSpan = 5})}
     }
+}
+function 刷新(){
+    document.querySelector('#主页').replaceChildren(document.querySelector('#用户'))
+    时间戳= (new Date()).getTime()
+    周数指针 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
+    文章列表.forEach(function(i,n){
+        if (i['类型']==='文本'){模块_文章加载.文本(i,-1,n)}
+        else if (i['类型']==='音乐播放器'){模块_文章加载.音乐(n)}
+        else if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
+    })
 }
 function 请求音乐(){
     fetch("./music/music.json")
@@ -882,18 +896,9 @@ function 请求音乐(){
         音乐列表=data;
         // 音乐索引=Math.floor(Math.random()*音乐列表.length);
         // 音乐.src = '/music/' + 音乐列表[音乐索引];
+        if(!音乐.src){音乐.src = './music/' + 音乐列表[音乐索引]}
         document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration);
         document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
-    })
-}
-function 刷新(){
-    document.querySelector('#主页').replaceChildren(document.querySelector('#用户'))
-    时间戳= (new Date()).getTime()
-    周数指针 = Math.ceil((时间戳-开学时间.getTime())/1000/60/60/24/7)
-    文章列表.forEach(function(i,n){
-        if (i['类型']==='文本'){模块_文章加载.文本(i,-1,n)}
-        else if (i['类型']==='音乐播放器'){if(!音乐){音乐 = new Audio('./music/!toy.mp3');音乐.loop = false;音乐.volume = 0.1};模块_文章加载.音乐(n)}
-        else if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
     })
 }
 function 音乐时间显示(秒i){
