@@ -170,21 +170,32 @@ button:active{
     box-shadow:0 0 10px rgba(0,0,0,0.15);
     border:1px solid var(--表格颜色);
     padding:0px 16px;
-    margin:0;
-    border:0;
     font-size:24px;
     transition: 0.5s;
 }
-/* #endregion */
-/* #region 登录 */
-#登录卡片{
+#模糊{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.1);
+    backdrop-filter: blur(3px);
+    z-index: 2;
+    transition: 0.2s;
+    pointer-events:none;
+    opacity: 0;
+}
+#模糊 .卡片{
     position: absolute;
-    width:400px;
     opacity: 0;
     transition: 0.2s;
     transform: scale(0.8);
     pointer-events: none;
+    min-width: 400px;
 }
+/* #endregion */
+/* #region 登录 */
+/* #登录卡片{
+    width:400px;
+} */
 #登录卡片 input{
     font-size:20px;
     margin:5px;
@@ -206,14 +217,9 @@ button:active{
 }
 /* #endregion */
 /* #region 设置 */
-#设置卡片{
-    pointer-events: none;
-    position: absolute;
-    min-width: 400px;
-    opacity: 0;
-    transition: 0.2s;
-    transform: scale(0.8);
-}
+/* #设置卡片{
+    width:400px;
+} */
 .设置选项{
     font-size:20px;
     justify-content: space-between;
@@ -244,16 +250,6 @@ button:active{
     width: 24px;
     transition: 0.1s;
 }
-#模糊{
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.1);
-    backdrop-filter: blur(3px);
-    z-index: 2;
-    transition: 0.2s;
-    pointer-events:none;
-    opacity: 0;
-}
 /* #endregion */
 /* #region 音乐播放器 */
 #音乐卡片{
@@ -277,7 +273,7 @@ button:active{
 }
 .进度{
     height: 100%;
-    width: 10%;
+    width: 0;
     background: #34D0F4;
     /* transition: 1s; */
 }
@@ -458,6 +454,7 @@ table[data-表格='1'] tr:nth-child(4)> th {
 </div>
 <div id="模糊" class="居中 竖排">
     <div id='设置卡片' class="卡片 居中 竖排"></div>
+    <div id='百宝箱卡片' class="卡片 居中 竖排"></div>
     <div id="登录卡片" class='卡片 居中 竖排'>
         <h2 style='padding-top:10px'>智慧教务登录</h2>
         <input id="用户名" placeholder="用户名" maxlength="20">
@@ -470,7 +467,7 @@ table[data-表格='1'] tr:nth-child(4)> th {
 <!-- #endregion -->
 <script>
 //#region 初始化
-let 音乐列表, 循环播放 = true, 播放中 = false, 音乐索引 = 0
+let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0
 const 音乐 = new Audio()
 音乐.loop = false;音乐.volume = 0.1
 let 时间戳,周数指针,课表,表格1
@@ -621,6 +618,8 @@ const 模块_设置 = {
             模块_设置.缓存存储('音乐播放器',false)
             文章列表.shift()
             刷新()
+            音乐.pause()
+            播放中=false
         }
         else{
             this.classList.add('开关开启');
@@ -662,14 +661,17 @@ const 模块_顶栏 = {
         document.querySelector('#设置卡片').classList.add('渐显')
     },
     百宝箱(){
-        alert(`
-            投掷硬币：${随机数(0,1) === 0 ? '正面' : '反面'}
-            四面骰：${随机数(1,4)}
-            六面骰：${随机数(1,6)}
-            1-10随机数：${随机数(1,10)}
-            1-50随机数：${随机数(1,50)}
+        document.querySelector('#模糊').classList.add('渐显')
+        document.querySelector('#百宝箱卡片').classList.add('渐显')
+        document.querySelector('#百宝箱卡片').innerHTML=(`<h1>随机数</h1><br>
+        <h2>
+            硬币：${随机数(0,1) === 0 ? '正面' : '反面'}<br>
+            四面骰：${随机数(1,4)}<br>
+            六面骰：${随机数(1,6)}<br>
+            1-10随机数：${随机数(1,10)}<br>
+            1-50随机数：${随机数(1,50)}<br>
             1-100随机数：${随机数(1,100)}
-        `)
+        </h2>`)
     },
     登录(){
         document.querySelector('#模糊').classList.add('渐显')
@@ -808,7 +810,7 @@ const 模块_文章加载 = {
             if(播放中&&长按){音乐.play()};
             长按 = false;
         });
-        音乐.addEventListener('timeupdate',function(){
+        音乐.addEventListener('timeupdate',function (){
             let 百分比 = this.currentTime / this.duration *100;
             document.querySelector('.进度').style.width = 百分比 + '%';
             document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
@@ -822,9 +824,9 @@ const 模块_文章加载 = {
             if(循环播放){音乐.currentTime = 0}
             else{下一首()}
         });
-        document.querySelector('.进度').style.width = 0;
         if(播放中){document.querySelector('.播放按钮 img').src='./svg/暂停按钮.svg'};
         if(!循环播放){document.querySelector('.循环按钮 img').src='./svg/双箭头.svg'};
+        音乐.dispatchEvent(new Event('timeupdate'))
         setTimeout(function(){document.querySelector('#音乐卡片').classList.add('渐显')},80*n+10)
     },
     文本(i,id,n){
@@ -913,12 +915,7 @@ function 登录切换(){
     let 密码 = document.querySelector("#密码").value
     document.querySelector('#登录卡片').classList.remove('渐显')
     document.querySelector('#模糊').classList.remove('渐显')
-    if (用户名 !== '' && 密码 !== ''){
-        智慧教务(用户名,密码)
-        setTimeout(function(){
-            刷新();
-        },200)
-    }
+    if (用户名 !== '' && 密码 !== ''){智慧教务(用户名,密码)}
 }
 function 复制文字(){
     document.querySelector('.复制按钮').style.pointerEvents = "none";
@@ -948,7 +945,10 @@ function 智慧教务(username,password){
         localStorage.setItem('登录信息',JSON.stringify(缓存.登录信息))
         alert('登录成功\n姓名：' + 缓存.登录信息.realname)
         }
-
+        setTimeout(function(){刷新()},100)
+    })
+    .catch(error => {
+        alert(`网络错误，登录失败`)
     })
 }
 function 随机数(最小,最大){
@@ -973,8 +973,7 @@ else{
 document.querySelector("#模糊").addEventListener("click",function(e){
     if (e.target === e.currentTarget){
     document.querySelector('#模糊').classList.remove('渐显');
-    document.querySelector('#设置卡片').classList.remove('渐显');
-    document.querySelector('#登录卡片').classList.remove('渐显');
+    document.querySelectorAll('#模糊 .卡片').forEach(function(卡片){卡片.classList.remove('渐显')})
     e.stopPropagation;
     }});
 模块_设置.加载()
