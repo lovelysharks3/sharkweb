@@ -267,7 +267,7 @@ img{
     align-items:center;
     z-index: 1;
 }
-#音乐卡片 h1{
+#音乐卡片 #音乐标题{
     font-size: 40px;
     height: 60px;
     line-height: 60px;
@@ -343,6 +343,7 @@ img{
     height: 100%;
     align-items:center;
     overflow-y: auto;
+    overscroll-behavior-y: contain;
     padding: 16px 0 12px 0;
     font-size: var(--文字大小,32px);
 }
@@ -356,8 +357,8 @@ img{
     top: 28px;
     height: 40px;
     width: 40px;
-    opacity: 1;
-    transition: 0.2s;
+    /* opacity: 1;
+    transition: 0.2s; */
 }
 /* .音乐列表内容 :not(:last-child){
     border-bottom: 1px solid var(--线条颜色);
@@ -365,7 +366,7 @@ img{
 .音乐列表内容 span{
     width: 100%;
     text-align: center;
-    line-height: calc(var(--文字大小) * 1.5);
+    line-height: calc(var(--文字大小,32px) * 1.6);
 }
 /* #音乐卡片:hover .展开按钮{
     opacity: 1;
@@ -1026,7 +1027,7 @@ if (screen.width < 512) {
     // document.documentElement.style.setProperty('--文章宽度', 'min(75vw + 128px,95vw)')
     document.documentElement.style.setProperty('--文章宽度','95vw')
     document.documentElement.style.setProperty('--课表高度','80px')
-    document.documentElement.style.setProperty('--文字大小','64px')
+    document.documentElement.style.setProperty('--文字大小','48px')
 }
 else{
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
