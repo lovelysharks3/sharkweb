@@ -495,7 +495,7 @@ table[data-表格='1'] tr:nth-child(4)> th {
     <div id='设置卡片' class="卡片 居中 竖排"></div>
     <div id='百宝箱卡片' class="卡片 居中 竖排"></div>
     <div id="登录卡片" class='卡片 居中 竖排'>
-        <h2 style='padding-top:10px'>智慧教务</h2>
+        <h2 style='padding-top:10px'>控制台</h2>
         <input id="用户名" placeholder="用户名" maxlength="20">
         <input id="密码" placeholder="密码" maxlength="20">
         <button id='登录按钮' class="方按钮" onclick='登录切换()'>登录</button>
@@ -508,6 +508,7 @@ table[data-表格='1'] tr:nth-child(4)> th {
 let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0, 长按 = false
 const 音乐 = new Audio()
 音乐.loop = false;音乐.volume = 0.1
+let 音效
 let 时间戳,周数指针,课表,表格1
 let 缓存 = {设置:JSON.parse(localStorage.getItem('设置'))||{},登录信息:JSON.parse(localStorage.getItem('登录信息'))||{}}
 const 开学时间 = new Date('2026-9-7')
@@ -632,7 +633,7 @@ const 模块_设置 = {
     设置列表 : [
         ['深色模式','深色模式'],
         ['音乐播放器','音乐播放器'],
-        ['版本:2.1','无'],
+        ['沉浸模式','沉浸模式'],
     ],
     缓存存储(属性名,值){
         缓存.设置[属性名]=值
@@ -664,7 +665,18 @@ const 模块_设置 = {
             this.classList.add('开关开启');
             模块_设置.缓存存储('音乐播放器',true)
             文章列表.unshift({id:0,标题:`音乐播放器`,内容:`music`,作者:'shark',类型:'音乐播放器'})
-            // document.documentElement.style.background = 'linear-gradient(145deg, #f5f7fc 0%, #eef2f8 100%)';
+            刷新()
+        }
+    },
+    沉浸模式(){
+        if(this.classList.contains('开关开启')){
+            this.classList.remove('开关开启');
+            模块_设置.缓存存储('沉浸模式',false)
+            刷新()
+        }
+        else{
+            this.classList.add('开关开启');
+            模块_设置.缓存存储('沉浸模式',true)
             刷新()
         }
     },
@@ -808,6 +820,7 @@ const 模块_文章加载 = {
         if(!音乐.src){
             音乐.addEventListener('timeupdate',function (){
                 let 百分比 = this.currentTime / this.duration *100;
+                if(!document.querySelector('.进度')) return
                 document.querySelector('.进度').style.width = 百分比 + '%';
                 document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
             });
@@ -867,8 +880,9 @@ const 模块_文章加载 = {
             if(长按){
             const rect = document.querySelector('.进度条').getBoundingClientRect();
             let x = e.clientX - rect.left;
-            x = Math.max(0, Math.min(x, rect.width));
-            音乐.currentTime = (x / rect.width) * 音乐.duration;
+            x = Math.max(0, Math.min(x, rect.width)) / rect.width
+            if(x>=1){x=0.99999}
+            音乐.currentTime = x * 音乐.duration
             }
         });
         document.addEventListener('mouseup',function(){
@@ -943,6 +957,16 @@ function 刷新(){
         else if (i['类型']==='音乐播放器'){模块_文章加载.音乐(n)}
         else if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
     })
+    if (!音效&&缓存.设置['沉浸模式']){音效 = {
+        点击:加载音效('./osu/UI/cursor-tap.wav'),
+        开启:加载音效('./osu/UI/check-on.wav'),
+        关闭:加载音效('./osu/UI/check-off.wav'),
+        开启2:加载音效('./osu/UI/osd-on.wav',0.3),
+        关闭2:加载音效('./osu/UI/osd-off.wav',0.3),
+        展开:加载音效('./osu/UI/overlay-pop-out.wav'),
+        收起:加载音效('./osu/UI/overlay-big-pop-out.wav'),
+        刷新:加载音效('./osu/UI/bss-stage-0.wav')
+    }}
 }
 function 请求音乐(){
     fetch("./music/music.json")
@@ -975,7 +999,19 @@ function 登录切换(){
     let 密码 = document.querySelector("#密码").value
     document.querySelector('#登录卡片').classList.remove('渐显')
     document.querySelector('#模糊').classList.remove('渐显')
-    if (用户名 !== '' && 密码 !== ''){智慧教务(用户名,密码)}
+    if (用户名 === '刷新'||用户名 == 'reload'){location.reload()}
+    else if (用户名 === '清除缓存'||用户名 == 'clear'){localStorage.clear()}
+    else if (用户名 === '控制台'||用户名 == 'console'){
+        if (window.eruda) {
+            eruda.show()
+            return
+        }
+        let script = document.createElement('script')
+        script.src = 'https://cdn.jsdelivr.net/npm/eruda'
+        document.head.append(script)
+        script.onload = () => eruda.init()
+    }
+    // {智慧教务(用户名,密码)}
 }
 function 复制文字(){
     document.querySelector('.复制按钮').style.pointerEvents = "none";
@@ -1021,6 +1057,35 @@ function 计数器_秒(){
         if(课表){模块_课表.更新()}
     },1000);
 }
+function 加载音效(地址, 音量=0.4) {
+    let 音效i = new Audio(地址)
+    音效i.volume = 音量
+    return 音效i
+}
+document.addEventListener('click',e =>{
+    if (!e.isTrusted||!缓存.设置['沉浸模式']) return
+    let 音效i
+    let 按钮i = e.target.closest('button')
+    if(按钮i?.closest('#顶栏')){音效i = 音效.开启}
+    else if(按钮i?.id.includes('用户')){音效i = 音效.刷新}
+    else if(按钮i?.classList.contains('展开按钮')){
+        if(document.querySelector('.音乐列表卡片').classList.contains('展开')){音效i = 音效.展开}
+        else{音效i = 音效.收起}
+    }
+    else if(e.target.matches('#模糊')){音效i=音效.关闭}
+    else if(e.target.closest('.设置开关.开关开启')){音效i=音效.开启2}
+    else if(e.target.closest('.设置开关:not(.开关开启)')){音效i=音效.关闭2}
+    else if(按钮i){音效i = 音效.点击}
+    else{return}
+    音效i.currentTime = 0
+    音效i.play()
+})
+document.querySelector("#模糊").addEventListener("click",function(e){
+    if (e.target === e.currentTarget){
+    document.querySelector('#模糊').classList.remove('渐显');
+    document.querySelectorAll('#模糊 .卡片').forEach(function(卡片){卡片.classList.remove('渐显')})
+    e.stopPropagation;
+    }});
 //#region 启动程序
 if (screen.width < 512) {
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.45')
@@ -1032,12 +1097,6 @@ if (screen.width < 512) {
 else{
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
 }
-document.querySelector("#模糊").addEventListener("click",function(e){
-    if (e.target === e.currentTarget){
-    document.querySelector('#模糊').classList.remove('渐显');
-    document.querySelectorAll('#模糊 .卡片').forEach(function(卡片){卡片.classList.remove('渐显')})
-    e.stopPropagation;
-    }});
 模块_设置.加载()
 setTimeout(function(){
     刷新()
