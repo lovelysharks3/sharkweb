@@ -22,13 +22,15 @@
     --表头颜色:lightgray;
     --表格颜色:#f5f5f5;
     --文字颜色:black;
+    --线条颜色:lightgray;
 }
 .变量_深色{
-    --背景颜色:#222228;
-    --卡片颜色:#282836;
+    --背景颜色:#22222a;
+    --卡片颜色:#282838;
     --表头颜色:#303049;
     --表格颜色:#2c2c3c;
     --文字颜色:#f5f5f5;
+    --线条颜色:#363648;
 }
 .变量_深色 img {
     filter: invert(1);
@@ -170,7 +172,7 @@ img{
     position:absolute;
     top:8px;
     right: 0;
-    z-index:1;
+    z-index: 1;
     height:64px;
     min-width:64px;
     background:var(--表格颜色);
@@ -236,7 +238,7 @@ img{
     height: 64px;
 }
 .设置选项:not(:last-child){
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid var(--线条颜色);
 }
 .设置开关{
     background: lightgrey;
@@ -263,6 +265,7 @@ img{
 #音乐卡片{
     justify-content: flex-start;
     align-items:center;
+    z-index: 1;
 }
 #音乐卡片 h1{
     font-size: 40px;
@@ -324,6 +327,49 @@ img{
     opacity: 1;
     pointer-events:auto;
 }
+.音乐列表卡片{
+    background: var(--表格颜色);
+    position: absolute;
+    top: calc(100% + 16px);
+    width: 100%;
+    min-height: 0;
+    height: 0;
+    padding: 0;
+    transition: 0.3s;
+    overflow: hidden;
+}
+.音乐列表内容{
+    width: 100%;
+    height: 100%;
+    align-items:center;
+    overflow-y: auto;
+    padding: 16px 0 12px 0;
+    font-size: var(--文字大小,32px);
+}
+.音乐列表卡片.展开 {
+    height: calc(40vh + 200px);
+    border:1px solid var(--文字颜色);
+}
+#音乐卡片 .展开按钮{
+    position: absolute;
+    right:22px;
+    top: 28px;
+    height: 40px;
+    width: 40px;
+    opacity: 1;
+    transition: 0.2s;
+}
+/* .音乐列表内容 :not(:last-child){
+    border-bottom: 1px solid var(--线条颜色);
+} */
+.音乐列表内容 span{
+    width: 100%;
+    text-align: center;
+    line-height: calc(var(--文字大小) * 1.5);
+}
+/* #音乐卡片:hover .展开按钮{
+    opacity: 1;
+} */
 /* #endregion */
 /* #region 表格 */
 table {
@@ -433,18 +479,6 @@ table[data-表格='1'] tr:nth-child(4)> th {
     width:var(--文章宽度,min(600px + 20vw,95vw));
     transition: 0.5s;
 }
-.文章 .删除按钮{
-    position: absolute;
-    right:5px;
-    top: 20px;
-    height: 40px;
-    width: 40px;
-    opacity: 0;
-    transition: 0.2s;
-}
-.文章:hover .删除按钮{
-    opacity: 0.8;
-}
 /* #endregion */
 </style>
 
@@ -460,18 +494,17 @@ table[data-表格='1'] tr:nth-child(4)> th {
     <div id='设置卡片' class="卡片 居中 竖排"></div>
     <div id='百宝箱卡片' class="卡片 居中 竖排"></div>
     <div id="登录卡片" class='卡片 居中 竖排'>
-        <h2 style='padding-top:10px'>智慧教务登录</h2>
+        <h2 style='padding-top:10px'>智慧教务</h2>
         <input id="用户名" placeholder="用户名" maxlength="20">
         <input id="密码" placeholder="密码" maxlength="20">
         <button id='登录按钮' class="方按钮" onclick='登录切换()'>登录</button>
     </div>
 </div>
 <div id='主页' class='竖排'><button id="用户" onclick='刷新()'></button></div>
-</div>
 <!-- #endregion -->
 <script>
 //#region 初始化
-let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0
+let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0, 长按 = false
 const 音乐 = new Audio()
 音乐.loop = false;音乐.volume = 0.1
 let 时间戳,周数指针,课表,表格1
@@ -668,14 +701,14 @@ const 模块_顶栏 = {
     百宝箱(){
         document.querySelector('#模糊').classList.add('渐显')
         document.querySelector('#百宝箱卡片').classList.add('渐显')
-        document.querySelector('#百宝箱卡片').innerHTML=(`<h1>随机数</h1><br>
+        document.querySelector('#百宝箱卡片').innerHTML=(`<br><h1>随机数</h1><br>
         <h2>
             硬币：${随机数(0,1) === 0 ? '正面' : '反面'}<br>
             四面骰：${随机数(1,4)}<br>
             六面骰：${随机数(1,6)}<br>
             1-10随机数：${随机数(1,10)}<br>
             1-50随机数：${随机数(1,50)}<br>
-            1-100随机数：${随机数(1,100)}
+            1-100随机数：${随机数(1,100)}<br><br>
         </h2>`)
     },
     登录(){
@@ -747,10 +780,11 @@ const 模块_课表 = {
 }
 const 模块_文章加载 = {
     音乐(n){
-        let 长按 = false;
         document.querySelector('#主页').insertAdjacentHTML('afterbegin',
         `<div id="音乐卡片" class="卡片 文章 竖排">
-            <h1>标题加载中</h1>
+            <button class='展开按钮'><img src='./svg/展开按钮.svg'></button>
+            <div class="音乐列表卡片 卡片"><div class="音乐列表内容 竖排"></div></div>
+            <h1 id='音乐标题'>标题加载中</h1>
             <div class="进度条"><div class="进度"></div></div>
             <div class="横排 时间条"><h3 class="当前时间">0:00</h3><h3 class="总时间">0:00</h3></div>
             <div class="音乐按钮栏 横排">
@@ -764,7 +798,7 @@ const 模块_文章加载 = {
                 </div>
                 <div class='grid右'>
                     <div class='音量区域 横排 居中'>
-                        <div class='音量条区域 横排 居中'><input class='音量条' type="range" min="0" max="100" value="20" step="10"></div>
+                        <div class='音量条区域 横排 居中'><input class='音量条' type="range" min="0" max="100" value="${音乐.volume*200}" step="10"></div>
                         <button class="音量按钮"><img src='./svg/声音开.svg'></button>
                     </div>
                 </div>
@@ -776,11 +810,10 @@ const 模块_文章加载 = {
                 document.querySelector('.进度').style.width = 百分比 + '%';
                 document.querySelector('.当前时间').textContent = 音乐时间显示(this.currentTime);
             });
-            // 音乐.addEventListener('loadedmetadata',function(){
-            // });
+            // 音乐.addEventListener('loadedmetadata',function(){});
             音乐.addEventListener('canplay',function(){
                 document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
-                document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
+                document.querySelector('#音乐卡片 #音乐标题').textContent = 音乐列表[音乐索引].replace('.mp3','');
                 if(播放中&&!长按){音乐.play()};
             });
             音乐.addEventListener('ended',function(){
@@ -791,6 +824,16 @@ const 模块_文章加载 = {
         document.querySelector('.音量条').addEventListener('input',function(){
             音乐.volume =this.value *0.005
         });
+        document.querySelector('.展开按钮').onclick = function(){
+            if(document.querySelector('.音乐列表卡片').classList.contains('展开')){
+                document.querySelector('.音乐列表卡片').classList.remove('展开')
+                document.querySelector('.展开按钮 img').src='./svg/展开按钮.svg'
+            }
+            else{
+                document.querySelector('.音乐列表卡片').classList.add('展开')
+                document.querySelector('.展开按钮 img').src='./svg/收起按钮.svg'
+            }
+        }
         document.querySelector('.播放按钮').onclick = function(){
             if(播放中){this.querySelector('img').src='./svg/播放按钮.svg';音乐.pause()}
             else{this.querySelector('img').src='./svg/暂停按钮.svg';音乐.play()};
@@ -906,8 +949,18 @@ function 请求音乐(){
     .then(data=>{
         音乐列表=data;
         if(!音乐.src){音乐.src = './music/' + 音乐列表[音乐索引]}
-        document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration);
-        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','');
+        document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration)
+        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','')
+        音乐列表.forEach((歌曲, n) =>{
+            let 歌曲i = document.createElement('span')
+            歌曲i.innerText= 歌曲.replace('.mp3','')
+            歌曲i.onclick= () => {
+                音乐索引 = n
+                document.querySelector('.进度').style.width = 0
+                音乐.src = './music/' + 音乐列表[音乐索引]
+            }
+            document.querySelector('.音乐列表内容').append(歌曲i)
+        })
     })
 }
 function 音乐时间显示(秒i){
@@ -973,6 +1026,7 @@ if (screen.width < 512) {
     // document.documentElement.style.setProperty('--文章宽度', 'min(75vw + 128px,95vw)')
     document.documentElement.style.setProperty('--文章宽度','95vw')
     document.documentElement.style.setProperty('--课表高度','80px')
+    document.documentElement.style.setProperty('--文字大小','64px')
 }
 else{
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
