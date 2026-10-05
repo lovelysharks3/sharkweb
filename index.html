@@ -22,15 +22,17 @@
     --表头颜色:lightgray;
     --表格颜色:#f5f5f5;
     --文字颜色:black;
-    --线条颜色:lightgray;
+    --小字颜色:gray;
+    --线条颜色:rgba(0,0,0,0.1);
 }
 .变量_深色{
     --背景颜色:#22222a;
-    --卡片颜色:#282838;
+    --卡片颜色:#28283a;
     --表头颜色:#303049;
     --表格颜色:#2c2c3c;
     --文字颜色:#f5f5f5;
-    --线条颜色:#363648;
+    --小字颜色:#c0c0c0;
+    --线条颜色:rgba(0,0,0,0.125);
 }
 .变量_深色 img {
     filter: invert(1);
@@ -43,7 +45,6 @@
     margin: 0;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    /* color: white; */
 }
 html{
     color: var(--文字颜色);
@@ -311,15 +312,15 @@ img{
     position: relative;
 }
 .音量条{
-    width: 100px;
+    width: 120px;
 }
 .音量条区域{
     position: absolute;
-    width: 120px;
-    height: 40px;
+    width: 128px;
+    height: 36px;
     border-radius: 100px;
     right: 90%;
-    background: rgba(220,220,220,0.9);
+    background: var(--表头颜色);
     opacity: 0;
     pointer-events:none;
 }
@@ -344,7 +345,7 @@ img{
     align-items:center;
     overflow-y: auto;
     overscroll-behavior-y: contain;
-    padding: 16px 0 12px 0;
+    padding: 12px 0 12px 0;
     font-size: var(--文字大小,32px);
 }
 .音乐列表卡片.展开 {
@@ -380,10 +381,10 @@ table {
     background-color: var(--表格颜色);
     border-radius: 12px;
     overflow: hidden;
-    margin: 0px -20px -20px -20px;
+    margin: 4px -20px -20px -20px;
 }
 th, td {
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid var(--线条颜色);
     padding: 2px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
@@ -466,13 +467,13 @@ table[data-表格='1'] tr:nth-child(4)> th {
     font-size: 30px;
     margin: 0 10px 0 10px;
 }
-.文章 :is(h1,h2,h3,h4,h5,h6,span,p){
+.文章[data-文章类型='文本'] :is(h1,h2,h3,h4,h5,h6,span,p){
     margin-bottom:4px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
-.文章 :is(h3,h4,h5,h6){
-    color: grey !important;
+.文章[data-文章类型='文本'] :is(h3,h4,h5,h6){
+    color: var(--小字颜色) !important;
 }
 .文章{
     position: relative;
@@ -505,13 +506,13 @@ table[data-表格='1'] tr:nth-child(4)> th {
 <!-- #endregion -->
 <script>
 //#region 初始化
-let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0, 长按 = false
+let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0, 长按 = false, 歌单='哈基米'
 const 音乐 = new Audio()
 音乐.loop = false;音乐.volume = 0.1
 let 音效
 let 时间戳,周数指针,课表,表格1
 let 缓存 = {设置:JSON.parse(localStorage.getItem('设置'))||{},登录信息:JSON.parse(localStorage.getItem('登录信息'))||{}}
-const 开学时间 = new Date('2026-9-7')
+const 开学时间 = new Date('2026-09-07')
 //#endregion
 let 文章列表 = [
     {id:1,
@@ -520,7 +521,7 @@ let 文章列表 = [
         <span class='居中 横排'>课程表</span>\n
         <a href="https://m.fjpit.com/#/">智慧教务</a>
     </div>`,
-    列:['周一','周二','周三','周四','周五','周六','周日'],
+    列:['周一<span></span>','周二<span></span>','周三<span></span>','周四<span></span>','周五<span></span>','周六<span></span>','周日<span></span>'],
     行:['课程表','第一节\n8:10-9:50','第二节\n10:10-11:50','午休','第三节\n2:30-4:10','第四节\n4:20-6:00','第五节\n6:15-8:10','第六节\n8:20-10:00'],
     内容:``,
     作者:'shark',
@@ -672,12 +673,13 @@ const 模块_设置 = {
         if(this.classList.contains('开关开启')){
             this.classList.remove('开关开启');
             模块_设置.缓存存储('沉浸模式',false)
-            刷新()
+            音效.关闭.play()
+            音效加载()
         }
         else{
             this.classList.add('开关开启');
             模块_设置.缓存存储('沉浸模式',true)
-            刷新()
+            音效加载()
         }
     },
     无(){
@@ -752,10 +754,16 @@ const 模块_课表 = {
     请求(){
         fetch(`./公告/课表(${周数指针}).json`).then(res => res.json()).then(data => {
             课表 = data.data.list
+            function 计算(天){
+                return new Date(开学时间.getTime() + 24*60*60*1000*(天-1+7*(周数指针-1)))
+            }
             表格1.querySelectorAll('tr:not(:nth-child(4)) th:not([data-列]):not([data-行])').forEach(i => i.innerText = '')
-            表格1.rows[0].cells[0].innerText=`第${周数指针}周`
+            表格1.rows[0].cells[0].innerText=`第${周数指针}周\n${计算(1).getMonth()+1}.${计算(1).getDate()}-${计算(7).getMonth()+1}.${计算(7).getDate()}`
             课表.forEach(function(课程){
                 表格1.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
+            })
+            document.querySelectorAll('table[data-表格="1"] [data-列="0"] span').forEach(function(i,n){
+                i.innerText= `\n${计算(n+1).getMonth()+1}.${计算(n+1).getDate()}`
             })
             模块_课表.更新()
         })
@@ -783,7 +791,7 @@ const 模块_课表 = {
         }
         if(当前课程){
             if(课程开始){课程开始=`下课倒计时:${差值计算(结束差值)}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`;课程进度=100-结束差值/1000/60}
-            else{课程开始=`上课倒计时:${差值计算(开始差值)}  -  下节课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`}
+            else{课程开始=`上课倒计时:${差值计算(开始差值)}  -  下节课程:${当前课程['course']}\n上课地点:${当前课程['spaceName'] || '无'}`}
             document.querySelector('#课程进度提示').innerText=课程开始
         }
         else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
@@ -817,6 +825,7 @@ const 模块_文章加载 = {
                 </div>
             </div>
         </div>`);
+        document.querySelector('#音乐卡片').dataset.文章类型='音乐'
         if(!音乐.src){
             音乐.addEventListener('timeupdate',function (){
                 let 百分比 = this.currentTime / this.duration *100;
@@ -898,6 +907,7 @@ const 模块_文章加载 = {
     文本(i,id,n){
         const 文章i = document.createElement('div')
         文章i.className = '卡片 文章'
+        文章i.dataset.文章类型='文本'
         const 标题i = document.createElement('h1')
         标题i.innerHTML = i['标题']
         const 内容i = document.createElement('h3')
@@ -913,6 +923,7 @@ const 模块_文章加载 = {
     表格(i,id,n){
         const 文章i = document.createElement('div')
         文章i.className = '卡片 文章'
+        文章i.dataset.文章类型='表格'
         const 标题i = document.createElement('h1')
         标题i.innerHTML = i['标题']
         const 内容i = document.createElement('table')
@@ -957,23 +968,27 @@ function 刷新(){
         else if (i['类型']==='音乐播放器'){模块_文章加载.音乐(n)}
         else if (i['类型']==='表格'){模块_文章加载.表格(i,-1,n)}
     })
+    资源加载()
+}
+function 资源加载(){
     if (!音效&&缓存.设置['沉浸模式']){音效 = {
         点击:加载音效('./osu/UI/cursor-tap.wav'),
+        选择:加载音效('./osu/UI/default-select.wav',0.3),
         开启:加载音效('./osu/UI/check-on.wav'),
         关闭:加载音效('./osu/UI/check-off.wav'),
         开启2:加载音效('./osu/UI/osd-on.wav',0.3),
         关闭2:加载音效('./osu/UI/osd-off.wav',0.3),
-        展开:加载音效('./osu/UI/overlay-pop-out.wav'),
-        收起:加载音效('./osu/UI/overlay-big-pop-out.wav'),
+        展开:加载音效('./osu/UI/overlay-pop-out.wav',0.6),
+        收起:加载音效('./osu/UI/overlay-big-pop-out.wav',0.6),
         刷新:加载音效('./osu/UI/bss-stage-0.wav')
     }}
 }
 function 请求音乐(){
-    fetch("./music/music.json")
+    fetch("./music/!歌单.json")
     .then(res => res.json())
     .then(data=>{
-        音乐列表=data;
-        if(!音乐.src){音乐.src = './music/' + 音乐列表[音乐索引]}
+        音乐列表=data[歌单];
+        if(!音乐.src||arguments[0]===0){音乐.src = './music/' + 音乐列表[音乐索引]}
         document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration)
         document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','')
         音乐列表.forEach((歌曲, n) =>{
@@ -994,7 +1009,7 @@ function 音乐时间显示(秒i){
     if (秒<10){秒 = '0'+秒};
     return (分+':'+秒)
 }
-function 登录切换(){
+async function 登录切换(){
     let 用户名 = document.querySelector("#用户名").value
     let 密码 = document.querySelector("#密码").value
     document.querySelector('#登录卡片').classList.remove('渐显')
@@ -1010,6 +1025,25 @@ function 登录切换(){
         script.src = 'https://cdn.jsdelivr.net/npm/eruda'
         document.head.append(script)
         script.onload = () => eruda.init()
+    }
+    else if (用户名 === '歌单切换'||用户名 == 'osu'){
+        document.querySelector('.音乐列表内容').innerHTML=''
+        歌单='osu'
+        音乐索引=0
+        循环播放=true
+        请求音乐(0)
+    }
+    if (用户名 === '导入'||用户名 == 'load') {
+        let 文件夹 = await window.showDirectoryPicker()
+        for await (let [名字, 文件] of 文件夹.entries()) {
+            console.log(名字, 文件)
+        }
+    }
+    if (用户名 === '音乐'||用户名 == 'music') {
+        document.querySelector('.音乐列表内容').innerHTML=''
+        歌单='音乐'
+        音乐索引=0
+        请求音乐(0)
     }
     // {智慧教务(用户名,密码)}
 }
@@ -1057,7 +1091,7 @@ function 计数器_秒(){
         if(课表){模块_课表.更新()}
     },1000);
 }
-function 加载音效(地址, 音量=0.4) {
+function 加载音效(地址, 音量=0.5) {
     let 音效i = new Audio(地址)
     音效i.volume = 音量
     return 音效i
@@ -1068,6 +1102,7 @@ document.addEventListener('click',e =>{
     let 按钮i = e.target.closest('button')
     if(按钮i?.closest('#顶栏')){音效i = 音效.开启}
     else if(按钮i?.id.includes('用户')){音效i = 音效.刷新}
+    else if(按钮i?.closest('.音乐按钮栏')){音效i = 音效.选择}
     else if(按钮i?.classList.contains('展开按钮')){
         if(document.querySelector('.音乐列表卡片').classList.contains('展开')){音效i = 音效.展开}
         else{音效i = 音效.收起}
