@@ -673,7 +673,7 @@ const 模块_设置 = {
         if(this.classList.contains('开关开启')){
             this.classList.remove('开关开启');
             模块_设置.缓存存储('沉浸模式',false)
-            音效.关闭.play()
+            音效.关闭2.play()
             音效加载()
         }
         else{
@@ -1028,9 +1028,10 @@ async function 登录切换(){
     }
     else if (用户名 === '歌单切换'||用户名 == 'osu'){
         document.querySelector('.音乐列表内容').innerHTML=''
+        document.querySelector('.循环按钮 img').src='./svg/循环.svg'
+        循环播放=true
         歌单='osu'
         音乐索引=0
-        循环播放=true
         请求音乐(0)
     }
     if (用户名 === '导入'||用户名 == 'load') {
