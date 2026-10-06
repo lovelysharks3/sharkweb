@@ -1010,7 +1010,7 @@ function 刷新(){
 function 资源加载(){
     if (!音效&&缓存.设置['沉浸模式']){音效 = {
         点击:加载音效('./osu/UI/cursor-tap.wav'),
-        选择:加载音效('./osu/UI/default-select.wav',0.6),
+        选择:加载音效('./osu/UI/default-select.wav',0.5),
         开启:加载音效('./osu/UI/check-on.wav'),
         关闭:加载音效('./osu/UI/check-off.wav'),
         开启2:加载音效('./osu/UI/osd-on.wav',0.6),
@@ -1081,9 +1081,11 @@ async function 登录切换(){
     }
     if (用户名 === '导入'||用户名 == 'load') {
         let 文件夹 = await window.showDirectoryPicker()
+        let 列表i = ''
         for await (let [名字, 文件] of 文件夹.entries()) {
-            console.log(名字, 文件)
+            列表i+= (`\"${名字}\",`)
         }
+        console.log(列表i)
     }
     if (用户名 === '音乐'||用户名 == 'music') {
         document.querySelector('.音乐列表内容').innerHTML=''
