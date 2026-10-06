@@ -24,6 +24,7 @@
     --文字颜色:black;
     --小字颜色:gray;
     --线条颜色:rgba(0,0,0,0.1);
+    --阴影:0 0 10px 1px rgba(0,0,0,0.1);
 }
 .变量_深色{
     --背景颜色:#22222a;
@@ -33,6 +34,7 @@
     --文字颜色:#f5f5f5;
     --小字颜色:#c0c0c0;
     --线条颜色:rgba(0,0,0,0.125);
+    --阴影:0 0 10px 5px rgba(0,0,0,0.1);
 }
 .变量_深色 img {
     filter: invert(1);
@@ -57,11 +59,9 @@ html{
     text-size-adjust: 100%;
 }
 body{
-    margin:0;
-    min-height:100vh;
     font-family: Arial;
+    min-height:100vh;
     background:transparent;
-    box-sizing:border-box;
     touch-action: manipulation;
     overscroll-behavior-y: none;
 }
@@ -85,7 +85,7 @@ body{
     background:var(--卡片颜色);
     padding:20px;
     border-radius:16px;
-    box-shadow:0 0 20px rgba(0,0,0,0.1);
+    box-shadow:var(--阴影);
 }
 .填充{
     /* margin-right:auto */
@@ -153,7 +153,7 @@ img{
     height:64px;
     background:var(--卡片颜色);
     border-radius:100px;
-    box-shadow:0 0 10px rgba(0,0,0,0.15);
+    box-shadow:var(--阴影);
     border-bottom:1px solid --表格颜色;
     padding:8px;
     justify-content:flex-start;
@@ -176,9 +176,9 @@ img{
     z-index: 1;
     height:64px;
     min-width:64px;
-    background:var(--表格颜色);
+    background:var(--卡片颜色);
     border-radius:100px;
-    box-shadow:0 0 10px rgba(0,0,0,0.15);
+    box-shadow:var(--阴影);
     border:1px solid var(--表格颜色);
     padding:0px 16px;
     font-size:24px;
@@ -250,6 +250,10 @@ img{
     box-shadow:0 0 10px rgba(0,0,0,0.2);
     justify-content: flex-start;
 }
+.设置开关.按钮{
+    background: lightgray;
+    padding: 10px;
+}
 .设置开关.开关开启{
     justify-content: flex-end;
     background: #34D0F4;
@@ -258,8 +262,10 @@ img{
     border-radius:100px;
     background: white;
     height: 100%;
-    width: 24px;
-    transition: 0.1s;
+    aspect-ratio: 1 / 1;
+}
+.设置开关.按钮 .开关圆点{
+    width: 100%;
 }
 /* #endregion */
 /* #region 音乐播放器 */
@@ -268,6 +274,7 @@ img{
     align-items:center;
     z-index: 1;
 }
+    /* #region 播放器 */
 #音乐卡片 #音乐标题{
     font-size: 40px;
     height: 60px;
@@ -312,11 +319,12 @@ img{
     position: relative;
 }
 .音量条{
-    width: 120px;
+    width: 128px;
+    height: 36px;
 }
 .音量条区域{
     position: absolute;
-    width: 128px;
+    width: 150px;
     height: 36px;
     border-radius: 100px;
     right: 90%;
@@ -328,6 +336,8 @@ img{
     opacity: 1;
     pointer-events:auto;
 }
+    /* #endregion */
+    /* #region 歌单 */
 .音乐列表卡片{
     background: var(--表格颜色);
     position: absolute;
@@ -343,14 +353,14 @@ img{
     width: 100%;
     height: 100%;
     align-items:center;
-    overflow-y: auto;
+    overflow-y:scroll;
     overscroll-behavior-y: contain;
-    padding: 12px 0 12px 0;
+    padding: 12px 0;
     font-size: var(--文字大小,32px);
 }
 .音乐列表卡片.展开 {
-    height: calc(25vh + 256px);
-    border:1px solid var(--文字颜色);
+    height: min(25vh + 256px,75vh - 200px);
+    box-shadow: 0 0 0 1px var(--小字颜色);
 }
 #音乐卡片 .展开按钮{
     position: absolute;
@@ -358,20 +368,25 @@ img{
     top: 28px;
     height: 40px;
     width: 40px;
-    /* opacity: 1;
-    transition: 0.2s; */
 }
-/* .音乐列表内容 :not(:last-child){
-    border-bottom: 1px solid var(--线条颜色);
-} */
 .音乐列表内容 span{
     width: 100%;
     text-align: center;
     line-height: calc(var(--文字大小,32px) * 1.6);
 }
-/* #音乐卡片:hover .展开按钮{
-    opacity: 1;
-} */
+.歌单按钮栏{
+    width: 600px;
+    height: 64px;
+    justify-content: space-between;
+    background: var(--表头颜色);
+    border-radius: 100px;
+    box-shadow: var(--阴影);
+    margin-bottom: 16px;
+}
+.歌单按钮栏 span{
+    font-size: 36px;
+}
+    /* #endregion */
 /* #endregion */
 /* #region 表格 */
 table {
@@ -506,7 +521,7 @@ table[data-表格='1'] tr:nth-child(4)> th {
 <!-- #endregion -->
 <script>
 //#region 初始化
-let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0, 长按 = false, 歌单='哈基米'
+let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0,歌单='精选哈基米', 歌单索引=0, 长按 = false
 const 音乐 = new Audio()
 音乐.loop = false;音乐.volume = 0.1
 let 音效
@@ -632,9 +647,10 @@ let 文章列表 = [
 ]
 const 模块_设置 = {
     设置列表 : [
-        ['深色模式','深色模式'],
-        ['音乐播放器','音乐播放器'],
-        ['沉浸模式','沉浸模式'],
+        ['深色模式','深色模式','开关'],
+        ['音乐播放器','音乐播放器','开关'],
+        ['沉浸模式','沉浸模式','开关'],
+        [`音量等级:${缓存.设置.音量等级 || 3}`,'音量等级','按钮'],
     ],
     缓存存储(属性名,值){
         缓存.设置[属性名]=值
@@ -674,15 +690,20 @@ const 模块_设置 = {
             this.classList.remove('开关开启');
             模块_设置.缓存存储('沉浸模式',false)
             音效.关闭2.play()
-            音效加载()
         }
         else{
             this.classList.add('开关开启');
             模块_设置.缓存存储('沉浸模式',true)
-            音效加载()
+            资源加载()
         }
     },
-    无(){
+    音量等级(){
+        缓存.设置.音量等级=(缓存.设置.音量等级 || 3) + 1
+        if (缓存.设置.音量等级>3){缓存.设置.音量等级=1}
+        this.closest('.设置选项').querySelector('span').innerHTML='音量等级:' + 缓存.设置.音量等级
+        localStorage.setItem('设置',JSON.stringify(缓存.设置))
+    },
+    普通开关(){
         if(this.classList.contains('开关开启')){
             this.classList.remove('开关开启');
             }
@@ -690,19 +711,19 @@ const 模块_设置 = {
             {this.classList.add('开关开启');
     }},
     加载(){
-        模块_设置.设置列表.forEach(function([选项文本,选项功能]){ //设置功能
+        模块_设置.设置列表.forEach(function([选项文本,选项功能,开关类型]){ //设置功能
             const 设置选项 = document.createElement('div')
             设置选项.className = '设置选项 横排';
-            设置选项.textContent = 选项文本;
+            设置选项.innerHTML = `<span>${选项文本}</span>`;
             const 设置开关 = document.createElement('div');
-            设置开关.className = '设置开关 横排';
+            设置开关.className = `设置开关 横排 ${开关类型}`;
             const 开关圆点 = document.createElement('div');
             开关圆点.className = '开关圆点';
             document.querySelector('#设置卡片').appendChild(设置选项);
             设置选项.appendChild(设置开关);
             设置开关.appendChild(开关圆点);
             设置开关.onclick = 模块_设置[选项功能];
-            if(缓存.设置[选项功能]){设置开关.classList.add('开关开启');}
+            if(开关类型==='开关'&&缓存.设置[选项功能]){设置开关.classList.add('开关开启');}
         })
         if(缓存.设置['深色模式']){document.documentElement.classList.add('变量_深色')}
         if(缓存.设置['音乐播放器']){文章列表.unshift({id:0,标题:`音乐播放器`,内容:`music`,作者:'shark',类型:'音乐播放器'})}
@@ -804,7 +825,14 @@ const 模块_文章加载 = {
         document.querySelector('#主页').insertAdjacentHTML('afterbegin',
         `<div id="音乐卡片" class="卡片 文章 竖排">
             <button class='展开按钮'><img src='./svg/展开按钮.svg'></button>
-            <div class="音乐列表卡片 卡片"><div class="音乐列表内容 竖排"></div></div>
+            <div class="音乐列表卡片 卡片 竖排 居中">
+                <div class="音乐列表内容 竖排"></div>
+                <div class="歌单按钮栏 横排 居中">
+                    <button class="左箭头"><img src='./svg/左箭头.svg'></button>
+                    <span>歌单加载中</span>
+                    <button class="右箭头"><img src='./svg/右箭头.svg'></button>
+                </div>
+            </div>
             <h1 id='音乐标题'>标题加载中</h1>
             <div class="进度条"><div class="进度"></div></div>
             <div class="横排 时间条"><h3 class="当前时间">0:00</h3><h3 class="总时间">0:00</h3></div>
@@ -836,12 +864,11 @@ const 模块_文章加载 = {
             // 音乐.addEventListener('loadedmetadata',function(){});
             音乐.addEventListener('canplay',function(){
                 document.querySelector('.总时间').textContent = 音乐时间显示(this.duration);
-                document.querySelector('#音乐卡片 #音乐标题').textContent = 音乐列表[音乐索引].replace('.mp3','');
                 if(播放中&&!长按){音乐.play()};
             });
             音乐.addEventListener('ended',function(){
                 if(循环播放){音乐.currentTime = 0}
-                else{document.querySelector('.右箭头').click()}
+                else{document.querySelector('.音乐按钮栏 .右箭头').click()}
             });
         }
         document.querySelector('.音量条').addEventListener('input',function(){
@@ -867,17 +894,27 @@ const 模块_文章加载 = {
             else{this.querySelector('img').src='./svg/循环.svg'};
             循环播放=!循环播放
         };
-        document.querySelector('.左箭头').onclick = function(){
-            if(音乐索引===0){音乐索引=音乐列表.length-1}
+        document.querySelector('.音乐按钮栏 .左箭头').onclick = function(){
+            if(音乐索引===0){音乐索引=音乐列表[歌单].length-1}
             else{音乐索引--};
             document.querySelector('.进度').style.width = 0
-            音乐.src = './music/' + 音乐列表[音乐索引];
+            音乐.src = './music/' + 音乐列表[歌单][音乐索引]
+            document.querySelector('#音乐卡片 #音乐标题').textContent = 音乐列表[歌单][音乐索引].replace('.mp3','')
         };
-        document.querySelector('.右箭头').onclick = function (){
-            if(音乐索引===音乐列表.length-1){音乐索引=0}
+        document.querySelector('.音乐按钮栏 .右箭头').onclick = function (){
+            if(音乐索引===音乐列表[歌单].length-1){音乐索引=0}
             else{音乐索引++};
             document.querySelector('.进度').style.width = 0
-            音乐.src = './music/' + 音乐列表[音乐索引];
+            音乐.src = './music/' + 音乐列表[歌单][音乐索引]
+            document.querySelector('#音乐卡片 #音乐标题').textContent = 音乐列表[歌单][音乐索引].replace('.mp3','')
+        };
+        document.querySelector('.歌单按钮栏 .左箭头').onclick = function(){
+            歌单索引 = 歌单索引===0? Object.keys(音乐列表).length-1:歌单索引-1
+            加载歌单()
+        };
+        document.querySelector('.歌单按钮栏 .右箭头').onclick = function (){
+            歌单索引 = 歌单索引===Object.keys(音乐列表).length-1? 0:歌单索引+1
+            加载歌单()
         };
         document.querySelector('.进度条').addEventListener('mousedown',function(e){
             长按 = true;
@@ -973,34 +1010,42 @@ function 刷新(){
 function 资源加载(){
     if (!音效&&缓存.设置['沉浸模式']){音效 = {
         点击:加载音效('./osu/UI/cursor-tap.wav'),
-        选择:加载音效('./osu/UI/default-select.wav',0.3),
+        选择:加载音效('./osu/UI/default-select.wav',0.6),
         开启:加载音效('./osu/UI/check-on.wav'),
         关闭:加载音效('./osu/UI/check-off.wav'),
-        开启2:加载音效('./osu/UI/osd-on.wav',0.3),
-        关闭2:加载音效('./osu/UI/osd-off.wav',0.3),
-        展开:加载音效('./osu/UI/overlay-pop-out.wav',0.6),
-        收起:加载音效('./osu/UI/overlay-big-pop-out.wav',0.6),
-        刷新:加载音效('./osu/UI/bss-stage-0.wav')
+        开启2:加载音效('./osu/UI/osd-on.wav',0.6),
+        关闭2:加载音效('./osu/UI/osd-off.wav',0.6),
+        展开:加载音效('./osu/UI/overlay-pop-out.wav',1),
+        收起:加载音效('./osu/UI/overlay-big-pop-out.wav',1),
+        刷新:加载音效('./osu/UI/bss-stage-1.wav',0.4)
     }}
 }
 function 请求音乐(){
     fetch("./music/!歌单.json")
     .then(res => res.json())
     .then(data=>{
-        音乐列表=data[歌单];
-        if(!音乐.src||arguments[0]===0){音乐.src = './music/' + 音乐列表[音乐索引]}
+        音乐列表=data;
+        document.querySelector('.歌单按钮栏 span').innerText=歌单
+        if(!音乐.src||arguments[0]===0){音乐.src = './music/' + 音乐列表[歌单][音乐索引]}
         document.querySelector('.总时间').textContent = 音乐时间显示(音乐.duration)
-        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[音乐索引].replace('.mp3','')
-        音乐列表.forEach((歌曲, n) =>{
-            let 歌曲i = document.createElement('span')
-            歌曲i.innerText= 歌曲.replace('.mp3','')
-            歌曲i.onclick= () => {
-                音乐索引 = n
-                document.querySelector('.进度').style.width = 0
-                音乐.src = './music/' + 音乐列表[音乐索引]
-            }
-            document.querySelector('.音乐列表内容').append(歌曲i)
-        })
+        document.querySelector('#音乐卡片 h1').textContent = 音乐列表[歌单][音乐索引].replace('.mp3','')
+        加载歌单()
+    })
+}
+function 加载歌单(){
+    document.querySelector('.歌单按钮栏 span').innerText=Object.keys(音乐列表)[歌单索引]
+    document.querySelector('.音乐列表内容').replaceChildren()
+    音乐列表[Object.keys(音乐列表)[歌单索引]].forEach((歌曲, n) =>{
+        let 歌曲i = document.createElement('span')
+        歌曲i.innerText= 歌曲.replace('.mp3','')
+        歌曲i.onclick= () => {
+            音乐索引 = n
+            歌单 = Object.keys(音乐列表)[歌单索引]
+            document.querySelector('.进度').style.width = 0
+            音乐.src = './music/' + 音乐列表[歌单][音乐索引]
+            document.querySelector('#音乐卡片 #音乐标题').textContent = 音乐列表[歌单][音乐索引].replace('.mp3','')
+        }
+        document.querySelector('.音乐列表内容').append(歌曲i)
     })
 }
 function 音乐时间显示(秒i){
@@ -1027,7 +1072,7 @@ async function 登录切换(){
         script.onload = () => eruda.init()
     }
     else if (用户名 === '歌单切换'||用户名 == 'osu'){
-        document.querySelector('.音乐列表内容').innerHTML=''
+        document.querySelector('.音乐列表内容').replaceChildren()
         document.querySelector('.循环按钮 img').src='./svg/循环.svg'
         循环播放=true
         歌单='osu'
@@ -1092,36 +1137,41 @@ function 计数器_秒(){
         if(课表){模块_课表.更新()}
     },1000);
 }
-function 加载音效(地址, 音量=0.5) {
+function 加载音效(地址, 音量=0.8) {
     let 音效i = new Audio(地址)
-    音效i.volume = 音量
+    // 音效i.volume = 音量
+    音效i.初始音量=音量
     return 音效i
 }
 document.addEventListener('click',e =>{
+
+    if(e.target.matches('#模糊')){
+    document.querySelector('#模糊').classList.remove('渐显')
+    document.querySelectorAll('#模糊 .卡片').forEach(function(卡片){卡片.classList.remove('渐显')})
+    }
+
     if (!e.isTrusted||!缓存.设置['沉浸模式']) return
     let 音效i
     let 按钮i = e.target.closest('button')
     if(按钮i?.closest('#顶栏')){音效i = 音效.开启}
     else if(按钮i?.id.includes('用户')){音效i = 音效.刷新}
-    else if(按钮i?.closest('.音乐按钮栏')){音效i = 音效.选择}
+    else if(按钮i?.closest('.音乐按钮栏,.歌单按钮栏')){音效i = 音效.选择}
     else if(按钮i?.classList.contains('展开按钮')){
         if(document.querySelector('.音乐列表卡片').classList.contains('展开')){音效i = 音效.展开}
         else{音效i = 音效.收起}
     }
     else if(e.target.matches('#模糊')){音效i=音效.关闭}
-    else if(e.target.closest('.设置开关.开关开启')){音效i=音效.开启2}
-    else if(e.target.closest('.设置开关:not(.开关开启)')){音效i=音效.关闭2}
+    else if(e.target.closest('.设置开关')){
+        e.target.closest('.按钮')&&(音效i=音效.选择)
+        e.target.closest('.开关.开关开启')&&(音效i=音效.开启2)
+        e.target.closest('.开关:not(.开关开启)')&&(音效i=音效.关闭2)
+    }
     else if(按钮i){音效i = 音效.点击}
     else{return}
+    音效i.volume = 音效i.初始音量*缓存.设置.音量等级/3||1
     音效i.currentTime = 0
     音效i.play()
 })
-document.querySelector("#模糊").addEventListener("click",function(e){
-    if (e.target === e.currentTarget){
-    document.querySelector('#模糊').classList.remove('渐显');
-    document.querySelectorAll('#模糊 .卡片').forEach(function(卡片){卡片.classList.remove('渐显')})
-    e.stopPropagation;
-    }});
 //#region 启动程序
 if (screen.width < 512) {
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.45')
