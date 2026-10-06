@@ -251,7 +251,7 @@ img{
     justify-content: flex-start;
 }
 .设置开关.按钮{
-    background: lightgray;
+    /* background: #34D0F4; */
     padding: 10px;
 }
 .设置开关.开关开启{
@@ -355,7 +355,7 @@ img{
     align-items:center;
     overflow-y:scroll;
     overscroll-behavior-y: contain;
-    padding: 12px 0;
+    padding: 12px 0 92px 0;
     font-size: var(--文字大小,32px);
 }
 .音乐列表卡片.展开 {
@@ -375,13 +375,25 @@ img{
     line-height: calc(var(--文字大小,32px) * 1.6);
 }
 .歌单按钮栏{
+    position: absolute;
+    bottom: 16px;
     width: 600px;
     height: 64px;
     justify-content: space-between;
     background: var(--表头颜色);
     border-radius: 100px;
     box-shadow: var(--阴影);
-    margin-bottom: 16px;
+    z-index: 1;
+}
+.音乐列表卡片::after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 16px);
+    height: 80px;
+    background: var(--表格颜色);
+    z-index: 0;
+    pointer-events: none;
 }
 .歌单按钮栏 span{
     font-size: 36px;
@@ -1009,15 +1021,19 @@ function 刷新(){
 }
 function 资源加载(){
     if (!音效&&缓存.设置['沉浸模式']){音效 = {
-        点击:加载音效('./osu/UI/cursor-tap.wav'),
-        选择:加载音效('./osu/UI/default-select.wav',0.5),
+        点击:加载音效('./osu/UI/cursor-tap.wav',0.8),
+        点击2:加载音效('./osu/UI/notch-tick.wav',0.8),
+        选择:加载音效('./osu/UI/default-select.wav',0.4),
+        选择2:加载音效('./osu/UI/button-select.wav',0.3),
+        选择3:加载音效('./osu/UI/submit-select.wav',0.3),
+        选择4:加载音效('./osu/UI/tabselect-select.wav',0.3),
         开启:加载音效('./osu/UI/check-on.wav'),
         关闭:加载音效('./osu/UI/check-off.wav'),
         开启2:加载音效('./osu/UI/osd-on.wav',0.6),
         关闭2:加载音效('./osu/UI/osd-off.wav',0.6),
         展开:加载音效('./osu/UI/overlay-pop-out.wav',1),
         收起:加载音效('./osu/UI/overlay-big-pop-out.wav',1),
-        刷新:加载音效('./osu/UI/bss-stage-1.wav',0.4)
+        刷新:加载音效('./osu/SongSelect/select-expand.wav',0.4)
     }}
 }
 function 请求音乐(){
@@ -1157,7 +1173,11 @@ document.addEventListener('click',e =>{
     let 按钮i = e.target.closest('button')
     if(按钮i?.closest('#顶栏')){音效i = 音效.开启}
     else if(按钮i?.id.includes('用户')){音效i = 音效.刷新}
-    else if(按钮i?.closest('.音乐按钮栏,.歌单按钮栏')){音效i = 音效.选择}
+    else if(按钮i?.closest('.音乐按钮栏 :is(.左箭头,.右箭头)')){音效i = 音效.点击2}
+    else if(按钮i?.closest('.歌单按钮栏 :is(.左箭头,.右箭头)')){音效i = 音效.选择}
+    else if(按钮i?.closest('.音乐按钮栏 .播放按钮')){音效i = 音效.选择2}
+    else if(按钮i?.closest('.音乐按钮栏 .循环按钮')){音效i = 音效.选择3}
+    else if(按钮i?.closest('.音乐按钮栏 .音量按钮')){return}
     else if(按钮i?.classList.contains('展开按钮')){
         if(document.querySelector('.音乐列表卡片').classList.contains('展开')){音效i = 音效.展开}
         else{音效i = 音效.收起}
