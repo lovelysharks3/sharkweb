@@ -389,7 +389,7 @@ img{
     content: "";
     position: absolute;
     bottom: 0;
-    width: calc(100% - 16px);
+    width: calc(100% - 32px);
     height: 80px;
     background: var(--表格颜色);
     z-index: 0;
@@ -823,7 +823,7 @@ const 模块_课表 = {
             return 差值
         }
         if(当前课程){
-            if(课程开始){课程开始=`下课倒计时:${差值计算(结束差值)}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName']}`;课程进度=100-结束差值/1000/60}
+            if(课程开始){课程开始=`下课倒计时:${差值计算(结束差值)}  -  当前课程:${当前课程['course']}\n上课地点:${当前课程['spaceName'] || '无'}`;课程进度=100-结束差值/1000/60}
             else{课程开始=`上课倒计时:${差值计算(开始差值)}  -  下节课程:${当前课程['course']}\n上课地点:${当前课程['spaceName'] || '无'}`}
             document.querySelector('#课程进度提示').innerText=课程开始
         }
@@ -1087,14 +1087,6 @@ async function 登录切换(){
         document.head.append(script)
         script.onload = () => eruda.init()
     }
-    else if (用户名 === '歌单切换'||用户名 == 'osu'){
-        document.querySelector('.音乐列表内容').replaceChildren()
-        document.querySelector('.循环按钮 img').src='./svg/循环.svg'
-        循环播放=true
-        歌单='osu'
-        音乐索引=0
-        请求音乐(0)
-    }
     if (用户名 === '导入'||用户名 == 'load') {
         let 文件夹 = await window.showDirectoryPicker()
         let 列表i = ''
@@ -1102,12 +1094,6 @@ async function 登录切换(){
             列表i+= (`\"${名字}\",`)
         }
         console.log(列表i)
-    }
-    if (用户名 === '音乐'||用户名 == 'music') {
-        document.querySelector('.音乐列表内容').innerHTML=''
-        歌单='音乐'
-        音乐索引=0
-        请求音乐(0)
     }
     // {智慧教务(用户名,密码)}
 }
