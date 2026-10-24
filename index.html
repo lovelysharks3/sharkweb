@@ -458,8 +458,8 @@ table[data-表格='1'] tr:nth-child(4)> th {
     left: 0;
     width: 0;
     height: 100%;
-    background:rgba(200,245,200,0.5);
-    box-shadow:0 0 0 1px rgba(200,245,200,0.5)
+    background:rgba(200,245,200,0.6);
+    box-shadow:0 0 0 2px rgba(200,245,200,0.6)
 }
 #课程进度提示{
     position: relative;
@@ -539,6 +539,7 @@ const 音乐 = new Audio()
 let 音效
 let 时间戳,周数指针,课表,表格1
 let 缓存 = {设置:JSON.parse(localStorage.getItem('设置'))||{},登录信息:JSON.parse(localStorage.getItem('登录信息'))||{}}
+console.log(缓存)
 const 开学时间 = new Date('2026-09-07')
 //#endregion
 let 文章列表 = [
@@ -549,29 +550,29 @@ let 文章列表 = [
         <a href="https://m.fjpit.com/#/">智慧教务</a>
     </div>`,
     列:['周一<span></span>','周二<span></span>','周三<span></span>','周四<span></span>','周五<span></span>','周六<span></span>','周日<span></span>'],
-    行:['课程表','第一节\n8:10-9:50','第二节\n10:10-11:50','午休','第三节\n2:30-4:10','第四节\n4:20-6:00','第五节\n6:15-8:10','第六节\n8:20-10:00'],
+    行:['课程表','第1-2节','第3-4节','午休','第5-6节','第7-8节','第9-10节','第11-12节'],
     内容:``,
     作者:'shark',
     类型:'表格'},
 
-    {id:2,
-    标题:`<span class='居中 横排'>第四周晨跑表</span>`,
-    列:['周一','周二','周三','周四','周五'],
-    行:``,
-    内容:[
-        ["软件技术2522", "软件技术2511", "物联网2512", "", ""],
-        ["网络技术2522", "大数据2511", "软件技术2521", "", ""],
-        ["电子信息2512", "物联网2511", "电子信息2511", "", ""],
-        ["电子信息2521", "网络技术2521", "网络技术2511", "", ""],
-        ["物联网2331", "电子信息2621", "大数据2621", "", ""],
-        ["软件技术2621", "物联网2612", "电子信息2612", "", ""],
-        ["电子信息2333", "软件技术2622", "网络技术2621", "", ""],
-        ["电子信息2332", "软件技术2611", "电子信息2611", "", ""],
-        ["大数据2611", "电子信息2331", "物联网2611", "", ""],
-        ["网络技术2611", "", "物联网2332", "",""]
-    ],
-    作者:'shark',
-    类型:'表格'},
+    // {id:2,
+    // 标题:`<span class='居中 横排'>第四周晨跑表</span>`,
+    // 列:['周一','周二','周三','周四','周五'],
+    // 行:``,
+    // 内容:[
+    //     ["软件技术2522", "软件技术2511", "物联网2512", "", ""],
+    //     ["网络技术2522", "大数据2511", "软件技术2521", "", ""],
+    //     ["电子信息2512", "物联网2511", "电子信息2511", "", ""],
+    //     ["电子信息2521", "网络技术2521", "网络技术2511", "", ""],
+    //     ["物联网2331", "电子信息2621", "大数据2621", "", ""],
+    //     ["软件技术2621", "物联网2612", "电子信息2612", "", ""],
+    //     ["电子信息2333", "软件技术2622", "网络技术2621", "", ""],
+    //     ["电子信息2332", "软件技术2611", "电子信息2611", "", ""],
+    //     ["大数据2611", "电子信息2331", "物联网2611", "", ""],
+    //     ["网络技术2611", "", "物联网2332", "",""]
+    // ],
+    // 作者:'shark',
+    // 类型:'表格'},
 
     {id:3,
     标题:`<span class='居中 横排'>值日表</span>`,
@@ -766,6 +767,31 @@ const 模块_顶栏 = {
 }
 const 模块_课表 = {
     创建(){
+        fetch("https://jw-api.fjpit.com/api/scheduleTime", {
+            "headers": {
+                "accept": "*/*",
+                "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+                "content-type": "application/json",
+                "platform": "h5",
+                "server": "1",
+                "ba-token":缓存.登录信息.token,
+                "Referer": "https://m.fjpit.com/"
+            },
+            "body": JSON.stringify({ dqz:周数指针 }),
+            "method": "POST"
+            }).then(res=>res.json())
+            .then(data=>{
+                function 表头时间(时间){
+                    let 小时 = Number(时间.split(':')[0])
+                    小时>12&&(小时-=12)
+                    return String(小时) + ':' + 时间.split(':')[1]
+                }
+                Object.entries(data.data).forEach((i,n)=>{
+                    if (n===4||n===5) return
+                    n%2===0&&(表格1.rows[Math.floor(n/2+1)].cells[0].innerHTML+=`\n${表头时间(i[1].jcskkssj)}`)
+                    n%2===1&&(表格1.rows[Math.floor(n/2+1)].cells[0].innerHTML+=`-${表头时间(i[1].jcskjssj)}`)
+                })
+            })
         表格1 = document.querySelector('table[data-表格="1"]')
         表格1.querySelectorAll('tr:nth-child(4) th:not(:nth-child(1)):not(:nth-child(2))').forEach(function(i){i.remove()})
         表格1.rows[3].cells[1].colSpan = 7
@@ -1076,8 +1102,8 @@ async function 登录切换(){
     document.querySelector('#登录卡片').classList.remove('渐显')
     document.querySelector('#模糊').classList.remove('渐显')
     if (用户名 === '刷新'||用户名 == 'reload'){location.reload()}
-    else if (用户名 === '清除缓存'||用户名 == 'clear'){localStorage.clear()}
-    else if (用户名 === '控制台'||用户名 == 'console'){
+    else if (用户名 === '清除缓存'||用户名 === 'clear'){localStorage.clear()}
+    else if (用户名 === '控制台'||用户名 === 'console'){
         if (window.eruda) {
             eruda.show()
             return
@@ -1087,7 +1113,7 @@ async function 登录切换(){
         document.head.append(script)
         script.onload = () => eruda.init()
     }
-    if (用户名 === '导入'||用户名 == 'load') {
+    else if (用户名 === '导入'||用户名 === 'load') {
         let 文件夹 = await window.showDirectoryPicker()
         let 列表i = ''
         for await (let [名字, 文件] of 文件夹.entries()) {
@@ -1095,7 +1121,10 @@ async function 登录切换(){
         }
         console.log(列表i)
     }
-    // {智慧教务(用户名,密码)}
+    else if (用户名 === '测试'||用户名 === 'test'){
+        测试(缓存.登录信息.token)
+    }
+    else if (用户名 !== ''&&用户名 !== ''){智慧教务(用户名,密码)}
 }
 function 复制文字(){
     document.querySelector('.复制按钮').style.pointerEvents = "none";
@@ -1104,7 +1133,6 @@ function 复制文字(){
     setTimeout(function(){document.querySelector('#复制提示').innerHTML='请假提示(点击内容以复制)';document.querySelector('.复制按钮').style.pointerEvents = "auto";},2500)
 }
 function 智慧教务(username,password){
-    return
     fetch("https://jw-api.fjpit.com/api/auth/login", {
         "headers": {
             "accept": "*/*",
@@ -1118,10 +1146,12 @@ function 智慧教务(username,password){
         "method": "POST"
     }).then(res => res.json())
     .then(data =>{
-        console.log(data)
-        if(data.code!==1){alert(`登录失败！\n${data.msg}\n\ntip:智慧教务默认密码是身份证\n请不要频繁尝试，账户可能被冻结`)}
+        if(data.code!==1){
+            alert(`登录失败！\n${data.msg}\n\ntip:智慧教务默认密码是身份证\n请不要频繁尝试，账户可能被冻结`)
+        }
         else if (data.code===1){
         缓存.登录信息=data.data.userInfo
+        console.log(缓存.登录信息)
         document.querySelector('#姓名').innerText = 缓存.登录信息.realname
         localStorage.setItem('登录信息',JSON.stringify(缓存.登录信息))
         alert('登录成功\n姓名：' + 缓存.登录信息.realname)
@@ -1131,6 +1161,22 @@ function 智慧教务(username,password){
     .catch(error => {
         alert(`网络错误，登录失败`)
     })
+}
+async function 测试(token){
+    const res = await fetch("https://jw-api.fjpit.com/api/auth/getUserInfo", {
+        "headers": {
+            "accept": "*/*",
+            "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+            "content-type": "application/json",
+            "platform": "h5",
+            "server": "1",
+            "ba-token":token,
+            "Referer": "https://m.fjpit.com/"
+        },
+        "method": "GET"
+    })
+    const data=await res.json()
+    document.querySelector('#姓名').innerText = 缓存.登录信息.realname
 }
 function 随机数(最小,最大){
     return Math.floor(Math.random() * (最大 - 最小 + 1)) + 最小
@@ -1192,6 +1238,7 @@ else{
     document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=0.6')
 }
 模块_设置.加载()
+测试(缓存.登录信息.token)
 setTimeout(function(){
     刷新()
     计数器_秒()
