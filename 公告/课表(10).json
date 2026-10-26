@@ -1,7 +1,7 @@
 {
     "code": 1,
     "msg": "操作成功",
-    "time": 1790769828,
+    "time": 1793015429,
     "data": {
         "list": [
             {
@@ -14,7 +14,7 @@
                 "courseCode": "10030000090",
                 "date": "2026-11-12",
                 "teacherName": "郑晶晶",
-                "spaceName": "503(龙腰校区教学楼)",
+                "spaceName": "101(龙腰校区教学楼)",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
                 "jckssj": "10:10:00",
@@ -122,7 +122,7 @@
                 "courseCode": "10010023960",
                 "date": "2026-11-12",
                 "teacherName": "何婷婷",
-                "spaceName": "103(龙腰校区教学楼)",
+                "spaceName": "101(龙腰校区教学楼)",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
                 "jckssj": "08:10:00",
@@ -167,6 +167,60 @@
                 ]
             },
             {
+                "id": 1587269,
+                "teachingTaskId": 140636,
+                "mergeTaskId": "",
+                "skfsmc": "实训",
+                "fdjs": "",
+                "course": "电子技术基础",
+                "courseCode": "10010002910",
+                "date": "2026-11-09",
+                "teacherName": "汤婕",
+                "spaceName": "1+X传感网实训室（综合楼204）(龙腰校区综合楼北楼)",
+                "className": "物联网2611",
+                "xqmc": "龙腰校区",
+                "jckssj": "08:10:00",
+                "jcjssj": "09:50:00",
+                "studentCount": 0,
+                "DayIndex": 1,
+                "sections": "1-2",
+                "sectionsShow": "1-2",
+                "section": "上午",
+                "startNode": "1",
+                "endNode": "2",
+                "week": 10,
+                "classHour": 2,
+                "spzt": 1,
+                "xz": "调课",
+                "actionButtons": [
+                    {
+                        "name": "教学日志",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "发送到",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "调停补",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "考试安排",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png"
+                    },
+                    {
+                        "name": "成绩录入",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/book-note-paper-school-256.png"
+                    },
+                    {
+                        "name": "课堂活动",
+                        "icon": "https:\/\/cdn3.iconfinder.com\/data\/icons\/education-209\/64\/board-math-class-school-256.png",
+                        "url": ""
+                    }
+                ]
+            },
+            {
                 "id": 1583430,
                 "teachingTaskId": 140617,
                 "mergeTaskId": "",
@@ -176,7 +230,7 @@
                 "courseCode": "10030000090",
                 "date": "2026-11-09",
                 "teacherName": "郑晶晶",
-                "spaceName": "503(龙腰校区教学楼)",
+                "spaceName": "101(龙腰校区教学楼)",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
                 "jckssj": "10:10:00",
@@ -230,7 +284,7 @@
                 "courseCode": "10010023960",
                 "date": "2026-11-13",
                 "teacherName": "何婷婷",
-                "spaceName": "103(龙腰校区教学楼)",
+                "spaceName": "205(龙腰校区教学楼)",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
                 "jckssj": "10:10:00",
@@ -341,8 +395,8 @@
                 "spaceName": "1+X传感网实训室（综合楼204）(龙腰校区综合楼北楼)",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
-                "jckssj": "14:30:00",
-                "jcjssj": "16:10:00",
+                "jckssj": "14:00:00",
+                "jcjssj": "15:40:00",
                 "studentCount": 0,
                 "DayIndex": 1,
                 "sections": "7-8",
@@ -449,8 +503,8 @@
                 "spaceName": "",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
-                "jckssj": "16:20:00",
-                "jcjssj": "18:00:00",
+                "jckssj": "15:50:00",
+                "jcjssj": "17:30:00",
                 "studentCount": 0,
                 "DayIndex": 2,
                 "sections": "9-10",
@@ -665,8 +719,8 @@
                 "spaceName": "合班1(龙腰校区综合楼南楼)",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
-                "jckssj": "14:30:00",
-                "jcjssj": "16:10:00",
+                "jckssj": "14:00:00",
+                "jcjssj": "15:40:00",
                 "studentCount": 0,
                 "DayIndex": 4,
                 "sections": "7-8",
@@ -719,8 +773,8 @@
                 "spaceName": "JDL智能服务机器人实训中心(综合楼103)(龙腰校区综合楼北楼)",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
-                "jckssj": "16:20:00",
-                "jcjssj": "18:00:00",
+                "jckssj": "15:50:00",
+                "jcjssj": "17:30:00",
                 "studentCount": 0,
                 "DayIndex": 4,
                 "sections": "9-10",
