@@ -1127,11 +1127,11 @@ async function 登录切换(){
         let 文件夹 = await window.showDirectoryPicker()
         let 列表i = []
         for await (let [名字, 文件] of 文件夹.entries()) {
-            (密码==='.'||密码==='-')&&(名字=名字.split('.')[0])
+            (密码===''||密码==='.')&&(名字=名字.split('.')[0])
             列表i.push(名字)
             // 列表i+= (`\"${名字}\",`)
         }
-        if(密码==='-'){console.log('传入文件夹与全班名字差别:\n多余：'+列表i.filter(值 => !物联网2611.includes(值))+'\n\n缺少：'+物联网2611.filter(值 => !列表i.includes(值)))}
+        if(密码===''){console.log('传入文件夹与全班名字差别:\n多余：'+列表i.filter(值 => !物联网2611.includes(值))+'\n\n缺少：'+物联网2611.filter(值 => !列表i.includes(值)))}
         console.log(列表i)
     }
     else if (用户名 === '测试'||用户名 === 'test'){
