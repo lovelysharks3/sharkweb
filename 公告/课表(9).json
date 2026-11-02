@@ -1,7 +1,7 @@
 {
     "code": 1,
     "msg": "操作成功",
-    "time": 1793015419,
+    "time": 1793609287,
     "data": {
         "list": [
             {
@@ -343,7 +343,7 @@
                 "xqmc": "龙腰校区",
                 "jckssj": "14:00:00",
                 "jcjssj": "15:40:00",
-                "studentCount": 0,
+                "studentCount": 50,
                 "DayIndex": 1,
                 "sections": "7-8",
                 "sectionsShow": "5-6",
@@ -554,12 +554,12 @@
                 "courseCode": "10010002910",
                 "date": "2026-11-02",
                 "teacherName": "汤婕",
-                "spaceName": "1+X传感网实训室（综合楼204）(龙腰校区综合楼北楼)",
+                "spaceName": "电子技术实验室（综合楼301）(龙腰校区综合楼北楼)",
                 "className": "物联网2611",
                 "xqmc": "龙腰校区",
                 "jckssj": "08:10:00",
                 "jcjssj": "09:50:00",
-                "studentCount": 0,
+                "studentCount": 50,
                 "DayIndex": 1,
                 "sections": "1-2",
                 "sectionsShow": "1-2",

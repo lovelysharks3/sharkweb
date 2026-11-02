@@ -532,6 +532,7 @@ table[data-表格='1'] tr:nth-child(4)> th {
 <div id='主页' class='竖排'><button id="用户" onclick='刷新()'></button></div>
 <!-- #endregion -->
 <script>
+alert('HTML 内的 JS 执行成功')
 //#region 初始化
 let 音乐列表, 循环播放 = false, 播放中 = false, 音乐索引 = 0,歌单='精选哈基米', 歌单索引=0, 长按 = false
 const 音乐 = new Audio()
@@ -541,7 +542,7 @@ let 时间戳,周数指针,课表,表格1
 let 物联网2611 = ["陈墨阳","李煜烨","方礼程","占鑫淼","杜仁博","徐培超","徐淑婷","王记","何岳恒","张佳惠","林嘉琪","刘文俊","方伟炫","郑佳宝","郑戴俞萱","张钰玲","鲁城君","杨子鉴","林欣怡","郑洁","柯诗琳","刘智宏","邱函楸","李运","吴敬榆","沈一铭","陈雅诗","万龙","陈伟斌","陈巧莹","黄菡羽","杨昊","朱晨琳","陈宇杰","叶广霖","叶雯鑫","詹灿彬","朱铭航","吴京思","蔡星怀","洪梓杭","李泓燊","潘欣怡","刘鸣","余晨","程安琪","赖欣怡","黄洋","胡应超","刘子轩"]
 let 缓存 = {设置:JSON.parse(localStorage.getItem('设置'))||{},登录信息:JSON.parse(localStorage.getItem('登录信息'))||{}}
 // console.log(缓存)
-const 开学时间 = new Date('2026-09-07')
+const 开学时间 = new Date('2026-09-07T00:00:00')
 //#endregion
 let 文章列表 = [
     {id:1,
@@ -646,7 +647,7 @@ let 文章列表 = [
 
     {id:4,
     标题:`备忘录`,
-    内容:`右上角小圆点刷新\n记得多喝热水，别忘了断电倒垃圾\n上午 7:00晨跑  7:30英语单词  12:00午休\n下午 7:00晚自习  9:30晚点点名  10:30熄灯`,
+    内容:`右上角小圆点刷新\n记得多喝热水，别忘了断电倒垃圾\n上午 7:00晨跑  7:10晨检  12:00午休\n下午 7:00晚自习  9:30晚点查房  10:30熄灯`,
     作者:'shark',
     类型:'文本'},
 
@@ -703,7 +704,10 @@ const 模块_设置 = {
         if(this.classList.contains('开关开启')){
             this.classList.remove('开关开启');
             模块_设置.缓存存储('沉浸模式',false)
-            音效.关闭2.play()
+            音效i = 音效.关闭2
+            音效i.volume = 音效i.初始音量*缓存.设置.音量等级/3||1
+            音效i.currentTime = 0
+            音效i.play()
         }
         else{
             this.classList.add('开关开启');
@@ -779,8 +783,6 @@ const 模块_课表 = {
                 "ba-token":缓存.登录信息.token,
                 "Referer": "https://m.fjpit.com/"
             },
-            // "body": JSON.stringify({ dqz:周数指针 }),
-            // "method": "POST"
             }).then(res=>res.json())
             .then(data=>{
                 function 表头时间(时间){
@@ -821,7 +823,10 @@ const 模块_课表 = {
             表格1.querySelectorAll('tr:not(:nth-child(4)) th:not([data-列]):not([data-行])').forEach(i => i.innerText = '')
             表格1.rows[0].cells[0].innerText=`第${周数指针}周\n${计算(1).getMonth()+1}.${计算(1).getDate()}-${计算(7).getMonth()+1}.${计算(7).getDate()}`
             课表.forEach(function(课程){
-                表格1.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])].innerText = 课程['course']
+                let 课程i = 表格1.rows[Math.ceil(Number(课程['endNode'])/2)].cells[Number(课程['DayIndex'])]
+                课程i.innerText = 课程['course']
+                课程i.课程 = 课程
+                课程i.onclick = () => {console.log(课程i.课程)}
             })
             document.querySelectorAll('table[data-表格="1"] [data-列="0"] span').forEach(function(i,n){
                 i.innerText= `\n${计算(n+1).getMonth()+1}.${计算(n+1).getDate()}`
@@ -1037,11 +1042,50 @@ const 模块_文章加载 = {
     }
 }
 const 模块_智慧教务 = {
-    post(){
-
+    post(api,内容){
+        return fetch(`https://jw-api.fjpit.com/api/${api}`, {
+            "headers": {
+                "accept": "*/*",
+                "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+                "content-type": "application/json",
+                "platform": "h5",
+                "server": "1",
+                "ba-token":缓存.登录信息.token,
+                "Referer": "https://m.fjpit.com/"
+            },
+            "body": JSON.stringify(内容),
+            "method": "POST"
+        }).then(res => res.json())
     },
-    get(){
+    get(api){
+        return fetch(`https://jw-api.fjpit.com/api/${api}`, {
+            "headers": {
+                "accept": "*/*",
+                "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+                "content-type": "application/json",
+                "platform": "h5",
+                "server": "1",
+                "ba-token":缓存.登录信息.token,
+                "Referer": "https://m.fjpit.com/"
+            },
+        }).then(res => res.json())
+    },
+    下载JSON(数据, 文件名 = '课表.json') {
+        let 文件 = new Blob(
+            [JSON.stringify(数据, null, 2)],
+            { type: 'application/json;charset=utf-8' }
+        );
 
+        let 下载地址 = URL.createObjectURL(文件);
+
+        let 下载链接 = document.createElement('a');
+        下载链接.href = 下载地址;
+        下载链接.download = 文件名;
+
+        下载链接.click();
+
+        // 延迟释放临时 URL
+        setTimeout(() => URL.revokeObjectURL(下载地址), 1000);
     }
 }
 function 刷新(){
@@ -1123,6 +1167,21 @@ async function 登录切换(){
         document.head.append(script)
         script.onload = () => eruda.init()
     }
+    else if (用户名 === '下载'||用户名 === 'download') {
+        let 列表i = await Promise.all(
+            Array.from({ length: 10 }, (_, n) =>
+                模块_智慧教务.post('schedule', {semester: "2026-2027-1",week: n + 11,showxxq: 0})
+            )
+        )
+        列表i.forEach((i,n) => {
+            模块_智慧教务.下载JSON(i,`课表(${n + 11}).json`)
+        })
+        // for (let n = 1; n <= 20; n++) {
+        //     let i = await 模块_智慧教务.post('schedule',{semester: "2026-2027-1", week: n, showxxq: 0})
+        //     console.log(i)
+        //     模块_智慧教务.下载JSON(i,`课表（${n}）.json`)
+        // }
+    }
     else if (用户名 === '导入'||用户名 === 'load') {
         let 文件夹 = await window.showDirectoryPicker()
         let 列表i = []
@@ -1176,6 +1235,7 @@ function 智慧教务(username,password){
     })
 }
 async function 测试(token){
+    if (!token) return
     const res = await fetch("https://jw-api.fjpit.com/api/auth/getUserInfo", {
         "headers": {
             "accept": "*/*",
