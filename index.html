@@ -29,7 +29,7 @@
 .变量_深色{
     --背景颜色:#22222a;
     --卡片颜色:#28283a;
-    --表头颜色:#303049;
+    --表头颜色:#30304a;
     --表格颜色:#2c2c3c;
     --文字颜色:#f5f5f5;
     --小字颜色:#c0c0c0;
@@ -442,6 +442,7 @@ table[data-表格='1'] th:nth-child(1) {
 }
 table[data-表格='1'] tr:nth-child(4)> th {
     height: 54px;
+    padding: 0;
 }
 /* table[data-表格='3'] {
     table-layout: auto;
@@ -459,7 +460,6 @@ table[data-表格='1'] tr:nth-child(4)> th {
     width: 0;
     height: 100%;
     background:rgba(200,245,200,0.6);
-    box-shadow:0 0 0 2px rgba(200,245,200,0.6)
 }
 #课程进度提示{
     position: relative;
@@ -646,7 +646,7 @@ let 文章列表 = [
 
     {id:4,
     标题:`备忘录`,
-    内容:`右上角小圆点刷新\n记得多喝热水，别忘了断电倒垃圾\n上午 7:00晨跑  7:10晨检  12:00午休\n下午 7:00晚自习  9:30晚点查房  10:30熄灯`,
+    内容:`右上角小圆点刷新\n记得多喝热水，别忘了断电倒垃圾\n上午 7:00晨跑  7:10晨检  12:00午休\n下午 7:00晚自习  9:30晚点  10:30熄灯`,
     作者:'shark',
     类型:'文本'},
 
@@ -860,8 +860,7 @@ const 模块_课表 = {
             document.querySelector('#课程进度提示').innerText=课程开始
         }
         else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
-        if(课程进度){课程进度条.style.display='flex';课程进度条.style.width=课程进度 + '%'}
-        else{课程进度条.style.display='none'}
+        if(课程进度){课程进度条.style.width=课程进度 + '%'}
     }    
 }
 const 模块_文章加载 = {
@@ -1266,7 +1265,6 @@ function 加载音效(地址, 音量=0.8) {
     return 音效i
 }
 document.addEventListener('click',e =>{
-
     if(e.target.matches('#模糊')){
     document.querySelector('#模糊').classList.remove('渐显')
     document.querySelectorAll('#模糊 .卡片').forEach(function(卡片){卡片.classList.remove('渐显')})
