@@ -459,7 +459,7 @@ table[data-表格='1'] tr:nth-child(4)> th {
     left: 0;
     width: 0;
     height: 100%;
-    background:rgba(200,245,200,0.6);
+    background:rgba(180,240,180,0.6);
 }
 #课程进度提示{
     position: relative;
@@ -836,7 +836,7 @@ const 模块_课表 = {
     更新(){
         时间戳= (new Date()).getTime()
         let 开始差值 = Infinity,结束差值 = Infinity
-        let 当前课程,课程开始,课程进度
+        let 当前课程,课程开始,课程进度 = 0
         let 课程进度条 = document.querySelector('.课程进度条')
 
         课表.forEach(function(课程){
@@ -860,7 +860,7 @@ const 模块_课表 = {
             document.querySelector('#课程进度提示').innerText=课程开始
         }
         else{document.querySelector('#课程进度提示').innerText = `本周没有课程了\n休息一下吧~`}
-        if(课程进度){课程进度条.style.width=课程进度 + '%'}
+        课程进度条.style.width=课程进度 + '%'
     }    
 }
 const 模块_文章加载 = {
